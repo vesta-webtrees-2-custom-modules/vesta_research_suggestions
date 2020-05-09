@@ -32,7 +32,7 @@ This is a webtrees 2.x module - It cannot be used with webtrees 1.x. There is no
 ![Screenshot](data1.png)
 
 ![Screenshot](data2.png)
-<p><img src="suggestion2.png" alt="Screenshot" style="max-width:75%;"></p>
+<p><img src="suggestion2.png" alt="Screenshot" width="75%"></p>
 
 * The module then attempts to match events of individuals with sources annotated in this manner, by comparing the event type, date, and place. 
 
