@@ -17,19 +17,19 @@ This is a webtrees 2.x module - It cannot be used with webtrees 1.x. There is no
 
 * In the extended 'Facts and Events' tab, if the 'Research Suggestions' checkbox is toggled, additional placeholder events are shown, indicating possible sources for the respective event. See below for two examples.
 
-<p><img src="suggestion1.png" alt="Screenshot" align="center" width="50%"></p>
-<p><img src="suggestion2.png" alt="Screenshot" align="center" width="50%"></p>
+<p align="center"><img src="suggestion1.png" alt="Screenshot" align="center" width="67%"></p>
+<p align="center"><img src="suggestion2.png" alt="Screenshot" align="center" width="67%"></p>
 
 
 * Possible sources are also suggested when creating or editing an event: If you search for sources without entering a source name, suggested sources are returned if available (Otherwise, sources matching the entered name are returned as usual).
 
-<p><img src="suggestion3.png" alt="Screenshot" align="center" width="50%"></p>
+<p align="center"><img src="suggestion3.png" alt="Screenshot" align="center" width="50%"></p>
 
 
 * How does this work? First, you have to annotate your sources in order to define the events recorded in the respective source. This is part of the GEDCOM source data (it just hasn't been used so far in webtrees). When editing a source, add a 'data' object and list the types of events (such as births/baptisms, marriages, deaths/burials), the date and the place (e.g. a county, or a parish) the source refers to. This is primarily useful for sources which you expect to use for multiple individuals.
 
-<p><img src="data1.png" alt="Screenshot" align="center" width="50%"></p>
-<p><img src="data2.png" alt="Screenshot" align="center" width="50%"></p>
+<p align="center"><img src="data1.png" alt="Screenshot" align="center" width="67%"></p>
+<p align="center"><img src="data2.png" alt="Screenshot" align="center" width="67%"></p>
 
 
 * The module then attempts to match events of individuals with sources annotated in this manner, by comparing the event type, date, and place. 
