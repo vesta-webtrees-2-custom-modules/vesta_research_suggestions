@@ -128,8 +128,13 @@ class ResearchSuggestionsService {
     
 		$resolved = new Collection();
 		
-    //resolve via hook
+    
     $ps = PlaceStructure::create("2 PLAC " . $placeName, $tree, null, $dateInterval->toGedcomString(2));
+    
+    //add place itself!
+    $resolved->put($placeName, $ps);
+    
+    //resolve via hook
     $parents = FunctionsPlaceUtils::placPplac($this->module, $ps, new Collection($typesOfLocation));
 
     foreach ($parents as $parentPs) {
@@ -544,10 +549,10 @@ class ResearchSuggestionsService {
 		$events = array();
 		
 		$sources = array();
-		
 		foreach ($places as $eventPlace) {
 			$sources2 = $this->searchService->searchSources(array($tree), array($eventPlace));
 			foreach ($sources2 as $source) {
+        
 				//overwrite duplicate results
 				$sources[$source->xref()] = $source;
 			}
