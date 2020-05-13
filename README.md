@@ -25,12 +25,27 @@ This is a webtrees 2.x module - It cannot be used with webtrees 1.x. There is no
 
 <p align="center"><img src="suggestion3.png" alt="Screenshot" align="center" width="50%"></p>
 
+#### Annotating Sources
 
-* How does this work? First, you have to annotate your sources in order to define the events recorded in the respective source. This is part of the GEDCOM source data (it just hasn't been used so far in webtrees). When editing a source, add a 'data' object and list the types of events (such as births/baptisms, marriages, deaths/burials), the date and the place (e.g. a county, or a parish) the source refers to. This is primarily useful for sources which you expect to use for multiple individuals.
+* How does this work? First, you have to annotate your sources in order to define the events recorded in the respective source. This is part of the GEDCOM source data (it just hasn't been used so far in webtrees). When editing a source, add a 'data' object and list the types of events (such as births/baptisms, marriages, deaths/burials), the date and the place (e.g. a county, or a parish) the source refers to. You can set multiple events with different dates and places, if necessary. These annotations are primarily useful for sources which you expect to use for multiple individuals.
 
+<p align="center"><img src="data0.png" alt="Screenshot" align="center" width="67%"></p>
 <p align="center"><img src="data1.png" alt="Screenshot" align="center" width="67%"></p>
 <p align="center"><img src="data2.png" alt="Screenshot" align="center" width="67%"></p>
 
+* The raw GEDCOM data should have a structure like this:
+
+~~~~
+1 DATA
+2 EVEN CHR,MARR,BURI
+3 DATE FROM 1765 TO 1852
+3 PLAC Neuenkirchen (St. Bartholomäus)
+2 EVEN CONF
+3 DATE FROM 1841 TO 1852
+3 PLAC Neuenkirchen (St. Bartholomäus)
+~~~~ 
+
+#### Evaluating Source Data
 
 * The module then attempts to match events of individuals with sources annotated in this manner, by comparing the event type, date, and place. 
 * Note that higher-level places also match, if respective sources are available (see again the first example above).
