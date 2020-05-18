@@ -52,21 +52,9 @@ class ResearchSuggestionsService {
     
     $places = array();
 		$interval = null;
-		
-    //TODO add others
-		//if (!in_array($fact->getTag(), ['BIRT','BAPM','CHR'])) {
-		//	return $collection;
-		//}
-		
-    //if ($fact->attribute("SOUR")) {
-		//	//we should filter maybe if the source is already used
-    //  return $collection;
-		//}
 				
 		$place = $fact->attribute("PLAC");
 		if ($place) {
-			//$gedcom .= "\n2 PLAC ";
-			//$gedcom .= $place;
 						
 			$date = $fact->attribute("DATE");
 			if ($date) {          
@@ -127,8 +115,6 @@ class ResearchSuggestionsService {
     //error_log("resolve: " . $placeName);
     
 		$resolved = new Collection();
-		
-    
     $ps = PlaceStructure::create("2 PLAC " . $placeName, $tree, null, $dateInterval->toGedcomString(2));
     
     //add place itself!
@@ -505,9 +491,6 @@ class ResearchSuggestionsService {
 						
 						//TODO: I18N this?
 						$gedcom = "1 ".$asType." Missing source for death/burial - Possible source:";
-
-						//$gedcom = "1 EVEN Missing source for death/burial - Possible source:";
-						//$gedcom .= "\n2 TYPE Research Suggestion";
 
 						$gedcom .= $match->toGedcomString(2);
 

@@ -27,7 +27,7 @@ This is a webtrees 2.x module - It cannot be used with webtrees 1.x. There is no
 
 #### Annotating Sources
 
-* How does this work? First, you have to annotate your sources in order to define the events recorded in the respective source. These annotations are primarily useful for sources which you expect to use for multiple individuals. They are part of the GEDCOM source data structure (they just haven't been used so far in webtrees). First, you may have to activate the 'data' fact in your tree preferences, under 'Facts for source records'. This is a unique source fact (optionally also a quick source fact):
+* How does this work? First, you have to annotate your sources in order to define the events recorded in the respective source. These annotations are primarily useful for sources which you expect to use for multiple individuals. They are part of the GEDCOM source data structure (they just haven't been used so far in webtrees). First, you may have to activate the 'data' fact in your tree preferences (in the control panel), under 'Facts for source records'. This is a unique source fact (optionally also a quick source fact). You may also adjust the types of events recorded in sources here.
 
 <p align="center"><img src="prefs.png" alt="Screenshot" align="center" width="67%"></p>
 
@@ -57,8 +57,8 @@ This is a webtrees 2.x module - It cannot be used with webtrees 1.x. There is no
 
 ### Download<a name="download"/>
 
-* Current version: 2.0.3.10
-* Based on and tested with webtrees 2.0.3. Cannot be used with webtrees 1.x. May not work with earlier 2.x versions!
+* Current version: 2.0.4.0.0
+* Based on and tested with webtrees 2.0.4. Cannot be used with webtrees 1.x. Will not work with earlier 2.x versions!
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 
 * Download the zipped module, including all related modules, [here](https://cissee.de/vesta.latest.zip).
