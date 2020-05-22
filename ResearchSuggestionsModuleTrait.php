@@ -2,11 +2,14 @@
 
 namespace Cissee\Webtrees\Module\ResearchSuggestions;
 
+use Fisharebest\Webtrees\GedcomTag;
 use Fisharebest\Webtrees\I18N;
-use Vesta\ControlPanel\Model\ControlPanelCheckbox;
-use Vesta\ControlPanel\Model\ControlPanelPreferences;
-use Vesta\ControlPanel\Model\ControlPanelSection;
-use Vesta\ControlPanel\Model\ControlPanelSubsection;
+use Vesta\ControlPanelUtils\Model\ControlPanelCheckbox;
+use Vesta\ControlPanelUtils\Model\ControlPanelFactRestriction;
+use Vesta\ControlPanelUtils\Model\ControlPanelPreferences;
+use Vesta\ControlPanelUtils\Model\ControlPanelRange;
+use Vesta\ControlPanelUtils\Model\ControlPanelSection;
+use Vesta\ControlPanelUtils\Model\ControlPanelSubsection;
 
 trait ResearchSuggestionsModuleTrait {
 
@@ -21,8 +24,7 @@ trait ResearchSuggestionsModuleTrait {
   protected function getFullDescription() {
     $description = array();
     $description[] = 
-            /* I18N: Module Configuration */I18N::translate('A module providing suggestions for additional research, based on available sources.') . ' ' .
-            /* I18N: Module Configuration */I18N::translate('...');
+            /* I18N: Module Configuration */I18N::translate('A module providing suggestions for additional research, based on available sources.');
     $description[] = 
             /* I18N: Module Configuration */I18N::translate('Requires the \'%1$s Vesta Common\' module, and the \'%1$s Vesta Facts and events\' module.', $this->getVestaSymbol());
     
@@ -42,15 +44,17 @@ trait ResearchSuggestionsModuleTrait {
   }
 
   protected function createPrefs() {
+    /*
     $generalSub = array();
     $generalSub[] = new ControlPanelSubsection(
-            /* I18N: Module Configuration */I18N::translate('Displayed title'),
+            I18N::translate('Displayed title'),
             array(new ControlPanelCheckbox(                    
-                /* I18N: Module Configuration */I18N::translate('Include the %1$s symbol in the module title', $this->getVestaSymbol()),
+                I18N::translate('Include the %1$s symbol in the module title', $this->getVestaSymbol()),
                 null,
                 'VESTA',
                 '1')));
-
+    */
+    
     $factsSub = array();
     $factsSub[] = new ControlPanelSubsection(
             /* I18N: Module Configuration */I18N::translate('Options'),
@@ -60,12 +64,46 @@ trait ResearchSuggestionsModuleTrait {
                 'TAB_TOGGLEABLE_RESEARCH',
                 '1')));
     
+    $factsSub[] = new ControlPanelSubsection(
+            /* I18N: Module Configuration */I18N::translate('Grouped events'),
+            array(
+        new ControlPanelFactRestriction(
+                array_intersect_key(GedcomTag::getPicklistFacts('INDI'), array_flip(ResearchSuggestionsService::BIRT_GROUPED_FACTS)),
+                /* I18N: Module Configuration */I18N::translate('Events related to Birth. If there is a source for one of these events, no suggestions will be made for other events in this group. Note that strictly BAPM is not necessarily an event occuring shortly after Birth, but it is often used that way (when CHR would actually be more appropriate, according to the GEDCOM specification). If you only use one of CHR/BAPM, it\'s recommended to deselect the other one here.'),
+                'BIRT_GROUPED_FACTS',
+                implode(',',ResearchSuggestionsService::BIRT_GROUPED_FACTS)),
+        new ControlPanelFactRestriction(
+                array_intersect_key(GedcomTag::getPicklistFacts('INDI'), array_flip(ResearchSuggestionsService::DEAT_GROUPED_FACTS)),
+                /* I18N: Module Configuration */I18N::translate('Events related to Death. If there is a source for one of these events, no suggestions will be made for other events in this group.'),
+                'DEAT_GROUPED_FACTS',
+                implode(',',ResearchSuggestionsService::DEAT_GROUPED_FACTS))));
+    
+    $factsSub[] = new ControlPanelSubsection(
+            /* I18N: Module Configuration */I18N::translate('Age range for Confirmation'),
+            array(
+        new ControlPanelRange(
+                /* I18N: Module Configuration */I18N::translate('Minimal age in years'),
+                null,
+                10,
+                20,
+                'CONF_MIN_AGE',
+                13),
+        new ControlPanelRange(
+                /* I18N: Module Configuration */I18N::translate('Maximal age in years'),
+                'Use to calculate date range for suggestions for Confirmation, calculated based on birth or similar event (in case there is no explicit Confirmation event).',
+                10,
+                20,
+                'CONF_MAX_AGE',
+                14)));
+    
     $sections = array();
+    /*
     $sections[] = new ControlPanelSection(
-            /* I18N: Module Configuration */I18N::translate('General'),
+            I18N::translate('General'),
             null,
             $generalSub);
-
+    */
+    
     $sections[] = new ControlPanelSection(
             /* I18N: Module Configuration */I18N::translate('Facts and Events Tab Settings'),
             null,

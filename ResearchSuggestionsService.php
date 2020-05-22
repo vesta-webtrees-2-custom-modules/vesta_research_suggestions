@@ -4,18 +4,25 @@ namespace Cissee\Webtrees\Module\ResearchSuggestions;
 
 use Cissee\WebtreesExt\VirtualFact;
 use Fisharebest\Webtrees\Fact;
+use Fisharebest\Webtrees\GedcomTag;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Services\SearchService;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\I18N;
+use Illuminate\Support\Collection;
 use Vesta\Hook\HookInterfaces\FunctionsPlaceUtils;
 use Vesta\Model\GedcomDateInterval;
 use Vesta\Model\PlaceStructure;
-use Illuminate\Support\Collection;
+use function collect;
+use function route;
 
 class ResearchSuggestionsService {
 
   protected $module;
   protected $searchService;
+  
+  public const BIRT_GROUPED_FACTS = ['BIRT','CHR','BAPM'];
+  public const DEAT_GROUPED_FACTS = ['DEAT','BURI','CREM'];
   
   public function __construct(
           $module,
@@ -142,6 +149,14 @@ class ResearchSuggestionsService {
           $ignorePartialRanges = false, 
           $tags = null) {
     
+    $birtTags = explode(',', $this->module->getPreference('BIRT_GROUPED_FACTS', implode(self::BIRT_GROUPED_FACTS,',')));
+    //intersect because we want to have a specific order!
+    $birtTags = array_intersect(self::BIRT_GROUPED_FACTS, $birtTags);
+    
+    $deatTags = explode(',', $this->module->getPreference('DEAT_GROUPED_FACTS', implode(self::DEAT_GROUPED_FACTS,',')));
+    //intersect because we want to have a specific order!
+    $deatTags = array_intersect(self::DEAT_GROUPED_FACTS, $deatTags);
+    
 		$facts = array();
 
 		//it is a feature that even for exact dates (e.g. exact BIRT date and exact CHR date), 
@@ -155,7 +170,8 @@ class ResearchSuggestionsService {
 		//TODO recheck
 		
 		//1. research suggestion for birth/christening?
-		if (($tags === null) || (array_intersect($tags, ['BIRT','BAPM','CHR']))) {
+    
+		if (!empty($birtTags) && (($tags === null) || (array_intersect($tags, $birtTags)))) {
 			//we define not to require any if there is at least one sourced event.
 			//also, we cannot provide a suggestion if there is no event of the respective type (because in that case we do not have date & place)
 			
@@ -163,7 +179,7 @@ class ResearchSuggestionsService {
 			$interval = null;
 			$isSourced = false;
 			foreach ($person->facts() as $fact) {
-				if (!in_array($fact->getTag(), ['BIRT','BAPM','CHR'])) {
+				if (!in_array($fact->getTag(), $birtTags)) {
 					continue;
 				}
 				if ($fact->attribute("SOUR")) {
@@ -208,25 +224,28 @@ class ResearchSuggestionsService {
 									$this->resolvePlace($place, $person->tree(), ['POLI','RELI'], $interval));
 				}
 				
-				//(TODO: handle BAPM/CHR confusion: technically, only CHR should be used here!)
-				$events = $this->getSourceEvents($person->tree(), ['BIRT','BAPM','CHR'], $resolvedPlaces);
+				$events = $this->getSourceEvents($person->tree(), $birtTags, $resolvedPlaces);
 
 				foreach ($events as $event) {
 					$sourceId = $event->getSourceXref();
 					$match = $interval->intersect($event->getInterval());
 					if ($match !== null) {
-						//TODO: I18N this?
-						
 						$asType = null;
 						//'preferred' order
-						foreach (['CHR','BAPM','BIRT'] as $type) {
+						foreach ($birtTags as $type) {
 							if (in_array($type, $event->getEventTypes())) {
 								$asType = $type;
 								break;
 							}
 						}
 						
-						$gedcom = "1 ".$asType." Missing source for birth/christening - Possible source:";
+            //TODO I18N
+            $labels = collect($birtTags)
+                    ->map(function (string $t) {
+                      return GedcomTag::getLabel($t);
+                    })->implode('/');
+            
+						$gedcom = "1 ".$asType." ". I18N::translate('Missing source for %1$s - Possible source:', $labels);
 
 						//conceptually a bit nicer, but leads to ugly sorting of facts:
 						//EVEN with date 'pulls' up other non-dated events, such as OCCU (cf Functions.sortFacts/Fact.compareType)
@@ -287,7 +306,7 @@ class ResearchSuggestionsService {
 				//first get death date, if any
 				$maxUntil = null;
 				foreach ($person->facts() as $fact) {
-					if (!in_array($fact->getTag(), ['DEAT','BURI','CREM'])) {
+					if (!in_array($fact->getTag(), self::DEAT_GROUPED_FACTS)) {
 						continue;
 					}
 					
@@ -300,7 +319,7 @@ class ResearchSuggestionsService {
 				}
 				
 				foreach ($person->facts() as $fact) {
-					if (!in_array($fact->getTag(), ['BIRT','BAPM','CHR'])) {
+					if (!in_array($fact->getTag(), self::BIRT_GROUPED_FACTS)) {
 						continue;
 					}
 
@@ -330,7 +349,9 @@ class ResearchSuggestionsService {
 					//individuals aged 14 or almost 14
 					//
 					//simply use year of birth + 14/15 years
-					$interval = $interval->shiftYears(14, 15);
+          $minAge = intval($this->module->getPreference('CONF_MIN_AGE', '13'));
+          $maxAge = intval($this->module->getPreference('CONF_MIN_AGE', '14'));
+					$interval = $interval->shiftYears($minAge+1, $maxAge+1);
 					//still alive? else reset interval to null
 					if ($maxUntil) {
 						$interval = $interval->maxUntil($maxUntil);
@@ -351,16 +372,12 @@ class ResearchSuggestionsService {
 					$sourceId = $event->getSourceXref();
 					$match = $event->getInterval()->intersect($interval);
 					if ($match !== null) {
-						//TODO: I18N this?
-						if ($hasEvent) {
-							$gedcom = "1 CONF Missing source for confirmation - Possible source:";
-							//$gedcom = "1 EVEN Missing source for birth/christening - Possible source:";
-						} else {
-							$gedcom = "1 CONF Possible source:";
-							//$gedcom = "1 EVEN Missing source for birth/christening - Possible source:";
-						}
 						
-						//$gedcom .= "\n2 TYPE Research Suggestion";
+						if ($hasEvent) {
+              $gedcom = "1 CONF ". I18N::translate('Missing source for %1$s - Possible source:', GedcomTag::getLabel('CONF'));
+						} else {
+              $gedcom = "1 CONF ". I18N::translate('Possible source:');
+						}
 						
 						$gedcom .= $match->toGedcomString(2);
 
@@ -373,14 +390,72 @@ class ResearchSuggestionsService {
 				}
 			}
 		}
+        
+    //3a. research suggestion for other sourced individual events?
+    $sour_indi_facts = 
+            collect(explode(',',$person->tree()->getPreference('SOUR_DATA_EVEN_FACTS', 'BIRT,BAPM,CHR,CONF,MARR,DEAT,BURI')))
+            ->intersect(array_keys(GedcomTag::getPicklistFacts('INDI')))
+            ->filter(function (string $t) use ($birtTags, $deatTags): bool {
+              return !in_array($t, $birtTags) && !in_array($t, $deatTags) && ($t !== 'CONF');
+            });
+            
+            //cannot use ->except because that operates on collection keys!
+    
+    //3a. research suggestion for sourced family events?
+    if (!empty($sour_indi_facts) && (($tags === null) || (array_intersect($tags, $sour_indi_facts)))) {
+      foreach ($person->facts() as $fact) {
+        if (!$sour_indi_facts->contains($fact->getTag())) {
+            continue;
+        }
 
-		//3. research suggestion for marriage(s)?
-		if (($tags === null) || (array_intersect($tags, ['MARR']))) {
+        if ($fact->attribute("SOUR")) {
+          continue;
+        }
+
+        $place = $fact->attribute("PLAC");
+        if ($place) {
+          $date = $fact->attribute("DATE");
+          if ($date) {
+            $interval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
+            $resolvedPlaces = $this->resolvePlace($place, $person->tree(), ['POLI','RELI'], $interval);
+            $events = $this->getSourceEvents($person->tree(), [$fact->getTag()], $resolvedPlaces);
+
+            foreach ($events as $event) {
+              $sourceId = $event->getSourceXref();
+              $match = $interval->intersect($event->getInterval());
+              if ($match !== null) {
+                $gedcom = "1 ".$fact->getTag()." ". I18N::translate('Missing source for %1$s - Possible source:', GedcomTag::getLabel($fact->getTag()));
+
+                //conceptually a bit nicer, but leads to ugly sorting of facts:
+                //EVEN with date 'pulls' up other non-dated events, such as OCCU (cf Functions.sortFacts/Fact.compareType)
+                //$gedcom = "1 EVEN Missing source for marriage - Possible source:";
+                //$gedcom .= "\n2 TYPE Research Suggestion";
+
+                $gedcom .= $match->toGedcomString(2);
+
+                $gedcom .= "\n2 PLAC " . $event->getPlace();
+                $gedcom .= "\n2 SOUR @" . $sourceId. "@";
+
+                $research = new VirtualFact($gedcom, $person, 'research');
+                $facts[] = $research;
+              }//else unexpected, shouldn't have been returned!					
+            }
+          }	
+        }
+      }
+		}
+    
+    $sour_fam_facts = 
+            collect(explode(',',$person->tree()->getPreference('SOUR_DATA_EVEN_FACTS', 'BIRT,BAPM,CHR,CONF,MARR,DEAT,BURI')))
+            ->intersect(array_keys(GedcomTag::getPicklistFacts('FAM')));
+
+		//3b. research suggestion for sourced family events?
+    if (!empty($sour_fam_facts) && (($tags === null) || (array_intersect($tags, $sour_fam_facts)))) {
 			foreach ($person->spouseFamilies() as $family) {
 				foreach ($family->facts() as $fact) {
-					if (!in_array($fact->getTag(), ['MARR'])) {
-						continue;
-					}
+          if (!$sour_fam_facts->contains($fact->getTag())) {
+            	continue;
+          }
 
 					if ($fact->attribute("SOUR")) {
 						continue;
@@ -388,21 +463,17 @@ class ResearchSuggestionsService {
 
 					$place = $fact->attribute("PLAC");
 					if ($place) {
-						//$gedcom .= "\n2 PLAC ";
-						//$gedcom .= $place;
-
 						$date = $fact->attribute("DATE");
 						if ($date) {
 							$interval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
 							$resolvedPlaces = $this->resolvePlace($place, $person->tree(), ['POLI','RELI'], $interval);
-							$events = $this->getSourceEvents($person->tree(), ['MARR'], $resolvedPlaces);
+							$events = $this->getSourceEvents($person->tree(), [$fact->getTag()], $resolvedPlaces);
 
 							foreach ($events as $event) {
 								$sourceId = $event->getSourceXref();
 								$match = $interval->intersect($event->getInterval());
 								if ($match !== null) {
-									//TODO: I18N this?
-									$gedcom = "1 MARR Missing source for marriage - Possible source:";
+                  $gedcom = "1 ".$fact->getTag()." ". I18N::translate('Missing source for %1$s - Possible source:', GedcomTag::getLabel($fact->getTag()));
 
 									//conceptually a bit nicer, but leads to ugly sorting of facts:
 									//EVEN with date 'pulls' up other non-dated events, such as OCCU (cf Functions.sortFacts/Fact.compareType)
@@ -425,7 +496,8 @@ class ResearchSuggestionsService {
 		}	
 		
 		//4. research suggestion for death/burial?
-		if (($tags === null) || (array_intersect($tags, ['DEAT','BURI','CREM']))) {
+    
+		if (!empty($deatTags) && (($tags === null) || (array_intersect($tags, $deatTags)))) {
 			//we define not to require any if there is at least one sourced event.
 			//also, we cannot provide a suggestion if there is no event of the respective type (because in that case we do not have date & place)
 			
@@ -433,7 +505,7 @@ class ResearchSuggestionsService {
 			$interval = null;
 			$isSourced = false;
 			foreach ($person->facts() as $fact) {
-				if (!in_array($fact->getTag(), ['DEAT','BURI','CREM'])) {
+				if (!in_array($fact->getTag(), $deatTags)) {
 					continue;
 				}
 				if ($fact->attribute("SOUR")) {
@@ -475,22 +547,25 @@ class ResearchSuggestionsService {
 									$this->resolvePlace($place, $person->tree(), ['POLI','RELI'], $interval));
 				}
 
-				$events = $this->getSourceEvents($person->tree(), ['DEAT','BURI','CREM'], $resolvedPlaces);
+				$events = $this->getSourceEvents($person->tree(), $deatTags, $resolvedPlaces);
 				foreach ($events as $event) {
 					$sourceId = $event->getSourceXref();
 					$match = $event->getInterval()->intersect($interval);
 					if ($match !== null) {
 						$asType = null;
 						//'preferred' order
-						foreach (['BURI','CREM','DEAT'] as $type) {
+						foreach ($deatTags as $type) {
 							if (in_array($type, $event->getEventTypes())) {
 								$asType = $type;
 								break;
 							}
 						}
-						
-						//TODO: I18N this?
-						$gedcom = "1 ".$asType." Missing source for death/burial - Possible source:";
+						$labels = collect($deatTags)
+                    ->map(function (string $t) {
+                      return GedcomTag::getLabel($t);
+                    })->implode('/');
+            
+						$gedcom = "1 ".$asType." ". I18N::translate('Missing source for %1$s - Possible source:', $labels);
 
 						$gedcom .= $match->toGedcomString(2);
 
@@ -503,15 +578,6 @@ class ResearchSuggestionsService {
 				}
 			}
 		}
-		
-		//not really helpful anyway (also filter would have to be implemented differently)
-		/*	
-		} else {
-			//TODO: add date to make this show up closer to birth?
-			$gedcom = "1 EVEN Missing source for Birth - No matching sources found!\n2 TYPE Research Suggestion";
-			$research = new VirtualFact($gedcom, $person, 'research');
-			$facts[] = $research;
-		 */
 		
 		return $facts;
 	}

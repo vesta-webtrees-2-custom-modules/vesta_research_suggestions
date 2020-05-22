@@ -113,16 +113,16 @@ class ResearchSuggestionsModule extends AbstractModule implements
 
   public function hFactsTabGetOutputInDBox(Individual $person) {
 		$toggleableResearch = boolval($this->getPreference('TAB_TOGGLEABLE_RESEARCH', '1'));	
-		return $this->getOutputInDescriptionBox($toggleableResearch, 'show-research-suggestions-factstab', 'wt-research-fact-pfh', 'Research Suggestions');
+		return $this->getOutputInDescriptionBox($toggleableResearch, 'show-research-suggestions-factstab', 'wt-research-fact-pfh', I18N::translate('Research Suggestions'));
 	}
   
-  protected function getOutputInDescriptionBox(bool $toggleableRels, string $id, string $targetClass, string $label) {
+  protected function getOutputInDescriptionBox(bool $toggleableResearch, string $id, string $targetClass, string $label) {
     ob_start();
-    if ($toggleableRels) {
+    if ($toggleableResearch) {
       ?>
       <label>
           <input id="<?php echo $id; ?>" type="checkbox" data-toggle="collapse" data-target=".<?php echo $targetClass; ?>">
-          <?php echo I18N::translate($label); ?>
+          <?php echo $label; ?>
       </label>
       <?php
     }

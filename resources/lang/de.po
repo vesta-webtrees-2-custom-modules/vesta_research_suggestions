@@ -17,32 +17,19 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ResearchSuggestionsModule.php:116
-msgid "Research Suggestions"
-msgstr "Forschungsvorschläge"
-
-#: ResearchSuggestionsModuleTrait.php:14
-msgid "Vesta Research Suggestions"
-msgstr "Vesta Forschungsvorschläge"
-
-#. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:18 ResearchSuggestionsModuleTrait.php:24
-msgid ""
-"A module providing suggestions for additional research, based on available "
-"sources."
-msgstr ""
-
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:25
 msgid "..."
 msgstr ""
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:27
-#, php-format
-msgid ""
-"Requires the '%1$s Vesta Common' module, and the '%1$s Vesta Facts and "
-"events' module."
+#: ResearchSuggestionsModuleTrait.php:18 ResearchSuggestionsModuleTrait.php:24
+msgid "A module providing suggestions for additional research, based on available sources."
+msgstr ""
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:58
+msgid "Allow persistent toggle (user may show/hide research suggestions as additional facts)"
 msgstr ""
 
 #. I18N: Module Configuration
@@ -51,21 +38,12 @@ msgid "Displayed title"
 msgstr ""
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:49
-#, php-format
-msgid "Include the %1$s symbol in the module title"
+#: ResearchSuggestionsModuleTrait.php:70
+msgid "Facts and Events Tab Settings"
 msgstr ""
 
-#. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:56
-msgid "Options"
-msgstr ""
-
-#. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:58
-msgid ""
-"Allow persistent toggle (user may show/hide research suggestions as "
-"additional facts)"
+#: resources/views/admin/trees-preferences-ext.phtml:10
+msgid "Facts recorded in sources"
 msgstr ""
 
 #. I18N: Module Configuration
@@ -74,34 +52,45 @@ msgid "General"
 msgstr ""
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:70
-msgid "Facts and Events Tab Settings"
+#: ResearchSuggestionsModuleTrait.php:49
+#, php-format
+msgid "Include the %1$s symbol in the module title"
 msgstr ""
 
 #: ResearchSuggestionsService.php:241 ResearchSuggestionsService.php:370
 #: ResearchSuggestionsService.php:508
 #, php-format
 msgid "Missing source for %1$s - Possible source:"
+msgstr "Keine Quelle angegeben für %1$s - Mögliche Quelle:"
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:56
+msgid "Options"
 msgstr ""
 
 #: ResearchSuggestionsService.php:372
 msgid "Possible source:"
+msgstr "Mögliche Quelle:"
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:27
+#, php-format
+msgid "Requires the '%1$s Vesta Common' module, and the '%1$s Vesta Facts and events' module."
 msgstr ""
 
-#: WhatsNew/WhatsNew0.php:11
-msgid ""
-"Vesta Research Suggestions: A new custom module. See the Readme for details."
-msgstr ""
-
-#: resources/views/admin/trees-preferences-ext.phtml:10
-msgid "Facts recorded in sources"
-msgstr ""
+#: ResearchSuggestionsModule.php:116
+msgid "Research Suggestions"
+msgstr "Forschungsvorschläge"
 
 #. I18N: Help text for the “Facts recorded in sources” configuration setting
 #: resources/views/admin/trees-preferences-ext.phtml:18
-msgid ""
-"Sources can be annotated, via the 'data' fact, in order to describe which "
-"individual and family facts they contain. This is the list of those GEDCOM "
-"facts. You can modify this list by removing or adding fact names, even "
-"custom ones, as necessary. "
+msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. This is the list of those GEDCOM facts. You can modify this list by removing or adding fact names, even custom ones, as necessary. "
+msgstr ""
+
+#: ResearchSuggestionsModuleTrait.php:14
+msgid "Vesta Research Suggestions"
+msgstr "Vesta Forschungsvorschläge"
+
+#: WhatsNew/WhatsNew0.php:11
+msgid "Vesta Research Suggestions: A new custom module. See the Readme for details."
 msgstr ""
