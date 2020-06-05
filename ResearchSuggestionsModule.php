@@ -54,7 +54,7 @@ class ResearchSuggestionsModule extends AbstractModule implements
   }
 
   public function customModuleLatestVersionUrl(): string {
-    return 'https://raw.githubusercontent.com/vesta-webtrees-2-custom-modules/research_suggestions/master/latest-version.txt';
+    return 'https://raw.githubusercontent.com/vesta-webtrees-2-custom-modules/vesta_research_suggestions/master/latest-version.txt';
   }
 
   public function customModuleSupportUrl(): string {
