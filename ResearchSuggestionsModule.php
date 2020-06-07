@@ -61,10 +61,10 @@ class ResearchSuggestionsModule extends AbstractModule implements
     return 'https://cissee.de';
   }
 
-  public function description(): string {
-    return $this->getShortDescription();
+  public function resourcesFolder(): string {
+    return __DIR__ . '/resources/';
   }
-
+  
   public function onBoot(): void {
     app()->instance(ResearchSuggestionsService::class, new ResearchSuggestionsService(
             $this, 
@@ -87,15 +87,6 @@ class ResearchSuggestionsModule extends AbstractModule implements
   
   public function postSelect2SourceAction(ServerRequestInterface $request): ResponseInterface {
     return app(Select2SourceWithSuggestions::class)->handle($request);
-  }
-  
-  /**
-   * Where does this module store its resources
-   *
-   * @return string
-   */
-  public function resourcesFolder(): string {
-    return __DIR__ . '/resources/';
   }
 
   //IndividualFactsTabExtenderInterface

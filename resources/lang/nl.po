@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-05-21 12:59+0200\n"
-"PO-Revision-Date: 2020-06-04 19:36+0200\n"
+"PO-Revision-Date: 2020-06-07 17:43+0200\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -55,7 +55,7 @@ msgstr "Algemeen"
 #: ResearchSuggestionsModuleTrait.php:49
 #, php-format
 msgid "Include the %1$s symbol in the module title"
-msgstr "Het symbool %1$s opnemen in de moduletitel"
+msgstr "Het %1$s-symbool opnemen in de moduletitel"
 
 #: ResearchSuggestionsService.php:241 ResearchSuggestionsService.php:370
 #: ResearchSuggestionsService.php:508
@@ -76,7 +76,7 @@ msgstr "Mogelijke bron:"
 #: ResearchSuggestionsModuleTrait.php:27
 #, php-format
 msgid "Requires the '%1$s Vesta Common' module, and the '%1$s Vesta Facts and events' module."
-msgstr "Vereist de '%1$s Vesta Common' module, en de '%1$s Vesta Feiten en gebeurtenissen' module."
+msgstr "Vereist de modules '%1$s Vesta Algemeen' en '%1$s Vesta Feiten en gebeurtenissen'."
 
 #: ResearchSuggestionsModule.php:116
 msgid "Research Suggestions"
