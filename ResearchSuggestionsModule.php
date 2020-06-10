@@ -199,7 +199,7 @@ class ResearchSuggestionsModule extends AbstractModule implements
   
   //TODO Issue #2
   public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-    $route = $request->getAttributes()['route'];
+    $route = $request->getAttribute('route');
     assert($route instanceof Route);
     
     //error_log(print_r($route, true));

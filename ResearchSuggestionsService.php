@@ -101,7 +101,7 @@ class ResearchSuggestionsService {
     }
 
     //(TODO: handle BAPM/CHR confusion)
-    $events = $this->getSourceEvents($tree, [$fact->tag()], $resolvedPlaces);
+    $events = $this->getSourceEvents($tree, [$fact->getTag()], $resolvedPlaces);
 
     foreach ($events as $event) {
       $match = $interval->intersect($event->getInterval());
@@ -179,7 +179,7 @@ class ResearchSuggestionsService {
 			$interval = null;
 			$isSourced = false;
 			foreach ($person->facts() as $fact) {
-				if (!in_array($fact->tag(), $birtTags)) {
+				if (!in_array($fact->getTag(), $birtTags)) {
 					continue;
 				}
 				if ($fact->attribute("SOUR")) {
@@ -275,7 +275,7 @@ class ResearchSuggestionsService {
 			
 			//2a. do we already have a CONF event?
 			foreach ($person->facts() as $fact) {
-				if ($fact->tag() !== 'CONF') {
+				if ($fact->getTag() !== 'CONF') {
 					continue;
 				}
 				
@@ -306,7 +306,7 @@ class ResearchSuggestionsService {
 				//first get death date, if any
 				$maxUntil = null;
 				foreach ($person->facts() as $fact) {
-					if (!in_array($fact->tag(), self::DEAT_GROUPED_FACTS)) {
+					if (!in_array($fact->getTag(), self::DEAT_GROUPED_FACTS)) {
 						continue;
 					}
 					
@@ -319,7 +319,7 @@ class ResearchSuggestionsService {
 				}
 				
 				foreach ($person->facts() as $fact) {
-					if (!in_array($fact->tag(), self::BIRT_GROUPED_FACTS)) {
+					if (!in_array($fact->getTag(), self::BIRT_GROUPED_FACTS)) {
 						continue;
 					}
 
@@ -404,7 +404,7 @@ class ResearchSuggestionsService {
     //3a. research suggestion for sourced family events?
     if (!empty($sour_indi_facts) && (($tags === null) || (array_intersect($tags, $sour_indi_facts)))) {
       foreach ($person->facts() as $fact) {
-        if (!$sour_indi_facts->contains($fact->tag())) {
+        if (!$sour_indi_facts->contains($fact->getTag())) {
             continue;
         }
 
@@ -418,13 +418,13 @@ class ResearchSuggestionsService {
           if ($date) {
             $interval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
             $resolvedPlaces = $this->resolvePlace($place, $person->tree(), ['POLI','RELI'], $interval);
-            $events = $this->getSourceEvents($person->tree(), [$fact->tag()], $resolvedPlaces);
+            $events = $this->getSourceEvents($person->tree(), [$fact->getTag()], $resolvedPlaces);
 
             foreach ($events as $event) {
               $sourceId = $event->getSourceXref();
               $match = $interval->intersect($event->getInterval());
               if ($match !== null) {
-                $gedcom = "1 ".$fact->tag()." ". I18N::translate('Missing source for %1$s - Possible source:', GedcomTag::getLabel($fact->tag()));
+                $gedcom = "1 ".$fact->getTag()." ". I18N::translate('Missing source for %1$s - Possible source:', GedcomTag::getLabel($fact->getTag()));
 
                 //conceptually a bit nicer, but leads to ugly sorting of facts:
                 //EVEN with date 'pulls' up other non-dated events, such as OCCU (cf Functions.sortFacts/Fact.compareType)
@@ -453,7 +453,7 @@ class ResearchSuggestionsService {
     if (!empty($sour_fam_facts) && (($tags === null) || (array_intersect($tags, $sour_fam_facts)))) {
 			foreach ($person->spouseFamilies() as $family) {
 				foreach ($family->facts() as $fact) {
-          if (!$sour_fam_facts->contains($fact->tag())) {
+          if (!$sour_fam_facts->contains($fact->getTag())) {
             	continue;
           }
 
@@ -467,13 +467,13 @@ class ResearchSuggestionsService {
 						if ($date) {
 							$interval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
 							$resolvedPlaces = $this->resolvePlace($place, $person->tree(), ['POLI','RELI'], $interval);
-							$events = $this->getSourceEvents($person->tree(), [$fact->tag()], $resolvedPlaces);
+							$events = $this->getSourceEvents($person->tree(), [$fact->getTag()], $resolvedPlaces);
 
 							foreach ($events as $event) {
 								$sourceId = $event->getSourceXref();
 								$match = $interval->intersect($event->getInterval());
 								if ($match !== null) {
-                  $gedcom = "1 ".$fact->tag()." ". I18N::translate('Missing source for %1$s - Possible source:', GedcomTag::getLabel($fact->tag()));
+                  $gedcom = "1 ".$fact->getTag()." ". I18N::translate('Missing source for %1$s - Possible source:', GedcomTag::getLabel($fact->getTag()));
 
 									//conceptually a bit nicer, but leads to ugly sorting of facts:
 									//EVEN with date 'pulls' up other non-dated events, such as OCCU (cf Functions.sortFacts/Fact.compareType)
@@ -505,7 +505,7 @@ class ResearchSuggestionsService {
 			$interval = null;
 			$isSourced = false;
 			foreach ($person->facts() as $fact) {
-				if (!in_array($fact->tag(), $deatTags)) {
+				if (!in_array($fact->getTag(), $deatTags)) {
 					continue;
 				}
 				if ($fact->attribute("SOUR")) {

@@ -79,7 +79,7 @@ trait ResearchSuggestionsModuleTrait {
                 implode(',',ResearchSuggestionsService::DEAT_GROUPED_FACTS))));
     
     $factsSub[] = new ControlPanelSubsection(
-            /* I18N: Module Configuration */I18N::translate('Age range for Confirmation'),
+            /* I18N: Module Configuration */I18N::translate('Age range for Confirmation events'),
             array(
         new ControlPanelRange(
                 /* I18N: Module Configuration */I18N::translate('Minimal age in years'),
@@ -90,7 +90,7 @@ trait ResearchSuggestionsModuleTrait {
                 13),
         new ControlPanelRange(
                 /* I18N: Module Configuration */I18N::translate('Maximal age in years'),
-                'Use to calculate date range for suggestions for Confirmation, calculated based on birth or similar event (in case there is no explicit Confirmation event).',
+                /* I18N: Module Configuration */I18N::translate('Used to calculate date range for suggestions for Confirmation (CONF) events, based on birth or similar event (in case there is no explicit Confirmation event).'),
                 10,
                 20,
                 'CONF_MAX_AGE',
