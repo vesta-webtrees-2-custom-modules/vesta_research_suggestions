@@ -17,9 +17,7 @@ use function app;
 use function response;
 use function view;
 
-/**
- * Autocomplete for sources.
- */
+//adapted from Select2Source
 class Select2SourceWithSuggestions {
     
      // For clients that request one page of data at a time.
@@ -108,7 +106,7 @@ class Select2SourceWithSuggestions {
      *
      * @return Collection<array<string,string>>
      */
-    protected function search(Tree $tree, string $query, int $offset, int $limit): Collection
+    protected function search(Tree $tree, string $query, int $offset, int $limit, string $at): Collection
     {
         // Search by XREF
         $source = Factory::source()->make($query, $tree);
@@ -119,9 +117,9 @@ class Select2SourceWithSuggestions {
             $results = $this->search_service->searchSourcesByName([$tree], [$query], $offset, $limit);
         }
 
-        return $results->map(static function (Source $source): array {
+        return $results->map(static function (Source $source) use ($at): array {
             return [
-                'id'    => $source->xref(),
+                'id'    => $at . $source->xref() . $at,
                 'text'  => view('selects/source', ['source' => $source]),
                 'title' => ' ',
             ];
