@@ -39,8 +39,8 @@ class Select2SourceWithSuggestions {
         assert($tree instanceof Tree);
 
         $params = (array) $request->getParsedBody();
-        $query  = $params['q'] ?? '';
-        $at     = (bool) ($params['at'] ?? false);
+        $query = $params['q'] ?? '';
+        $at = (bool) ($params['at'] ?? false);
         $atString = $at ? '@' : '';
         
         if (strlen($query) == 0) {
@@ -68,7 +68,7 @@ class Select2SourceWithSuggestions {
           $fact = new Fact($gedcom, $dummy, '');
           $sourceEvents = app(ResearchSuggestionsService::class)->getSourceSuggestions($fact, $tree);
           
-          $results = $sourceEvents->map(static function (SourceEvent $source): array {
+          $results = $sourceEvents->map(static function (SourceEvent $source) use ($atString): array {
               return [
                   'id'    => $atString . $source->getSource()->xref() . $atString,
                   'text'  => view('selects/source', ['source' => $source->getSource()]),

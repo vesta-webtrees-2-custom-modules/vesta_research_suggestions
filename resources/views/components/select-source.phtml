@@ -5,117 +5,165 @@ use Fisharebest\Webtrees\Http\RequestHandlers\Select2Source;
 use Fisharebest\Webtrees\Source;
 use Fisharebest\Webtrees\View;
 
+/**
+ * @var string      $at     "@" or "" (or unset).
+ * @var Source|null $source
+ * @var string|null $class
+ * @var string|null $id
+ * @var string      $name
+ * @var Tree        $tree
+ */
+
+$at = $at ?? '';
+
 ?>
 
-<?php  
-  //defaults from original view
-  $defaultLength = e(Select2Source::MINIMUM_INPUT_LENGTH);
-  $defaultUrl = e(route(Select2Source::class, ['tree' => $tree->name()]));
-  
-  $adjustedLength = "0";
-  //placeholder url
-  $adjustedUrl = app(ResearchSuggestionsService::class)->routeSelect2Source($tree, '__GEDCOM__'); 
-  
-  $selectId = e($id ?? $name);
-  
-  //apparently we must not set select2 data via attributes if we want to modify dynamically
-  
-  //TODO: span dir auto, clearing
-?>
-
-<select
-    autocomplete="off"
-    class="form-control select2 <?= $class ?? '' ?>"
-    id="<?= $selectId ?>"
-    name="<?= e($name) ?>"
-    <?= ($disabled ?? false) ? 'disabled' : '' ?>
-    <?= ($required ?? false) ? 'required' : '' ?>
-    style="width:100%"
->
-    <?php if (($source ?? null) instanceof Source) : ?>
-        <option value="<?= e($source->xref()) ?>"d>
-            <?= view('selects/source', ['source' => $source]) ?>
-        </option>
-    <?php else : ?>
-        <option value="">&nbsp;</option>
-    <?php endif ?>
-</select>
-
-<?php View::push('javascript') ?>
-<script>
-$(document).ready(function() {
-  var firstTagInput = document.querySelector('input[name=tag\\[\\]]');  
-  var firstDateInput = document.querySelector('[id^=DATE]');
-  var firstPlacInput = document.querySelector('[id^=PLAC]');
-
+<?php if ((!isset($id)) || (substr($id, 0, strlen("source-xref")) === "source-xref")) : ?>
   <?php
-    //the view is used in several other places, e.g. via the favorites module.
-    //in these cases, the following inputs aren't available, and we continue just as in the original view.
-    //otherwise, we adjust the select control based on the inputs
+  
+    //the view is used in several other places, e.g. via the favorites module, and in the 'merge records' dialog.
+    //in these cases, $id is either unset (not null, as documented) or starts with 'source-xref'
+
+    //and we use stardard view, contents copied here for convenience
   ?>
-  if (firstTagInput && firstDateInput && firstPlacInput) {
-    var selectControl = document.getElementById("<?= $selectId ?>");  
-    var tagValue = firstTagInput.value;
 
-    var changeListener = function() {
-      const lang = document.documentElement.lang;
-      const select2_languages = {
-        'zh-Hans': 'zh-CN',
-        'zh-Hant': 'zh-TW'
+  <select
+      autocomplete="off"
+      class="form-control select2 <?= $class ?? '' ?>"
+      data-ajax--delay="<?= e(Select2Source::AJAX_DELAY) ?>"
+      data-minimum-input-length="<?= e(Select2Source::MINIMUM_INPUT_LENGTH) ?>"
+      data-ajax--type="POST"
+      data-ajax--url="<?= e(route(Select2Source::class, ['tree' => $tree->name(), 'at' => $at])) ?>"
+      data-allow-clear="true"
+      data-placeholder=""
+      id="<?= e($id ?? $name) ?>"
+      name="<?= e($name) ?>"
+      <?= ($disabled ?? false) ? 'disabled' : '' ?>
+      <?= ($required ?? false) ? 'required' : '' ?>
+      style="width:100%"
+  >
+      <?php if (($source ?? null) instanceof Source) : ?>
+          <option value="<?= e($at . $source->xref() . $at) ?>"d>
+              <?= view('selects/source', ['source' => $source]) ?>
+          </option>
+      <?php else : ?>
+          <option value="">&nbsp;</option>
+      <?php endif ?>
+  </select>
+
+<?php else : ?>
+                            
+  <?php  
+  
+    //defaults from original view
+    //$defaultLength = e(Select2Source::MINIMUM_INPUT_LENGTH);
+    $defaultUrl = e(route(Select2Source::class, ['tree' => $tree->name(), 'at' => $at]));
+
+    $adjustedLength = "0";
+    //placeholder url
+    $adjustedUrl = app(ResearchSuggestionsService::class)->routeSelect2Source($tree, '__GEDCOM__'); 
+
+    $selectId = e($id ?? $name);
+
+    //apparently we must not set select2 data via attributes if we want to modify dynamically
+
+    //TODO: span dir auto, clearing
+  ?>
+
+  <select
+      autocomplete="off"
+      class="form-control select2 <?= $class ?? '' ?>"
+      id="<?= $selectId ?>"
+      name="<?= e($name) ?>"
+      <?= ($disabled ?? false) ? 'disabled' : '' ?>
+      <?= ($required ?? false) ? 'required' : '' ?>
+      style="width:100%"
+  >
+      <?php if (($source ?? null) instanceof Source) : ?>
+          <option value="<?= e($source->xref()) ?>"d>
+              <?= view('selects/source', ['source' => $source]) ?>
+          </option>
+      <?php else : ?>
+          <option value="">&nbsp;</option>
+      <?php endif ?>
+  </select>
+
+  <?php View::push('javascript') ?>
+  <script>
+  $(document).ready(function() {
+    var firstTagInput = document.querySelector('input[name=tag\\[\\]]');  
+    var firstDateInput = document.querySelector('[id^=DATE]');
+    var firstPlacInput = document.querySelector('[id^=PLAC]');
+
+    <?php
+      //the view is used in several other places, e.g. via the favorites module.
+      //in these cases, we shouldn't even be here, see above!
+    ?>
+    if (firstTagInput && firstDateInput && firstPlacInput) {
+      var selectControl = document.getElementById("<?= $selectId ?>");  
+      var tagValue = firstTagInput.value;
+
+      var changeListener = function() {
+        const lang = document.documentElement.lang;
+        const select2_languages = {
+          'zh-Hans': 'zh-CN',
+          'zh-Hant': 'zh-TW'
+        };
+
+        var dateValue = firstDateInput.value;
+        var placValue = firstPlacInput.value;
+        if (dateValue && placValue) {
+          var finalUrl = "<?= $adjustedUrl ?>".replace("__GEDCOM__", encodeURIComponent("1 "+ tagValue + "\n2 DATE " + dateValue + "\n2 PLAC " + placValue));
+          $(selectControl).select2({
+            minimumInputLength: <?= $adjustedLength ?>,
+            allowClear: true,
+            placeholder: "",
+            ajax: {
+              delay: <?= e(Select2Source::AJAX_DELAY) ?>,
+              type: "POST",
+              url: finalUrl
+            },
+
+            //stuff from webtrees.js
+            language: select2_languages[lang] || lang,
+            // Needed for elements that are initially hidden.
+            width: '100%',
+            // Do not escape - we do it on the server.
+            escapeMarkup: function (x) {
+              return x;
+            }
+          });
+        } else {
+          $(selectControl).select2({
+            minimumInputLength: 2,
+            allowClear: true,
+            placeholder: "",
+            ajax: {
+              delay: <?= e(Select2Source::AJAX_DELAY) ?>,
+              type: "POST",
+              url: "<?= $defaultUrl ?>"
+            },
+
+            //stuff from webtrees.js
+            language: select2_languages[lang] || lang,
+            // Needed for elements that are initially hidden.
+            width: '100%',
+            // Do not escape - we do it on the server.
+            escapeMarkup: function (x) {
+              return x;
+            }
+          });
+        }  
       };
-      
-      var dateValue = firstDateInput.value;
-      var placValue = firstPlacInput.value;
-      if (dateValue && placValue) {
-        var finalUrl = "<?= $adjustedUrl ?>".replace("__GEDCOM__", encodeURIComponent("1 "+ tagValue + "\n2 DATE " + dateValue + "\n2 PLAC " + placValue));
-        $(selectControl).select2({
-          minimumInputLength: <?= $adjustedLength ?>,
-          allowClear: true,
-          placeholder: "",
-          ajax: {
-            delay: <?= e(Select2Source::AJAX_DELAY) ?>,
-            type: "POST",
-            url: finalUrl
-          },
-          
-          //stuff from webtrees.js
-          language: select2_languages[lang] || lang,
-          // Needed for elements that are initially hidden.
-          width: '100%',
-          // Do not escape - we do it on the server.
-          escapeMarkup: function (x) {
-            return x;
-          }
-        });
-      } else {
-        $(selectControl).select2({
-          minimumInputLength: 2,
-          allowClear: true,
-          placeholder: "",
-          ajax: {
-            delay: <?= e(Select2Source::AJAX_DELAY) ?>,
-            type: "POST",
-            url: "<?= $defaultUrl ?>"
-          },
-          
-          //stuff from webtrees.js
-          language: select2_languages[lang] || lang,
-          // Needed for elements that are initially hidden.
-          width: '100%',
-          // Do not escape - we do it on the server.
-          escapeMarkup: function (x) {
-            return x;
-          }
-        });
-      }  
-    };
 
-    firstDateInput.addEventListener('change', changeListener);
-    firstPlacInput.addEventListener('change', changeListener);
-    
-    //also initialize!
-    changeListener();
-  }
-});
-</script>
-<?php View::endpush() ?>
+      firstDateInput.addEventListener('change', changeListener);
+      firstPlacInput.addEventListener('change', changeListener);
+
+      //also initialize!
+      changeListener();
+    }
+  });
+  </script>
+  <?php View::endpush() ?>
+
+<?php endif ?>
