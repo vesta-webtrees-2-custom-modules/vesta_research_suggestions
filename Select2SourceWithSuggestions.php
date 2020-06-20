@@ -37,11 +37,11 @@ class Select2SourceWithSuggestions {
     {
         $tree = $request->getAttribute('tree');
         assert($tree instanceof Tree);
-        
-        $params = (array) $request->getParsedBody();
 
-        $query = $params['q'] ?? '';
-        //assert(strlen($query) >= self::MINIMUM_INPUT_LENGTH);
+        $params = (array) $request->getParsedBody();
+        $query  = $params['q'] ?? '';
+        $at     = (bool) ($params['at'] ?? false);
+        $atString = $at ? '@' : '';
         
         if (strlen($query) == 0) {
           //return suggested sources, if there are any          
@@ -70,7 +70,7 @@ class Select2SourceWithSuggestions {
           
           $results = $sourceEvents->map(static function (SourceEvent $source): array {
               return [
-                  'id'    => $source->getSource()->xref(),
+                  'id'    => $atString . $source->getSource()->xref() . $atString,
                   'text'  => view('selects/source', ['source' => $source->getSource()]),
                   'title' => ' ',
               ];
@@ -84,7 +84,7 @@ class Select2SourceWithSuggestions {
           $limit  = self::RESULTS_PER_PAGE + 1;
 
           // Perform the search.
-          $results = $this->search($tree, $query, $offset, $limit);          
+          $results = $this->search($tree, $query, $offset, $limit, $atString);          
         }
 
 
