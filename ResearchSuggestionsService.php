@@ -149,11 +149,11 @@ class ResearchSuggestionsService {
           $ignorePartialRanges = false, 
           $tags = null) {
     
-    $birtTags = explode(',', $this->module->getPreference('BIRT_GROUPED_FACTS', implode(self::BIRT_GROUPED_FACTS,',')));
+    $birtTags = explode(',', $this->module->getPreference('BIRT_GROUPED_FACTS', implode(',',self::BIRT_GROUPED_FACTS)));
     //intersect because we want to have a specific order!
     $birtTags = array_intersect(self::BIRT_GROUPED_FACTS, $birtTags);
     
-    $deatTags = explode(',', $this->module->getPreference('DEAT_GROUPED_FACTS', implode(self::DEAT_GROUPED_FACTS,',')));
+    $deatTags = explode(',', $this->module->getPreference('DEAT_GROUPED_FACTS', implode(',',self::DEAT_GROUPED_FACTS)));
     //intersect because we want to have a specific order!
     $deatTags = array_intersect(self::DEAT_GROUPED_FACTS, $deatTags);
     
