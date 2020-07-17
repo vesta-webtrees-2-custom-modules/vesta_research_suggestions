@@ -5,10 +5,10 @@ namespace Cissee\Webtrees\Module\ResearchSuggestions;
 use Cissee\WebtreesExt\VirtualFact;
 use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\GedcomTag;
+use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Services\SearchService;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\I18N;
 use Illuminate\Support\Collection;
 use Vesta\Hook\HookInterfaces\FunctionsPlaceUtils;
 use Vesta\Model\GedcomDateInterval;
@@ -581,11 +581,7 @@ class ResearchSuggestionsService {
 		
 		return $facts;
 	}
-  
-  	
-	//cf Place.php;
-	const GEDCOM_SEPARATOR = ', ';
-
+    	
 	public function getSourceEvents($tree, $matchEventTypes, $places) {
 		return $this->doGetSourceEvents($tree, $matchEventTypes, $places);
 	}
@@ -632,7 +628,7 @@ class ResearchSuggestionsService {
 						//we no longer include these - potentially lead to large number of matches which aren't that useful:
 						//do you really want lots of suggestions for main place "USA"?
 						//"Iroquois, Illinois" is ok when looking for "Illinois" as main place
-						//if (($matchedPlace === $place) || (preg_match('/' . self::GEDCOM_SEPARATOR . preg_quote($place) . '$/', $matchedPlace))) {
+						//if (($matchedPlace === $place) || (preg_match('/' . Gedcom::PLACE_SEPARATOR . preg_quote($place) . '$/', $matchedPlace))) {
 						
 						foreach ($places as $eventPlace) {
 							//"Iroquois, Illinois" is NOT ok when looking for "Illinois" as parent place
