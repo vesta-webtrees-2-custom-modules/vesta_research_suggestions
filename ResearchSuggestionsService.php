@@ -57,7 +57,7 @@ class ResearchSuggestionsService {
     
     $collection = new Collection();
     
-    $places = array();
+    $factWithPlace = null;
 		$interval = null;
 				
 		$place = $fact->attribute("PLAC");
@@ -85,7 +85,7 @@ class ResearchSuggestionsService {
 					$interval = $currentInterval;
 				}
 			
-				$places[] = $place; 
+				$factWithPlace = $fact; 
 			}
 		}
 			
@@ -94,10 +94,12 @@ class ResearchSuggestionsService {
     }
     
 		$resolvedPlaces = array();
-    foreach ($places as $place) {
+    if ($factWithPlace !== null) {
       $resolvedPlaces = array_merge(
         $resolvedPlaces,
-        $this->resolvePlace($place, $tree, ['POLI','RELI'], $interval));
+        $this->resolvePlace(
+                PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval), 
+                ['POLI','RELI']));
     }
 
     //(TODO: handle BAPM/CHR confusion)
@@ -114,18 +116,16 @@ class ResearchSuggestionsService {
   }
   
   public function resolvePlace(
-          string $placeName, 
-          Tree $tree, 
-          array $typesOfLocation, 
-          GedcomDateInterval $dateInterval): array {
+          PlaceStructure $ps, 
+          array $typesOfLocation): array {
     
     //error_log("resolve: " . $placeName);
     
 		$resolved = new Collection();
-    $ps = PlaceStructure::create("2 PLAC " . $placeName, $tree, null, $dateInterval->toGedcomString(2));
+    //$ps = PlaceStructure::create("2 PLAC " . $placeName, $tree, null, $dateInterval->toGedcomString(2));
     
     //add place itself!
-    $resolved->put($placeName, $ps);
+    $resolved->put($ps->getGedcomName(), $ps);
     
     //resolve via hook
     $parents = FunctionsPlaceUtils::placPplac($this->module, $ps, new Collection($typesOfLocation));
@@ -175,7 +175,7 @@ class ResearchSuggestionsService {
 			//we define not to require any if there is at least one sourced event.
 			//also, we cannot provide a suggestion if there is no event of the respective type (because in that case we do not have date & place)
 			
-			$places = array();
+			$factsWithPlace = array();
 			$interval = null;
 			$isSourced = false;
 			foreach ($person->facts() as $fact) {
@@ -211,17 +211,19 @@ class ResearchSuggestionsService {
 							$interval = $currentInterval;
 						}
 						
-						$places[] = $place; 
+						$factsWithPlace[] = $fact; 
 					}
 				}
 			}
 			
 			if ((!$isSourced) && ($interval !== null)) {
 				$resolvedPlaces = array();
-				foreach ($places as $place) {
+				foreach ($factsWithPlace as $factWithPlace) {
 					$resolvedPlaces = array_merge(
 									$resolvedPlaces,
-									$this->resolvePlace($place, $person->tree(), ['POLI','RELI'], $interval));
+									$this->resolvePlace(
+                          PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval), 
+                          ['POLI','RELI']));
 				}
 				
 				$events = $this->getSourceEvents($person->tree(), $birtTags, $resolvedPlaces);
@@ -268,7 +270,7 @@ class ResearchSuggestionsService {
 		//2. research suggestion for confirmation (even without event)?
 		if (($tags === null) || (array_intersect($tags, ['CONF']))) {
 			
-			$places = array();
+			$factsWithPlace = array();
 			$interval = null;
 			$hasEvent = false;
 			$isSourced = false;
@@ -291,7 +293,7 @@ class ResearchSuggestionsService {
 					$date = $fact->attribute("DATE");
 					if ($date) {
 						$interval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);							
-						$places[] = $place;
+						$factsWithPlace[] = $fact;
 					}
 				}
 				
@@ -339,7 +341,7 @@ class ResearchSuggestionsService {
 								$interval = $currentInterval;
 							}
 
-							$places[] = $place; 
+							$factsWithPlace[] = $fact; 
 						}
 					}
 				}				
@@ -361,10 +363,12 @@ class ResearchSuggestionsService {
 			
 			if ((!$isSourced) && ($interval !== null)) {
 				$resolvedPlaces = array();
-				foreach ($places as $place) {
+				foreach ($factsWithPlace as $factWithPlace) {
 					$resolvedPlaces = array_merge(
 									$resolvedPlaces,
-									$this->resolvePlace($place, $person->tree(), ['POLI','RELI'], $interval));
+									$this->resolvePlace(
+                          PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval), 
+                          ['POLI','RELI']));
 				}
 				
 				$events = $this->getSourceEvents($person->tree(), ['CONF'], $resolvedPlaces);
@@ -417,7 +421,9 @@ class ResearchSuggestionsService {
           $date = $fact->attribute("DATE");
           if ($date) {
             $interval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
-            $resolvedPlaces = $this->resolvePlace($place, $person->tree(), ['POLI','RELI'], $interval);
+            $resolvedPlaces = $this->resolvePlace(
+                    PlaceStructure::fromFactWithExplicitInterval($fact, $interval), 
+                    ['POLI','RELI']);
             $events = $this->getSourceEvents($person->tree(), [$fact->getTag()], $resolvedPlaces);
 
             foreach ($events as $event) {
@@ -466,7 +472,9 @@ class ResearchSuggestionsService {
 						$date = $fact->attribute("DATE");
 						if ($date) {
 							$interval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
-							$resolvedPlaces = $this->resolvePlace($place, $person->tree(), ['POLI','RELI'], $interval);
+							$resolvedPlaces = $this->resolvePlace(
+                      PlaceStructure::fromFactWithExplicitInterval($fact, $interval), 
+                      ['POLI','RELI']);
 							$events = $this->getSourceEvents($person->tree(), [$fact->getTag()], $resolvedPlaces);
 
 							foreach ($events as $event) {
@@ -501,7 +509,7 @@ class ResearchSuggestionsService {
 			//we define not to require any if there is at least one sourced event.
 			//also, we cannot provide a suggestion if there is no event of the respective type (because in that case we do not have date & place)
 			
-			$places = array();
+			$factsWithPlace = array();
 			$interval = null;
 			$isSourced = false;
 			foreach ($person->facts() as $fact) {
@@ -534,17 +542,19 @@ class ResearchSuggestionsService {
 							$interval = $currentInterval;
 						}
 						
-						$places[] = $place; 
+						$factsWithPlace[] = $fact; 
 					}
 				}
 			}
 			
 			if ((!$isSourced) && ($interval !== null)) {
 				$resolvedPlaces = array();
-				foreach ($places as $place) {
+				foreach ($factsWithPlace as $factWithPlace) {
 					$resolvedPlaces = array_merge(
 									$resolvedPlaces,
-									$this->resolvePlace($place, $person->tree(), ['POLI','RELI'], $interval));
+									$this->resolvePlace(
+                          PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval), 
+                          ['POLI','RELI']));
 				}
 
 				$events = $this->getSourceEvents($person->tree(), $deatTags, $resolvedPlaces);

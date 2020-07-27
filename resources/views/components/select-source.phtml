@@ -96,14 +96,29 @@ $(document).ready(function() {
   ?>
 
   if (firstTagInput && firstDateInput && firstPlacInput) {
-    var tagValue = firstTagInput.value;
+
+    var firstGovInput = document.querySelector('[id^=_GOV]');
+    var firstLocInput = document.querySelector('[id^=_LOC]');
 
     var changeListener = function() {
 
+      var tagValue = firstTagInput.value;
       var dateValue = firstDateInput.value;
       var placValue = firstPlacInput.value;
+      
       if (dateValue && placValue) {
-        var finalUrl = "<?= $adjustedUrl ?>".replace("__GEDCOM__", encodeURIComponent("1 "+ tagValue + "\n2 DATE " + dateValue + "\n2 PLAC " + placValue));
+        var govValue = firstGovInput?firstGovInput.value:"";
+        var locValue = firstLocInput?firstLocInput.value:"";
+        
+        var gedcom = "1 "+ tagValue + "\n2 DATE " + dateValue + "\n2 PLAC " + placValue;
+        if (govValue) {
+          gedcom += "\n3 _GOV " + govValue;
+        } 
+        if (locValue) {
+          gedcom += "\n3 _LOC @" + locValue + "@";
+        }
+        
+        var finalUrl = "<?= $adjustedUrl ?>".replace("__GEDCOM__", encodeURIComponent(gedcom));
 
         $(selectControl).select2({
           minimumInputLength: <?= $adjustedLength ?>,

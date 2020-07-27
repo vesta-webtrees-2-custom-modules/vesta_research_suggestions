@@ -140,7 +140,7 @@ class ResearchSuggestionsModule extends AbstractModule implements
     ob_start();
     ?>
     <script>
-      persistent_toggle("<?php echo $toggle; ?>");
+      webtrees.persistentToggle('<?php echo $toggle; ?>');
     </script>
     <?php
     return ob_get_clean();
