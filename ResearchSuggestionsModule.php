@@ -172,11 +172,12 @@ class ResearchSuggestionsModule extends AbstractModule implements
     $script .= "  $(evt.target).append(option).change(); ";
     
     //update actual value
+    //spec strictly has ', ' as delimiter, seems a bit confused about this though ("Each enumeration is separated by a comma.")
     $script .= "  var idRefSelector = '#' + $(evt.target).attr('id') + '_REF'; ";
     $script .= "  console.log('append: ' + id); ";
-    $script .= "  updated = $(idRefSelector).val().split(',').filter(function(item){return item}); ";
+    $script .= "  var updated = $(idRefSelector).val().split(',').filter(function(item){return item.trim()}); ";
     $script .= "  updated.push(id); ";
-    $script .= "  $(idRefSelector).val(updated.join()); ";
+    $script .= "  $(idRefSelector).val(updated.join(', ')); ";
     $script .= "}); ";
     
     $script .= "$('select.select2ordered').on('select2:unselect', function (evt) { ";
@@ -185,11 +186,12 @@ class ResearchSuggestionsModule extends AbstractModule implements
     //we should re-order back to original position here (in dropdown)!
     
     //update actual value
+    //spec strictly has ', ' as delimiter, seems a bit confused about this though ("Each enumeration is separated by a comma.")
     $script .= "  var idRefSelector = '#' + $(evt.target).attr('id') + '_REF'; ";
     $script .= "  console.log('remove: ' + id); ";
-    $script .= "  updated = $(idRefSelector).val().split(','); ";
-    $script .= "  updated = updated.filter(function(item){return item !== id}); ";
-    $script .= "  $(idRefSelector).val(updated.join()); ";
+    $script .= "  var updated = $(idRefSelector).val().split(','); ";
+    $script .= "  updated = updated.filter(function(item){return item.trim() !== id}); ";
+    $script .= "  $(idRefSelector).val(updated.join(', ')); ";
     $script .= "}); ";
     
     $script .= "}); ";
@@ -202,8 +204,6 @@ class ResearchSuggestionsModule extends AbstractModule implements
     $route = $request->getAttribute('route');
     assert($route instanceof Route);
     
-    //error_log(print_r($route, true));
-        
     if ($route->handler === 'AdminTreesController::preferencesUpdate') {
       $this->preferencesUpdateExt($request);
     }
@@ -216,7 +216,7 @@ class ResearchSuggestionsModule extends AbstractModule implements
     $tree = $request->getAttribute('tree');
     assert($tree instanceof Tree);
 
-    $params = (array) $request->getParsedBody();    
+    $params = (array) $request->getParsedBody();
     $tree->setPreference('SOUR_DATA_EVEN_FACTS', implode(',', $params['SOUR_DATA_EVEN_FACTS'] ?? []));
   }
 }

@@ -575,6 +575,8 @@ class FunctionsEdit
 
             //preserve order
             foreach ($selected as $s) {
+              //spec strictly has ', ' as delimiter, seems a bit confused about this though ("Each enumeration is separated by a comma.")
+              $s = trim($s);
               if (array_key_exists($s, $sour_data_even)) {
                 $val = $sour_data_even[$s];
                 unset($sour_data_even[$s]);
