@@ -12,6 +12,7 @@ use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\Gedcom;
+use Cissee\WebtreesExt\Functions\FunctionsEditPlacHandler;
 use Fisharebest\Webtrees\GedcomCode\GedcomCodeAdop;
 use Fisharebest\Webtrees\GedcomCode\GedcomCodeLang;
 use Fisharebest\Webtrees\GedcomCode\GedcomCodeName;
@@ -650,20 +651,14 @@ class FunctionsEdit
         }
 
         if (!in_array($fact, Config::nonDateFacts(), true)) {
-            echo self::addSimpleTag($tree, '0 DATE', $fact, GedcomTag::getLabel($fact . ':DATE'));
+            //echo self::addSimpleTag($tree, '0 DATE', $fact, GedcomTag::getLabel($fact . ':DATE'));
+            $handler = app(FunctionsEditPlacHandler::class);
+            echo $handler->addSimpleTag($tree, '0 DATE', $fact, GedcomTag::getLabel($fact . ':DATE'));
         }
 
         if (!in_array($fact, Config::nonPlaceFacts(), true)) {
-            echo self::addSimpleTag($tree, '0 PLAC', $fact, GedcomTag::getLabel($fact . ':PLAC'));
-
-            if (preg_match_all('/(' . Gedcom::REGEX_TAG . ')/', $tree->getPreference('ADVANCED_PLAC_FACTS'), $match)) {
-                foreach ($match[1] as $tag) {
-                    echo self::addSimpleTag($tree, '0 ' . $tag, $fact, GedcomTag::getLabel($fact . ':PLAC:' . $tag));
-                }
-            }
-            echo self::addSimpleTag($tree, '0 MAP', $fact);
-            echo self::addSimpleTag($tree, '0 LATI', $fact);
-            echo self::addSimpleTag($tree, '0 LONG', $fact);
+            $handler = app(FunctionsEditPlacHandler::class);
+            $handler->addSimpleTagsPlac($tree, $fact);
         }
     }
 
@@ -738,7 +733,8 @@ class FunctionsEdit
                 'PAGE',
                 'DATA',
             ],
-            'PLAC' => ['MAP'],
+            //[RC] adjusted
+            'PLAC' => ['_LOC', 'MAP'],
             'MAP'  => [
                 'LATI',
                 'LONG',
@@ -775,7 +771,8 @@ class FunctionsEdit
         }
 
         if (preg_match_all('/(' . Gedcom::REGEX_TAG . ')/', $record->tree()->getPreference('ADVANCED_PLAC_FACTS'), $match)) {
-            $expected_subtags['PLAC'] = array_merge($match[1], $expected_subtags['PLAC']);
+            //[RC] order swapped
+            $expected_subtags['PLAC'] = array_merge($expected_subtags['PLAC'], $match[1]);
         }
 
         $stack       = [];
@@ -818,15 +815,21 @@ class FunctionsEdit
             if ($inSource && $type === 'DATE') {
                 echo self::addSimpleTag($tree, $subrecord, '', GedcomTag::getLabel($label));
             } elseif (!$inSource && $type === 'DATE') {
-                echo self::addSimpleTag($tree, $subrecord, $level1type, GedcomTag::getLabel($label));
+                $handler = app(FunctionsEditPlacHandler::class);
+                //adjust upperlevel to align with _LOC, upperlevel anyway not used by original code!
+                echo $handler->addSimpleTag($tree, $subrecord, $level0type, GedcomTag::getLabel($label));
+                //echo self::addSimpleTag($tree, $subrecord, $level1type, GedcomTag::getLabel($label));
                 if ($level === 2) {
                     // We already have a date - no need to add one.
                     $add_date = false;
                 }
             } elseif ($type === 'STAT') {
                 echo self::addSimpleTag($tree, $subrecord, $level1type, GedcomTag::getLabel($label));
-            } else {
+            } elseif (($type !== 'PLAC') && ($type !== '_LOC')) {
                 echo self::addSimpleTag($tree, $subrecord, $level0type, GedcomTag::getLabel($label));
+            } else {
+               $handler = app(FunctionsEditPlacHandler::class);
+               echo $handler->addSimpleTag($tree, $subrecord, $level0type, GedcomTag::getLabel($label));
             }
 
             // Get a list of tags present at the next level
@@ -837,10 +840,17 @@ class FunctionsEdit
                 }
             }
 
+            //[RC] ugly ordering here, why do they come before existing subtags??
             // Insert missing tags
             foreach ($expected_subtags[$type] ?? [] as $subtag) {
                 if (!in_array($subtag, $subtags, true)) {
-                    echo self::addSimpleTag($tree, ($level + 1) . ' ' . $subtag, '', GedcomTag::getLabel($label . ':' . $subtag));
+                    if (($type === 'PLAC') && ($subtag === '_LOC')) {
+                      $handler = app(FunctionsEditPlacHandler::class);
+                      //gah what a mess, why is it 'INDI:PLAC' here and not 'BIRT:PLAC'???
+                      echo $handler->addSimpleTag($tree, ($level + 1) . ' _LOC', $level0type.':PLAC', GedcomTag::getLabel($label . ':' . $subtag));
+                    } else {
+                      echo self::addSimpleTag($tree, ($level + 1) . ' ' . $subtag, '', GedcomTag::getLabel($label . ':' . $subtag));
+                    }                    
                     foreach ($expected_subtags[$subtag] ?? [] as $subsubtag) {
                         echo self::addSimpleTag($tree, ($level + 2) . ' ' . $subsubtag, '', GedcomTag::getLabel($label . ':' . $subtag . ':' . $subsubtag));
                     }
@@ -881,6 +891,7 @@ class FunctionsEdit
             if ($key === 'DATE' && in_array($level1tag, Config::nonDateFacts(), true) || $key === 'PLAC' && in_array($level1tag, Config::nonPlaceFacts(), true)) {
                 continue;
             }
+            
             if (in_array($level1tag, $value, true) && !in_array($key, self::$tags, true)) {
                 if ($key === 'TYPE') {
                     echo self::addSimpleTag($tree, '2 TYPE ' . $type_val, $level1tag);
@@ -891,20 +902,19 @@ class FunctionsEdit
                     echo self::addSimpleTag($tree, '2 ' . $key . ' ' . Auth::user()->userName(), $level1tag);
                 } elseif ($level1tag === 'NAME' && str_contains($tree->getPreference('ADVANCED_NAME_FACTS'), $key)) {
                     echo self::addSimpleTag($tree, '2 ' . $key, $level1tag);
-                } elseif ($level1tag !== 'NAME') {
+                //[RC] adjusted, DATE always added via handler!
+                } elseif ($key === 'DATE') {
+                  $handler = app(FunctionsEditPlacHandler::class);
+                  echo $handler->addSimpleTag($tree, '2 ' . $key, $level1tag);
+                //[RC] adjusted, PLAC itself always added via handler!
+                } elseif (($level1tag !== 'NAME') && ($key !== 'PLAC')) {
                     echo self::addSimpleTag($tree, '2 ' . $key, $level1tag);
                 }
                 // Add level 3/4 tags as appropriate
                 switch ($key) {
                     case 'PLAC':
-                        if (preg_match_all('/(' . Gedcom::REGEX_TAG . ')/', $tree->getPreference('ADVANCED_PLAC_FACTS'), $match)) {
-                            foreach ($match[1] as $tag) {
-                                echo self::addSimpleTag($tree, '3 ' . $tag, '', GedcomTag::getLabel($level1tag . ':PLAC:' . $tag));
-                            }
-                        }
-                        echo self::addSimpleTag($tree, '3 MAP');
-                        echo self::addSimpleTag($tree, '4 LATI');
-                        echo self::addSimpleTag($tree, '4 LONG');
+                        $handler = app(FunctionsEditPlacHandler::class);
+                        $handler->insertMissingSubtagsPlac($tree, $level1tag);
                         break;
                     case 'EVEN':
                         echo self::addSimpleTag($tree, '3 DATE');
