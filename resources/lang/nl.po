@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2020-06-09 20:07+0200\n"
+"POT-Creation-Date: 2020-09-06 12:00+0200\n"
 "PO-Revision-Date: 2020-06-10 19:59+0200\n"
 "Last-Translator: TheDutchJewel <thedutchjewel@gmail.com>\n"
 "Language-Team: \n"
@@ -24,8 +24,8 @@ msgstr "Een module met suggesties voor aanvullend onderzoek, op basis van beschi
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:82
-msgid "Age range for Confirmation"
-msgstr "Leeftijdscategorie voor Vormsel"
+msgid "Age range for Confirmation events"
+msgstr ""
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:62
@@ -66,9 +66,9 @@ msgstr "Maximale leeftijd in jaren"
 msgid "Minimal age in years"
 msgstr "Minimale leeftijd in jaren"
 
-#: ResearchSuggestionsService.php:248 ResearchSuggestionsService.php:377
-#: ResearchSuggestionsService.php:427 ResearchSuggestionsService.php:476
-#: ResearchSuggestionsService.php:568
+#: ResearchSuggestionsService.php:250 ResearchSuggestionsService.php:381
+#: ResearchSuggestionsService.php:433 ResearchSuggestionsService.php:484
+#: ResearchSuggestionsService.php:578
 #, php-format
 msgid "Missing source for %1$s - Possible source:"
 msgstr "Ontbrekende bron voor %1$s - Mogelijke bron:"
@@ -78,7 +78,7 @@ msgstr "Ontbrekende bron voor %1$s - Mogelijke bron:"
 msgid "Options"
 msgstr "Opties"
 
-#: ResearchSuggestionsService.php:379
+#: ResearchSuggestionsService.php:383
 msgid "Possible source:"
 msgstr "Mogelijke bron:"
 
@@ -99,8 +99,8 @@ msgstr "Bronnen kunnen worden geannoteerd, via het 'data'-feit, om te beschrijve
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:93
-msgid "Used to calculate date range for suggestions for Confirmation, based on birth or similar event (in case there is no explicit Confirmation event)."
-msgstr "Wordt gebruikt om het datumbereik te berekenen voor suggesties voor Vormsel (CONF), op basis van geboorte of een soortgelijke gebeurtenis (in het geval er geen expliciete vormselgebeurtenis is)."
+msgid "Used to calculate date range for suggestions for Confirmation (CONF) events, based on birth or similar event (in case there is no explicit Confirmation event)."
+msgstr ""
 
 #: ResearchSuggestionsModuleTrait.php:17
 msgid "Vesta Research Suggestions"
@@ -113,6 +113,9 @@ msgstr "Vesta Onderzoekssuggesties: Een nieuwe aangepaste module. Zie de Readme 
 #~ msgid "..."
 #~ msgstr "..."
 
+#~ msgid "Age range for Confirmation"
+#~ msgstr "Leeftijdscategorie voor Vormsel"
+
 #~ msgid "Displayed title"
 #~ msgstr "Weergegeven titel"
 
@@ -121,3 +124,6 @@ msgstr "Vesta Onderzoekssuggesties: Een nieuwe aangepaste module. Zie de Readme 
 
 #~ msgid "Include the %1$s symbol in the module title"
 #~ msgstr "Het %1$s-symbool opnemen in de moduletitel"
+
+#~ msgid "Used to calculate date range for suggestions for Confirmation, based on birth or similar event (in case there is no explicit Confirmation event)."
+#~ msgstr "Wordt gebruikt om het datumbereik te berekenen voor suggesties voor Vormsel (CONF), op basis van geboorte of een soortgelijke gebeurtenis (in het geval er geen expliciete vormselgebeurtenis is)."

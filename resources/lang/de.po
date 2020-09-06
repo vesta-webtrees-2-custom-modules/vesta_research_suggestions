@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2020-06-10 19:37+0200\n"
+"POT-Creation-Date: 2020-09-06 12:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,9 +66,9 @@ msgstr ""
 msgid "Minimal age in years"
 msgstr ""
 
-#: ResearchSuggestionsService.php:248 ResearchSuggestionsService.php:377
-#: ResearchSuggestionsService.php:427 ResearchSuggestionsService.php:476
-#: ResearchSuggestionsService.php:568
+#: ResearchSuggestionsService.php:250 ResearchSuggestionsService.php:381
+#: ResearchSuggestionsService.php:433 ResearchSuggestionsService.php:484
+#: ResearchSuggestionsService.php:578
 #, php-format
 msgid "Missing source for %1$s - Possible source:"
 msgstr "Keine Quelle angegeben für %1$s - Mögliche Quelle:"
@@ -78,7 +78,7 @@ msgstr "Keine Quelle angegeben für %1$s - Mögliche Quelle:"
 msgid "Options"
 msgstr ""
 
-#: ResearchSuggestionsService.php:379
+#: ResearchSuggestionsService.php:383
 msgid "Possible source:"
 msgstr "Mögliche Quelle:"
 
