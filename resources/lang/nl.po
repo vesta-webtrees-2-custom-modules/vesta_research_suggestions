@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-09-06 12:00+0200\n"
-"PO-Revision-Date: 2020-06-10 19:59+0200\n"
+"PO-Revision-Date: 2020-09-07 10:41+0200\n"
 "Last-Translator: TheDutchJewel <thedutchjewel@gmail.com>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:21 ResearchSuggestionsModuleTrait.php:27
@@ -25,7 +25,7 @@ msgstr "Een module met suggesties voor aanvullend onderzoek, op basis van beschi
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:82
 msgid "Age range for Confirmation events"
-msgstr ""
+msgstr "Leeftijdscategorie voor Vormsel-gebeurtenissen"
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:62
@@ -100,7 +100,7 @@ msgstr "Bronnen kunnen worden geannoteerd, via het 'data'-feit, om te beschrijve
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:93
 msgid "Used to calculate date range for suggestions for Confirmation (CONF) events, based on birth or similar event (in case there is no explicit Confirmation event)."
-msgstr ""
+msgstr "Wordt gebruikt om het datumbereik te berekenen voor suggesties voor Vormsel (CONF)-gebeurtenissen, op basis van geboorte of soortgelijke gebeurtenis (in het geval er geen expliciete Vormsel-gebeurtenis is)."
 
 #: ResearchSuggestionsModuleTrait.php:17
 msgid "Vesta Research Suggestions"
