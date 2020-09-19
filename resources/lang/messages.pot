@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2020-09-06 12:00+0200\n"
+"POT-Creation-Date: 2020-09-19 15:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,69 +21,49 @@ msgstr ""
 msgid "Research Suggestions"
 msgstr ""
 
-#: ResearchSuggestionsModuleTrait.php:17
-msgid "Vesta Research Suggestions"
-msgstr ""
-
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:21 ResearchSuggestionsModuleTrait.php:27
+#: ResearchSuggestionsModuleTrait.php:22 ResearchSuggestionsModuleTrait.php:28
 msgid "A module providing suggestions for additional research, based on available sources."
 msgstr ""
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:29
-#, php-format
-msgid "Requires the '%1$s Vesta Common' module, and the '%1$s Vesta Facts and events' module."
-msgstr ""
-
-#. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:60
-msgid "Options"
-msgstr ""
-
-#. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:62
+#: ResearchSuggestionsModuleTrait.php:63
 msgid "Allow persistent toggle (user may show/hide research suggestions as additional facts)"
 msgstr ""
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:68
+#: ResearchSuggestionsModuleTrait.php:69
 msgid "Grouped events"
 msgstr ""
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:72
+#: ResearchSuggestionsModuleTrait.php:73
 msgid "Events related to Birth. If there is a source for one of these events, no suggestions will be made for other events in this group. Note that strictly BAPM is not necessarily an event occuring shortly after Birth, but it is often used that way (when CHR would actually be more appropriate, according to the GEDCOM specification). If you only use one of CHR/BAPM, it's recommended to deselect the other one here."
 msgstr ""
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:77
+#: ResearchSuggestionsModuleTrait.php:78
 msgid "Events related to Death. If there is a source for one of these events, no suggestions will be made for other events in this group."
 msgstr ""
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:82
+#: ResearchSuggestionsModuleTrait.php:83
 msgid "Age range for Confirmation events"
 msgstr ""
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:85
+#: ResearchSuggestionsModuleTrait.php:86
 msgid "Minimal age in years"
 msgstr ""
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:92
+#: ResearchSuggestionsModuleTrait.php:93
 msgid "Maximal age in years"
 msgstr ""
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:93
+#: ResearchSuggestionsModuleTrait.php:94
 msgid "Used to calculate date range for suggestions for Confirmation (CONF) events, based on birth or similar event (in case there is no explicit Confirmation event)."
-msgstr ""
-
-#. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:108
-msgid "Facts and Events Tab Settings"
 msgstr ""
 
 #: ResearchSuggestionsService.php:250 ResearchSuggestionsService.php:381

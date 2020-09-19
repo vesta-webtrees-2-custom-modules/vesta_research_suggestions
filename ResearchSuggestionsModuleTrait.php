@@ -4,6 +4,7 @@ namespace Cissee\Webtrees\Module\ResearchSuggestions;
 
 use Fisharebest\Webtrees\GedcomTag;
 use Fisharebest\Webtrees\I18N;
+use Vesta\CommonI18N;
 use Vesta\ControlPanelUtils\Model\ControlPanelCheckbox;
 use Vesta\ControlPanelUtils\Model\ControlPanelFactRestriction;
 use Vesta\ControlPanelUtils\Model\ControlPanelPreferences;
@@ -14,7 +15,7 @@ use Vesta\ControlPanelUtils\Model\ControlPanelSubsection;
 trait ResearchSuggestionsModuleTrait {
 
   protected function getMainTitle() {
-    return I18N::translate('Vesta Research Suggestions');
+    return CommonI18N::titleVestaResearchSuggestions();
   }
 
   public function getShortDescription() {
@@ -26,7 +27,7 @@ trait ResearchSuggestionsModuleTrait {
     $description[] = 
             /* I18N: Module Configuration */I18N::translate('A module providing suggestions for additional research, based on available sources.');
     $description[] = 
-            /* I18N: Module Configuration */I18N::translate('Requires the \'%1$s Vesta Common\' module, and the \'%1$s Vesta Facts and events\' module.', $this->getVestaSymbol());
+            CommonI18N::requires2(CommonI18N::titleVestaCommon(), CommonI18N::titleVestaPersonalFacts());
     
     /*
     <h4><?php echo I18N::translate('How to use this module') ?></h4>
@@ -47,7 +48,7 @@ trait ResearchSuggestionsModuleTrait {
     /*
     $generalSub = array();
     $generalSub[] = new ControlPanelSubsection(
-            I18N::translate('Displayed title'),
+            CommonI18N::displayedTitle(),
             array(new ControlPanelCheckbox(                    
                 I18N::translate('Include the %1$s symbol in the module title', $this->getVestaSymbol()),
                 null,
@@ -57,7 +58,7 @@ trait ResearchSuggestionsModuleTrait {
     
     $factsSub = array();
     $factsSub[] = new ControlPanelSubsection(
-            /* I18N: Module Configuration */I18N::translate('Options'),
+            CommonI18N::options(),
             array(new ControlPanelCheckbox(
                 /* I18N: Module Configuration */I18N::translate('Allow persistent toggle (user may show/hide research suggestions as additional facts)'),
                 null,
@@ -105,7 +106,7 @@ trait ResearchSuggestionsModuleTrait {
     */
     
     $sections[] = new ControlPanelSection(
-            /* I18N: Module Configuration */I18N::translate('Facts and Events Tab Settings'),
+            CommonI18N::factsAndEventsTabSettings(),
             null,
             $factsSub);
 

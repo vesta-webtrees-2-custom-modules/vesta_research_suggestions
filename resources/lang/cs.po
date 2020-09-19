@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2020-09-06 12:00+0200\n"
+"POT-Creation-Date: 2020-09-19 15:42+0200\n"
 "PO-Revision-Date: 2020-06-23 17:50+0200\n"
 "Last-Translator: Josef Prause <josef.prause@gmail.com>\n"
 "Language-Team: \n"
@@ -19,51 +19,46 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:21 ResearchSuggestionsModuleTrait.php:27
+#: ResearchSuggestionsModuleTrait.php:22 ResearchSuggestionsModuleTrait.php:28
 msgid "A module providing suggestions for additional research, based on available sources."
 msgstr "Modul umožňující návrhy na doplňkový výzkum, založený na dostupných pramenech."
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:82
+#: ResearchSuggestionsModuleTrait.php:83
 msgid "Age range for Confirmation events"
 msgstr "Věkové rozmezí pro událost konfirmace"
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:62
+#: ResearchSuggestionsModuleTrait.php:63
 msgid "Allow persistent toggle (user may show/hide research suggestions as additional facts)"
 msgstr "Připustit setrvalý přepínač (uživatel může zobrazit/skrýt návrhy na výzkum jako dodatečná fakta)"
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:72
+#: ResearchSuggestionsModuleTrait.php:73
 msgid "Events related to Birth. If there is a source for one of these events, no suggestions will be made for other events in this group. Note that strictly BAPM is not necessarily an event occuring shortly after Birth, but it is often used that way (when CHR would actually be more appropriate, according to the GEDCOM specification). If you only use one of CHR/BAPM, it's recommended to deselect the other one here."
 msgstr "Události vztažené k narození. Jestliže pro jednu z těchto událostí je pramen, nebudou padat návrhy na jiné události v této skupině. Poznamenejme, že BAPM není nutně událost nastávající krátce po narození, ale často tomu tak bývá (když CHR by ve skutečnosti byl vhodnější, s ohledem na specifikaci GEDCOM). Jestliže používáte jen jeden z CHR/BAPM, doporučuje se potlačit zde ten druhý."
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:77
+#: ResearchSuggestionsModuleTrait.php:78
 msgid "Events related to Death. If there is a source for one of these events, no suggestions will be made for other events in this group."
 msgstr "Události vztažené k úmrtí. Jestliže pro jednu z těchto událostí je pramen, nebudou padat návrhy na jiné události v této skupině."
-
-#. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:108
-msgid "Facts and Events Tab Settings"
-msgstr "Nastavení záložky Fakta a události"
 
 #: resources/views/admin/trees-preferences-ext.phtml:10
 msgid "Facts recorded in sources"
 msgstr "Fakta zaznamenaná v pramenech"
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:68
+#: ResearchSuggestionsModuleTrait.php:69
 msgid "Grouped events"
 msgstr "Seskupené události"
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:92
+#: ResearchSuggestionsModuleTrait.php:93
 msgid "Maximal age in years"
 msgstr "Nejvyšší věk v letech"
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:85
+#: ResearchSuggestionsModuleTrait.php:86
 msgid "Minimal age in years"
 msgstr "Nejnižší věk v letech"
 
@@ -74,20 +69,9 @@ msgstr "Nejnižší věk v letech"
 msgid "Missing source for %1$s - Possible source:"
 msgstr "Chybí pramen pro  %1$s ‒ možný pramen:"
 
-#. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:60
-msgid "Options"
-msgstr "Možnosti"
-
 #: ResearchSuggestionsService.php:383
 msgid "Possible source:"
 msgstr "Možný pramen:"
-
-#. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:29
-#, php-format
-msgid "Requires the '%1$s Vesta Common' module, and the '%1$s Vesta Facts and events' module."
-msgstr "Vyžaduje modul '%1$s Vesta Common' a modul '%1$s Vesta Facts and events'."
 
 #: ResearchSuggestionsModule.php:107
 msgid "Research Suggestions"
@@ -99,14 +83,22 @@ msgid "Sources can be annotated, via the 'data' fact, in order to describe which
 msgstr "Prameny mohou být opatřeny poznámkami, skrze faktum 'data', které popíší, které skutečnosti k osobě a rodině obsahují. Toto je seznam těchto skutečností podle GEDCOM. Tento seznam se dá podle potřeby modifikovat odstraněním nebo přidáním názvů faktů. "
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:93
+#: ResearchSuggestionsModuleTrait.php:94
 msgid "Used to calculate date range for suggestions for Confirmation (CONF) events, based on birth or similar event (in case there is no explicit Confirmation event)."
 msgstr "Použit k výpočtu datového rozmezí pro návrhy na událost konfirmace (CONF), na základě narození nebo podobné události (v případě, že není výslovně událost konfirmace)."
-
-#: ResearchSuggestionsModuleTrait.php:17
-msgid "Vesta Research Suggestions"
-msgstr "Vesta Research Suggestions"
 
 #: WhatsNew/WhatsNew0.php:11
 msgid "Vesta Research Suggestions: A new custom module. See the Readme for details."
 msgstr "Vesta Research Suggestions: nový upravený modul. Podrobnosti v Readme."
+
+#~ msgid "Facts and Events Tab Settings"
+#~ msgstr "Nastavení záložky Fakta a události"
+
+#~ msgid "Options"
+#~ msgstr "Možnosti"
+
+#~ msgid "Requires the '%1$s Vesta Common' module, and the '%1$s Vesta Facts and events' module."
+#~ msgstr "Vyžaduje modul '%1$s Vesta Common' a modul '%1$s Vesta Facts and events'."
+
+#~ msgid "Vesta Research Suggestions"
+#~ msgstr "Vesta Research Suggestions"

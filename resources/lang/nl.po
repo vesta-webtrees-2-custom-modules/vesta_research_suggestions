@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2020-09-06 12:00+0200\n"
+"POT-Creation-Date: 2020-09-19 15:42+0200\n"
 "PO-Revision-Date: 2020-09-07 10:41+0200\n"
 "Last-Translator: TheDutchJewel <thedutchjewel@gmail.com>\n"
 "Language-Team: \n"
@@ -18,51 +18,46 @@ msgstr ""
 "X-Generator: Poedit 2.4.1\n"
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:21 ResearchSuggestionsModuleTrait.php:27
+#: ResearchSuggestionsModuleTrait.php:22 ResearchSuggestionsModuleTrait.php:28
 msgid "A module providing suggestions for additional research, based on available sources."
 msgstr "Een module met suggesties voor aanvullend onderzoek, op basis van beschikbare bronnen."
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:82
+#: ResearchSuggestionsModuleTrait.php:83
 msgid "Age range for Confirmation events"
 msgstr "Leeftijdscategorie voor Vormsel-gebeurtenissen"
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:62
+#: ResearchSuggestionsModuleTrait.php:63
 msgid "Allow persistent toggle (user may show/hide research suggestions as additional facts)"
 msgstr "Permanente schakeling toestaan (gebruiker kan onderzoekssuggesties weergeven/verbergen als aanvullende feiten)"
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:72
+#: ResearchSuggestionsModuleTrait.php:73
 msgid "Events related to Birth. If there is a source for one of these events, no suggestions will be made for other events in this group. Note that strictly BAPM is not necessarily an event occuring shortly after Birth, but it is often used that way (when CHR would actually be more appropriate, according to the GEDCOM specification). If you only use one of CHR/BAPM, it's recommended to deselect the other one here."
 msgstr "Gebeurtenissen met betrekking tot Geboorte. Als er een bron is voor een van deze gebeurtenissen, worden er geen suggesties gedaan voor andere gebeurtenissen in deze groep. Merk op dat strikt BAPM niet noodzakelijkerwijs een gebeurtenis is die kort na de geboorte plaatsvindt, maar het wordt vaak op die manier gebruikt (wanneer CHR eigenlijk geschikter zou zijn, volgens de GEDCOM-specificatie). Als u slechts één van CHR/BAPM gebruikt, is het raadzaam om de selectie van de andere hier uit te schakelen."
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:77
+#: ResearchSuggestionsModuleTrait.php:78
 msgid "Events related to Death. If there is a source for one of these events, no suggestions will be made for other events in this group."
 msgstr "Gebeurtenissen met betrekking tot Overleden. Als er een bron is voor een van deze gebeurtenissen, worden er geen suggesties gedaan voor andere gebeurtenissen in deze groep."
-
-#. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:108
-msgid "Facts and Events Tab Settings"
-msgstr "Instellingen voor tabblad Feiten en gebeurtenissen"
 
 #: resources/views/admin/trees-preferences-ext.phtml:10
 msgid "Facts recorded in sources"
 msgstr "Feiten opgenomen in bronnen"
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:68
+#: ResearchSuggestionsModuleTrait.php:69
 msgid "Grouped events"
 msgstr "Gegroepeerde gebeurtenissen"
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:92
+#: ResearchSuggestionsModuleTrait.php:93
 msgid "Maximal age in years"
 msgstr "Maximale leeftijd in jaren"
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:85
+#: ResearchSuggestionsModuleTrait.php:86
 msgid "Minimal age in years"
 msgstr "Minimale leeftijd in jaren"
 
@@ -73,20 +68,9 @@ msgstr "Minimale leeftijd in jaren"
 msgid "Missing source for %1$s - Possible source:"
 msgstr "Ontbrekende bron voor %1$s - Mogelijke bron:"
 
-#. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:60
-msgid "Options"
-msgstr "Opties"
-
 #: ResearchSuggestionsService.php:383
 msgid "Possible source:"
 msgstr "Mogelijke bron:"
-
-#. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:29
-#, php-format
-msgid "Requires the '%1$s Vesta Common' module, and the '%1$s Vesta Facts and events' module."
-msgstr "Vereist de modules '%1$s Vesta Algemeen' en '%1$s Vesta Feiten en gebeurtenissen'."
 
 #: ResearchSuggestionsModule.php:107
 msgid "Research Suggestions"
@@ -98,13 +82,9 @@ msgid "Sources can be annotated, via the 'data' fact, in order to describe which
 msgstr "Bronnen kunnen worden geannoteerd, via het 'data'-feit, om te beschrijven welke individuele en gezinsfeiten ze bevatten. Dit is de lijst van die GEDCOM-feiten. Indien nodig kunt u deze lijst wijzigen door namen van feiten, zelfs aangepaste namen, te verwijderen of toe te voegen. "
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:93
+#: ResearchSuggestionsModuleTrait.php:94
 msgid "Used to calculate date range for suggestions for Confirmation (CONF) events, based on birth or similar event (in case there is no explicit Confirmation event)."
 msgstr "Wordt gebruikt om het datumbereik te berekenen voor suggesties voor Vormsel (CONF)-gebeurtenissen, op basis van geboorte of soortgelijke gebeurtenis (in het geval er geen expliciete Vormsel-gebeurtenis is)."
-
-#: ResearchSuggestionsModuleTrait.php:17
-msgid "Vesta Research Suggestions"
-msgstr "Vesta Onderzoekssuggesties"
 
 #: WhatsNew/WhatsNew0.php:11
 msgid "Vesta Research Suggestions: A new custom module. See the Readme for details."
@@ -119,11 +99,23 @@ msgstr "Vesta Onderzoekssuggesties: Een nieuwe aangepaste module. Zie de Readme 
 #~ msgid "Displayed title"
 #~ msgstr "Weergegeven titel"
 
+#~ msgid "Facts and Events Tab Settings"
+#~ msgstr "Instellingen voor tabblad Feiten en gebeurtenissen"
+
 #~ msgid "General"
 #~ msgstr "Algemeen"
 
 #~ msgid "Include the %1$s symbol in the module title"
 #~ msgstr "Het %1$s-symbool opnemen in de moduletitel"
 
+#~ msgid "Options"
+#~ msgstr "Opties"
+
+#~ msgid "Requires the '%1$s Vesta Common' module, and the '%1$s Vesta Facts and events' module."
+#~ msgstr "Vereist de modules '%1$s Vesta Algemeen' en '%1$s Vesta Feiten en gebeurtenissen'."
+
 #~ msgid "Used to calculate date range for suggestions for Confirmation, based on birth or similar event (in case there is no explicit Confirmation event)."
 #~ msgstr "Wordt gebruikt om het datumbereik te berekenen voor suggesties voor Vormsel (CONF), op basis van geboorte of een soortgelijke gebeurtenis (in het geval er geen expliciete vormselgebeurtenis is)."
+
+#~ msgid "Vesta Research Suggestions"
+#~ msgstr "Vesta Onderzoekssuggesties"
