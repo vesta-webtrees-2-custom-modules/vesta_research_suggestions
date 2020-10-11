@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Cissee\Webtrees\Module\ResearchSuggestions;
 
 use Fisharebest\Webtrees\Fact;
-use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Individual;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\SearchService;
 use Fisharebest\Webtrees\Source;
 use Fisharebest\Webtrees\Tree;
@@ -109,7 +109,7 @@ class Select2SourceWithSuggestions {
     protected function search(Tree $tree, string $query, int $offset, int $limit, string $at): Collection
     {
         // Search by XREF
-        $source = Factory::source()->make($query, $tree);
+        $source = Registry::sourceFactory()->make($query, $tree);
 
         if ($source instanceof Source) {
             $results = new Collection([$source]);

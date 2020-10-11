@@ -103,6 +103,7 @@ class ResearchSuggestionsService {
     }
 
     //(TODO: handle BAPM/CHR confusion)
+    
     $events = $this->getSourceEvents($tree, [$fact->getTag()], $resolvedPlaces);
 
     foreach ($events as $event) {
@@ -558,6 +559,7 @@ class ResearchSuggestionsService {
 				}
 
 				$events = $this->getSourceEvents($person->tree(), $deatTags, $resolvedPlaces);
+        
 				foreach ($events as $event) {
 					$sourceId = $event->getSourceXref();
 					$match = $event->getInterval()->intersect($interval);
@@ -614,6 +616,7 @@ class ResearchSuggestionsService {
 		}
 		
 		foreach ($sources as $xref => $source) {
+      
 			//collect EVEN (similar to FunctionsPrintFacts, with fix for issue #1376)
 			preg_match_all('/\n2 EVEN (.*)((\n[3].*)*)/', $source->gedcom(), $evenMatches, PREG_SET_ORDER);
 			foreach ($evenMatches as $evenMatch) {
