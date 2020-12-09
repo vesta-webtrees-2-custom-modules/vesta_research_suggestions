@@ -1,0 +1,114 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the vesta package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: vesta 1.0\n"
+"Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
+"POT-Creation-Date: 2020-09-19 15:42+0200\n"
+"PO-Revision-Date: 2020-12-09 12:29+0000\n"
+"Last-Translator: Thomas Rindal <thomas@rindal.net>\n"
+"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-research-suggestions/nb_NO/>\n"
+"Language: nb_NO\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.4-dev\n"
+
+#: ResearchSuggestionsModule.php:107
+msgid "Research Suggestions"
+msgstr "Forskningsforslag"
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:22 ResearchSuggestionsModuleTrait.php:28
+msgid "A module providing suggestions for additional research, based on available sources."
+msgstr ""
+"En modul som gir forslag til ytterligere forskning, basert på tilgjengelige "
+"kilder."
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:63
+msgid "Allow persistent toggle (user may show/hide research suggestions as additional facts)"
+msgstr ""
+"Tillat vedvarende valg (brukeren kan vise/skjule forskningsforslag som flere "
+"fakta)"
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:69
+msgid "Grouped events"
+msgstr "Grupperte hendelser"
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:73
+msgid "Events related to Birth. If there is a source for one of these events, no suggestions will be made for other events in this group. Note that strictly BAPM is not necessarily an event occuring shortly after Birth, but it is often used that way (when CHR would actually be more appropriate, according to the GEDCOM specification). If you only use one of CHR/BAPM, it's recommended to deselect the other one here."
+msgstr ""
+"Hendelser relatert til fødsel. Hvis det finnes en kilde til en av disse "
+"hendelsene, vil det ikke komme forslag til andre hendelser i denne gruppen. "
+"Merk at strengt BAPM ikke nødvendigvis er en hendelse som oppstår kort tid "
+"etter fødselen, men det brukes ofte på den måten (når CHR faktisk ville være "
+"mer hensiktsmessig, i henhold til GEDCOM-spesifikasjonen). Hvis du bare "
+"bruker en av CHR/BAPM, anbefales det å fjerne merket for den andre her."
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:78
+msgid "Events related to Death. If there is a source for one of these events, no suggestions will be made for other events in this group."
+msgstr ""
+"Hendelser relatert til død. Hvis det finnes en kilde til en av disse "
+"hendelsene, vil det ikke komme forslag til andre hendelser i denne gruppen."
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:83
+msgid "Age range for Confirmation events"
+msgstr "Aldersgruppe for konfirmasjonshendelser"
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:86
+msgid "Minimal age in years"
+msgstr "Minimum alder i år"
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:93
+msgid "Maximal age in years"
+msgstr "Maksimum alder i år"
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:94
+msgid "Used to calculate date range for suggestions for Confirmation (CONF) events, based on birth or similar event (in case there is no explicit Confirmation event)."
+msgstr ""
+"Brukes til å beregne datoperiode for forslag til konfirmasjons-hendelser "
+"(CONF), basert på fødsel eller lignende hendelse (i tilfelle det ikke er "
+"noen eksplisitt konfirmasjonshendelse)."
+
+#: ResearchSuggestionsService.php:250 ResearchSuggestionsService.php:381
+#: ResearchSuggestionsService.php:433 ResearchSuggestionsService.php:484
+#: ResearchSuggestionsService.php:578
+#, php-format
+msgid "Missing source for %1$s - Possible source:"
+msgstr "Manglende kilde for %1$s - Mulig kilde:"
+
+#: ResearchSuggestionsService.php:383
+msgid "Possible source:"
+msgstr "Mulig kilde:"
+
+#: WhatsNew/WhatsNew0.php:11
+msgid "Vesta Research Suggestions: A new custom module. See the Readme for details."
+msgstr ""
+"Vesta Forskningsforslag: En ny tilpasset modul. Se Readme for mer "
+"informasjon."
+
+#: resources/views/admin/trees-preferences-ext.phtml:10
+msgid "Facts recorded in sources"
+msgstr "Fakta registrert i kilder"
+
+#. I18N: Help text for the “Facts recorded in sources” configuration setting
+#: resources/views/admin/trees-preferences-ext.phtml:18
+msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. This is the list of those GEDCOM facts. You can modify this list by removing or adding fact names, even custom ones, as necessary. "
+msgstr ""
+"Kilder kan kommenteres, via \"data\"-faktum, for å beskrive hvilke "
+"individuelle og familiefakta de inneholder. Dette er listen over disse "
+"GEDCOM fakta. Du kan endre denne listen ved å fjerne eller legge til "
+"faktanavn, til og med egendefinerte, etter behov. "
