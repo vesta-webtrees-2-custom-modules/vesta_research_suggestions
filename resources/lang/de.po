@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2020-09-19 15:42+0200\n"
-"PO-Revision-Date: 2021-01-06 02:29+0000\n"
+"PO-Revision-Date: 2021-01-07 01:04+0000\n"
 "Last-Translator: Bernd Schwendinger <b0ernie@gmx.net>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-research-suggestions/de/>\n"
@@ -105,6 +105,9 @@ msgstr ""
 #: ResearchSuggestionsModuleTrait.php:94
 msgid "Used to calculate date range for suggestions for Confirmation (CONF) events, based on birth or similar event (in case there is no explicit Confirmation event)."
 msgstr ""
+"Wird verwendet, um den Datumsbereich für Vorschläge zu Konfirmations-"
+"Ereignissen (CONF) basierend auf der Geburt oder einem ähnlichen Ereignis zu "
+"berechnen (falls kein explizites Konfirmations-Ereignis vorliegt)."
 
 #: WhatsNew/WhatsNew0.php:11
 msgid "Vesta Research Suggestions: A new custom module. See the Readme for details."
