@@ -37,6 +37,7 @@ $parentHtml = ob_get_clean();
 $search = "<h3>" . MoreI18N::xlate('Facts for repository records') . "</h3>";
 
 $all_sour_data_even_facts = array_merge($all_indi_facts, $all_fam_facts);
+uasort($all_sour_data_even_facts, '\Fisharebest\Webtrees\I18N::strcasecmp');
 
 $ext = view('admin/trees-preferences-ext', [
             'tree'                     => $tree,

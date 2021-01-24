@@ -61,7 +61,7 @@ This is a webtrees 2.x module - It cannot be used with webtrees 1.x. There is no
 
 ### Download<a name="download"/>
 
-* Current version: 2.0.11.0.0
+* Current version: 2.0.11.1.0
 * Based on and tested with webtrees 2.0.11. Requires webtrees 2.0.9 or later.
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 
@@ -81,7 +81,7 @@ This is a webtrees 2.x module - It cannot be used with webtrees 1.x. There is no
 
 * **vesta_research_suggestions: a webtrees custom module**
 * Copyright (C) 2020 – 2021 Richard Cissée
-* Derived from **webtrees** - Copyright 2020 webtrees development team.
+* Derived from **webtrees** - Copyright 2021 webtrees development team.
 * Dutch translations provided by TheDutchJewel.
 * Czech translations provided by Josef Prause.
 * Further translations contributed via weblate.

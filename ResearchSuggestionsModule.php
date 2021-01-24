@@ -3,9 +3,8 @@
 namespace Cissee\Webtrees\Module\ResearchSuggestions;
 
 use Aura\Router\Route;
-use Vesta\Hook\HookInterfaces\EmptyIndividualFactsTabExtender;
-use Vesta\Hook\HookInterfaces\IndividualFactsTabExtenderInterface;
 use Cissee\WebtreesExt\AbstractModule;
+use Fisharebest\Webtrees\Http\RequestHandlers\TreePreferencesAction;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
@@ -21,6 +20,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Vesta\Hook\HookInterfaces\EmptyIndividualFactsTabExtender;
+use Vesta\Hook\HookInterfaces\IndividualFactsTabExtenderInterface;
 use Vesta\Model\GenericViewElement;
 use Vesta\VestaModuleTrait;
 use function app;
@@ -204,7 +205,7 @@ class ResearchSuggestionsModule extends AbstractModule implements
     $route = $request->getAttribute('route');
     assert($route instanceof Route);
     
-    if ($route->handler === 'AdminTreesController::preferencesUpdate') {
+    if ($route->handler === TreePreferencesAction::class) {
       $this->preferencesUpdateExt($request);
     }
     
