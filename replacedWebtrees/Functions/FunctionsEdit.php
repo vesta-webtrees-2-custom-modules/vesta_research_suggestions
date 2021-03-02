@@ -573,7 +573,7 @@ class FunctionsEdit
         //we need the upperlevel to distinguish from individual custom events (same tag name unfortunately)
         } elseif (($fact === 'EVEN') && (($upperlevel == 'DATA') || ($upperlevel == 'SOUR'))) {
             $sour_data_even = FunctionsEdit::getPicklistSourDataEven($tree);
-                        
+
             //spec strictly has ', ' as delimiter, seems a bit confused about this though ("Each enumeration is separated by a comma.")
             $value = str_replace(' ','',$value);
 
@@ -586,7 +586,7 @@ class FunctionsEdit
                 unset($sour_data_even[$s]);
                 $sour_data_even[$s] = $val;
               }
-            }
+            }            
             
             //adjust name when creating?
             $html .= view('components/select', ['name' => $id . '[]', 'id' => $id, 'selected' => $selected, 'options' => $sour_data_even, 'class' => 'select2ordered']);
@@ -820,7 +820,9 @@ class FunctionsEdit
             } elseif (!$inSource && $type === 'DATE') {
                 $handler = app(FunctionsEditPlacHandler::class);
                 //adjust upperlevel to align with _LOC, upperlevel anyway not used by original code!
-                echo $handler->addSimpleTag($tree, $subrecord, $level0type, GedcomTag::getLabel($label));
+                //[2021/02] this seems to be a bad idea, reverting to $level1type
+                //echo $handler->addSimpleTag($tree, $subrecord, $level0type, GedcomTag::getLabel($label));
+                echo $handler->addSimpleTag($tree, $subrecord, $level1type, GedcomTag::getLabel($label));
                 //echo self::addSimpleTag($tree, $subrecord, $level1type, GedcomTag::getLabel($label));
                 if ($level === 2) {
                     // We already have a date - no need to add one.
