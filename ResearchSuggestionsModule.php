@@ -4,6 +4,8 @@ namespace Cissee\Webtrees\Module\ResearchSuggestions;
 
 use Aura\Router\Route;
 use Cissee\WebtreesExt\AbstractModule;
+use Cissee\WebtreesExt\Module\ModuleMetaInterface;
+use Cissee\WebtreesExt\Module\ModuleMetaTrait;
 use Fisharebest\Webtrees\Http\RequestHandlers\TreePreferencesAction;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
@@ -29,18 +31,19 @@ use function app;
 
 class ResearchSuggestionsModule extends AbstractModule implements 
   ModuleCustomInterface, 
+  ModuleMetaInterface, 
   ModuleConfigInterface,
   ModuleGlobalInterface, 
   MiddlewareInterface,
   IndividualFactsTabExtenderInterface {
 
-  use ModuleCustomTrait, ModuleConfigTrait, ModuleGlobalTrait, VestaModuleTrait {
+  use ModuleCustomTrait, ModuleMetaTrait, ModuleConfigTrait, ModuleGlobalTrait, VestaModuleTrait {
     VestaModuleTrait::customTranslations insteadof ModuleCustomTrait;
-    VestaModuleTrait::customModuleLatestVersion insteadof ModuleCustomTrait;
     VestaModuleTrait::getAssetAction insteadof ModuleCustomTrait;
-    VestaModuleTrait::assetUrl insteadof ModuleCustomTrait;
-    
+    VestaModuleTrait::assetUrl insteadof ModuleCustomTrait;    
     VestaModuleTrait::getConfigLink insteadof ModuleConfigTrait;
+    ModuleMetaTrait::customModuleVersion insteadof ModuleCustomTrait;
+    ModuleMetaTrait::customModuleLatestVersion insteadof ModuleCustomTrait;
   }
   
   use EmptyIndividualFactsTabExtender;
@@ -50,12 +53,12 @@ class ResearchSuggestionsModule extends AbstractModule implements
     return 'Richard Cissée';
   }
 
-  public function customModuleVersion(): string {
-    return file_get_contents(__DIR__ . '/latest-version.txt');
-  }
-
-  public function customModuleLatestVersionUrl(): string {
-    return 'https://raw.githubusercontent.com/vesta-webtrees-2-custom-modules/vesta_research_suggestions/master/latest-version.txt';
+  public function customModuleMetaDatasJson(): string {
+    return file_get_contents(__DIR__ . '/metadata.json');
+  } 
+  
+  public function customModuleLatestMetaDatasJsonUrl(): string {
+    return 'https://raw.githubusercontent.com/vesta-webtrees-2-custom-modules/vesta_research_suggestions/master/metadata.json';
   }
 
   public function customModuleSupportUrl(): string {
