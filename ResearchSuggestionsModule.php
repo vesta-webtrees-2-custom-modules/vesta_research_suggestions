@@ -6,6 +6,8 @@ use Aura\Router\Route;
 use Cissee\WebtreesExt\AbstractModule;
 use Cissee\WebtreesExt\Module\ModuleMetaInterface;
 use Cissee\WebtreesExt\Module\ModuleMetaTrait;
+use Cissee\WebtreesExt\MoreI18N;
+use Fisharebest\Webtrees\Elements\Marriage;
 use Fisharebest\Webtrees\Http\RequestHandlers\TreePreferencesAction;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
@@ -15,6 +17,7 @@ use Fisharebest\Webtrees\Module\ModuleCustomInterface;
 use Fisharebest\Webtrees\Module\ModuleCustomTrait;
 use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\SearchService;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\View;
@@ -77,6 +80,9 @@ class ResearchSuggestionsModule extends AbstractModule implements
     // Replace existing views with our own versions.
     View::registerCustomView('::components/select-source', $this->name() . '::components/select-source');
 
+    // Replace existing views with our own versions.
+    View::registerCustomView('::lists/sources-table', $this->name() . '::lists/sources-table');
+
     //TODO Issue #2
     // Replace existing views with our own versions.
     View::registerCustomView('::cards/add-sour-data-even', $this->name() . '::cards/add-sour-data-even');
@@ -85,6 +91,10 @@ class ResearchSuggestionsModule extends AbstractModule implements
     // Replace existing views with our own versions.
     View::registerCustomView('::admin/trees-preferences', $this->name() . '::admin/trees-preferences');
     View::registerCustomView('::admin/trees-preferences-ext', $this->name() . '::admin/trees-preferences-ext');
+    
+    //TODO: handle this better!
+    $ef = Registry::elementFactory();
+    $ef->register(['INDI:MARR' => new Marriage(MoreI18N::xlate('Marriage'))]);
     
     $this->flashWhatsNew('\Cissee\Webtrees\Module\ResearchSuggestions\WhatsNew', 1);
   }
