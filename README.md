@@ -61,7 +61,7 @@ This is a webtrees 2.x module - It cannot be used with webtrees 1.x. There is no
 
 ### Download<a name="download"/>
 
-* Current version: 2.0.15.2.0
+* Current version: 2.0.15.3.0
 * Based on and tested with webtrees 2.0.15. Requires webtrees 2.0.12 or later.
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 
