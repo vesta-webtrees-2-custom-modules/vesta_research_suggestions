@@ -2,66 +2,26 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the vesta package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2020-09-19 15:42+0200\n"
+"POT-Creation-Date: 2021-10-10 11:58+0200\n"
 "PO-Revision-Date: 2020-11-23 07:28+0000\n"
 "Last-Translator: Gray Rat <grayrats2@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/"
-"vesta-webtrees-custom-modules/vesta-research-suggestions/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-research-suggestions/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 4.4-dev\n"
-
-#: ResearchSuggestionsModule.php:107
-msgid "Research Suggestions"
-msgstr "Возможности для исследований"
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:22 ResearchSuggestionsModuleTrait.php:28
 msgid "A module providing suggestions for additional research, based on available sources."
-msgstr ""
-"Модуль представляет возможности дополнительных иследований в доступных "
-"источниках."
-
-#. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:63
-msgid "Allow persistent toggle (user may show/hide research suggestions as additional facts)"
-msgstr ""
-"Разрешить постоянное переключение (пользователь может показывать/скрывать "
-"исследовательские предложения в качестве дополнительных фактов)"
-
-#. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:69
-msgid "Grouped events"
-msgstr "Сгруппиррованные события"
-
-#. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:73
-msgid "Events related to Birth. If there is a source for one of these events, no suggestions will be made for other events in this group. Note that strictly BAPM is not necessarily an event occuring shortly after Birth, but it is often used that way (when CHR would actually be more appropriate, according to the GEDCOM specification). If you only use one of CHR/BAPM, it's recommended to deselect the other one here."
-msgstr ""
-"События, связанные с рождением. Если есть источник для одного из этих "
-"событий, никакие предложения не будут сделаны для других событий в этой "
-"группе. Обратите внимание, что BAPM не обязательно является событием, "
-"происходящим сразу после рождения, но оно часто используется таким образом ("
-"хотя CHR на самом деле было бы более подходящим, согласно спецификации "
-"GEDCOM). Если вы используете только одно из CHR/BAPM, рекомендуется отменить "
-"выбор другого здесь."
-
-#. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:78
-msgid "Events related to Death. If there is a source for one of these events, no suggestions will be made for other events in this group."
-msgstr ""
-"События, связанные со смертью. Если есть источник для одного из этих "
-"событий, никакие предложения не будут сделаны для других событий в этой "
-"группе."
+msgstr "Модуль представляет возможности дополнительных иследований в доступных источниках."
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:83
@@ -69,9 +29,32 @@ msgid "Age range for Confirmation events"
 msgstr "Возрастной диапазон для событий Конфирмации"
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:86
-msgid "Minimal age in years"
-msgstr "Минимальный возвраст, лет"
+#: ResearchSuggestionsModuleTrait.php:63
+msgid "Allow persistent toggle (user may show/hide research suggestions as additional facts)"
+msgstr "Разрешить постоянное переключение (пользователь может показывать/скрывать исследовательские предложения в качестве дополнительных фактов)"
+
+#: resources/views/lists/sources-table.phtml:94
+msgid "Event data?"
+msgstr ""
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:73
+msgid "Events related to Birth. If there is a source for one of these events, no suggestions will be made for other events in this group. Note that strictly BAPM is not necessarily an event occuring shortly after Birth, but it is often used that way (when CHR would actually be more appropriate, according to the GEDCOM specification). If you only use one of CHR/BAPM, it's recommended to deselect the other one here."
+msgstr "События, связанные с рождением. Если есть источник для одного из этих событий, никакие предложения не будут сделаны для других событий в этой группе. Обратите внимание, что BAPM не обязательно является событием, происходящим сразу после рождения, но оно часто используется таким образом (хотя CHR на самом деле было бы более подходящим, согласно спецификации GEDCOM). Если вы используете только одно из CHR/BAPM, рекомендуется отменить выбор другого здесь."
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:78
+msgid "Events related to Death. If there is a source for one of these events, no suggestions will be made for other events in this group."
+msgstr "События, связанные со смертью. Если есть источник для одного из этих событий, никакие предложения не будут сделаны для других событий в этой группе."
+
+#: resources/views/admin/trees-preferences-ext.phtml:10
+msgid "Facts recorded in sources"
+msgstr "Факты, зафиксированные в источниках"
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:69
+msgid "Grouped events"
+msgstr "Сгруппиррованные события"
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:93
@@ -79,39 +62,35 @@ msgid "Maximal age in years"
 msgstr "Максимальный возраст, лет"
 
 #. I18N: Module Configuration
-#: ResearchSuggestionsModuleTrait.php:94
-msgid "Used to calculate date range for suggestions for Confirmation (CONF) events, based on birth or similar event (in case there is no explicit Confirmation event)."
-msgstr ""
-"Используется для расчета диапазона дат для предложений по событиям "
-"Конфирмации (CONF), основанных на рождении или подобном событии (в случае "
-"отсутствия явного события Конфирмации)."
+#: ResearchSuggestionsModuleTrait.php:86
+msgid "Minimal age in years"
+msgstr "Минимальный возвраст, лет"
 
-#: ResearchSuggestionsService.php:250 ResearchSuggestionsService.php:381
-#: ResearchSuggestionsService.php:433 ResearchSuggestionsService.php:484
-#: ResearchSuggestionsService.php:578
+#: ResearchSuggestionsService.php:251 ResearchSuggestionsService.php:382
+#: ResearchSuggestionsService.php:434 ResearchSuggestionsService.php:485
+#: ResearchSuggestionsService.php:580
 #, php-format
 msgid "Missing source for %1$s - Possible source:"
 msgstr "Отсутствует источник для for %1$s - Возможный источник:"
 
-#: ResearchSuggestionsService.php:383
+#: ResearchSuggestionsService.php:384
 msgid "Possible source:"
 msgstr "Возможный источник:"
 
-#: WhatsNew/WhatsNew0.php:11
-msgid "Vesta Research Suggestions: A new custom module. See the Readme for details."
-msgstr ""
-"Vesta Research Suggestions: новый дополнительный модуль. Подробности "
-"смотрите в файле Readme."
-
-#: resources/views/admin/trees-preferences-ext.phtml:10
-msgid "Facts recorded in sources"
-msgstr "Факты, зафиксированные в источниках"
+#: ResearchSuggestionsModule.php:121
+msgid "Research Suggestions"
+msgstr "Возможности для исследований"
 
 #. I18N: Help text for the “Facts recorded in sources” configuration setting
 #: resources/views/admin/trees-preferences-ext.phtml:18
 msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. This is the list of those GEDCOM facts. You can modify this list by removing or adding fact names, even custom ones, as necessary. "
-msgstr ""
-"Источники могут быть связаны с фактами, чтобы описать, какие индивидуальные "
-"и семейные факты они содержат. Вот список этих фактов из GEDCOM. Вы можете "
-"изменить этот список, удалив или добавив имена фактов, даже "
-"пользовательские, по мере необходимости. "
+msgstr "Источники могут быть связаны с фактами, чтобы описать, какие индивидуальные и семейные факты они содержат. Вот список этих фактов из GEDCOM. Вы можете изменить этот список, удалив или добавив имена фактов, даже пользовательские, по мере необходимости. "
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:94
+msgid "Used to calculate date range for suggestions for Confirmation (CONF) events, based on birth or similar event (in case there is no explicit Confirmation event)."
+msgstr "Используется для расчета диапазона дат для предложений по событиям Конфирмации (CONF), основанных на рождении или подобном событии (в случае отсутствия явного события Конфирмации)."
+
+#: WhatsNew/WhatsNew0.php:11
+msgid "Vesta Research Suggestions: A new custom module. See the Readme for details."
+msgstr "Vesta Research Suggestions: новый дополнительный модуль. Подробности смотрите в файле Readme."
