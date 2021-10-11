@@ -8,14 +8,16 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2021-10-10 11:58+0200\n"
-"PO-Revision-Date: 2020-09-07 10:41+0200\n"
+"PO-Revision-Date: 2021-10-11 21:04+0000\n"
 "Last-Translator: TheDutchJewel <thedutchjewel@gmail.com>\n"
-"Language-Team: \n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-research-suggestions/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.9-dev\n"
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:22 ResearchSuggestionsModuleTrait.php:28
@@ -34,7 +36,7 @@ msgstr "Permanente schakeling toestaan (gebruiker kan onderzoekssuggesties weerg
 
 #: resources/views/lists/sources-table.phtml:94
 msgid "Event data?"
-msgstr ""
+msgstr "Gebeurtenisgegevens?"
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:73
