@@ -10,7 +10,7 @@ class SourceEvent {
 	private $source;
 	private $eventTypes;
 	private $interval;
-	private $place;
+	private $placeGedcomAsLevel2Tag;
 
   public function getSource() {
 		return $this->source;
@@ -28,15 +28,20 @@ class SourceEvent {
 		return $this->interval;
 	}
 	
-	public function getPlace() {
-		return $this->place;
+	public function getPlaceGedcomAsLevel2Tag() {
+		return $this->placeGedcomAsLevel2Tag;
 	}
 
 	//note: in Gedcom, DATE and PLAC are optional. Here, they are required. 
-  public function __construct(Source $source, $eventTypes, GedcomDateInterval $interval, $place) {
+  public function __construct(
+          Source $source, 
+          $eventTypes, 
+          GedcomDateInterval $interval, 
+          string $placeGedcomAsLevel2Tag) {
+    
   	$this->source = $source;
 		$this->eventTypes = $eventTypes;
 		$this->interval = $interval;
-		$this->place = $place;
+		$this->placeGedcomAsLevel2Tag = $placeGedcomAsLevel2Tag;
 	}
 }

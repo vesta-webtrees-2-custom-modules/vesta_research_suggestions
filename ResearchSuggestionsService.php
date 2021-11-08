@@ -139,9 +139,11 @@ class ResearchSuggestionsService {
     
 		return $resolved
             ->sort(PlaceStructure::sorterByLevel())
+            /*
             ->map(function (PlaceStructure $ps): string {
                     return $ps->getGedcomName();
                 })
+            */    
             ->toArray();
 	}
     		
@@ -258,9 +260,9 @@ class ResearchSuggestionsService {
 						//"assuming birth in the interval xy ..."
 						$gedcom .= $match->toGedcomString(2);
 
-						$gedcom .= "\n2 PLAC " . $event->getPlace();
-						$gedcom .= "\n2 SOUR @" . $sourceId. "@";
-
+						$gedcom .= "\n" . $event->getPlaceGedcomAsLevel2Tag();
+						$gedcom .= "\n" .'2 SOUR @' . $sourceId. '@';
+            
 						$research = new VirtualFact($gedcom, $person, 'research');
 						$facts[] = $research;
 					}//else unexpected, shouldn't have been returned!					
@@ -386,8 +388,8 @@ class ResearchSuggestionsService {
 						
 						$gedcom .= $match->toGedcomString(2);
 
-						$gedcom .= "\n2 PLAC " . $event->getPlace();
-						$gedcom .= "\n2 SOUR @" . $sourceId. "@";
+						$gedcom .= "\n" . $event->getPlaceGedcomAsLevel2Tag();
+						$gedcom .= "\n" .'2 SOUR @' . $sourceId. '@';
 
 						$research = new VirtualFact($gedcom, $person, 'research');
 						$facts[] = $research;
@@ -440,9 +442,9 @@ class ResearchSuggestionsService {
 
                 $gedcom .= $match->toGedcomString(2);
 
-                $gedcom .= "\n2 PLAC " . $event->getPlace();
-                $gedcom .= "\n2 SOUR @" . $sourceId. "@";
-
+                $gedcom .= "\n" . $event->getPlaceGedcomAsLevel2Tag();
+                $gedcom .= "\n" .'2 SOUR @' . $sourceId. '@';
+                
                 $research = new VirtualFact($gedcom, $person, 'research');
                 $facts[] = $research;
               }//else unexpected, shouldn't have been returned!					
@@ -491,8 +493,8 @@ class ResearchSuggestionsService {
 
 									$gedcom .= $match->toGedcomString(2);
 
-									$gedcom .= "\n2 PLAC " . $event->getPlace();
-									$gedcom .= "\n2 SOUR @" . $sourceId. "@";
+									$gedcom .= "\n" . $event->getPlaceGedcomAsLevel2Tag();
+                  $gedcom .= "\n" .'2 SOUR @' . $sourceId. '@';
 
 									$research = new VirtualFact($gedcom, $person, 'research');
 									$facts[] = $research;
@@ -581,8 +583,8 @@ class ResearchSuggestionsService {
 
 						$gedcom .= $match->toGedcomString(2);
 
-						$gedcom .= "\n2 PLAC " . $event->getPlace();
-						$gedcom .= "\n2 SOUR @" . $sourceId. "@";
+						$gedcom .= "\n" . $event->getPlaceGedcomAsLevel2Tag();
+						$gedcom .= "\n" .'2 SOUR @' . $sourceId. '@';
 
 						$research = new VirtualFact($gedcom, $person, 'research');
 						$facts[] = $research;
@@ -607,48 +609,94 @@ class ResearchSuggestionsService {
 		
 		$sources = array();
 		foreach ($places as $eventPlace) {
-			$sources2 = $this->searchService->searchSources(array($tree), array($eventPlace));
+      /* @var $eventPlace PlaceStructure */
+      
+			$sources2 = $this->searchService->searchSources(array($tree), array('3 PLAC ' . $eventPlace->getGedcomName()));
 			foreach ($sources2 as $source) {
         
 				//overwrite duplicate results
 				$sources[$source->xref()] = $source;
 			}
+      
+      //this is conceptually dubious,
+      //would be better to handle this via shared places module 
+      //(although PlaceStructure itself is aware of _LOC as well)
+      $loc = $eventPlace->getLoc();
+      if ($loc !== null) {
+        
+        $sources3 = $this->searchService->searchSources(array($tree), array('4 _LOC @' . $loc . '@'));
+        foreach ($sources3 as $source) {
+
+          //overwrite duplicate results
+          $sources[$source->xref()] = $source;
+        }
+      }
 		}
 		
 		foreach ($sources as $xref => $source) {
-      
+
 			//collect EVEN (similar to FunctionsPrintFacts, with fix for issue #1376)
-			preg_match_all('/\n2 EVEN (.*)((\n[3].*)*)/', $source->gedcom(), $evenMatches, PREG_SET_ORDER);
+			preg_match_all('/\n2 EVEN (.*)((\n[34].*)*)/', $source->gedcom(), $evenMatches, PREG_SET_ORDER);
 			foreach ($evenMatches as $evenMatch) {
 				$eventTypeMatches = false;
 				$eventTypes = array();
 				foreach (preg_split('/ *, */', $evenMatch[1]) as $event) {
-					$eventTypes[] = $event;
+					$eventTypes []= $event;
 					if (in_array($event, $matchEventTypes)) {
 						$eventTypeMatches = true;
 					}
 				}
 				
 				if ($eventTypeMatches) {
+                  
 					$dateInterval = GedcomDateInterval::createEmpty();
 					if (preg_match('/\n3 DATE (.+)/', $evenMatch[2], $date_match)) {
 						$dateInterval = GedcomDateInterval::create($date_match[1]);
 					}
-					
+          
 					if (preg_match('/\n3 PLAC (.+)/', $evenMatch[2], $plac_match)) {
 						$matchedPlace = $plac_match[1];
-						
+						$placeGedcom = '2 PLAC ' . $matchedPlace;
+            
+            $matchedLoc = '';
+            if (preg_match('/\n4 _LOC @(.+)@/', $evenMatch[2], $loc_match)) {
+              $matchedLoc = $loc_match[1];
+              $placeGedcom .= "\n" . '3 _LOC @' . $matchedLoc . '@';
+            }
+          
 						//we no longer include these - potentially lead to large number of matches which aren't that useful:
 						//do you really want lots of suggestions for main place "USA"?
 						//"Iroquois, Illinois" is ok when looking for "Illinois" as main place
 						//if (($matchedPlace === $place) || (preg_match('/' . Gedcom::PLACE_SEPARATOR . preg_quote($place) . '$/', $matchedPlace))) {
 						
 						foreach ($places as $eventPlace) {
+              /* @var $eventPlace PlaceStructure */
+              
 							//"Iroquois, Illinois" is NOT ok when looking for "Illinois" as parent place
-							if ($matchedPlace === $eventPlace) {
-								$events[] = new SourceEvent($source, $eventTypes, $dateInterval, $matchedPlace);
+							if ($matchedPlace === $eventPlace->getGedcomName()) {
+								$events[] = new SourceEvent(
+                        $source, 
+                        $eventTypes, 
+                        $dateInterval, 
+                        $placeGedcom);
 								break;
-							}
+							} else {
+                //match via _LOC
+                
+                $loc = $eventPlace->getLoc();
+                
+                if ($loc !== null) {
+                  if ($matchedLoc === $loc) {
+                    //error_log("matched via _LOC as " . $placeGedcom);
+                    $events[] = new SourceEvent(
+                            $source, 
+                            $eventTypes, 
+                            $dateInterval, 
+                            $placeGedcom);
+                    break;
+                  }
+                }                
+              }
 						}
 					}
 				}
