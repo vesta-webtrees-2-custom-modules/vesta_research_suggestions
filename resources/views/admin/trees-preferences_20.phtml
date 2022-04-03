@@ -1,15 +1,18 @@
 <?php
 
 use Cissee\WebtreesExt\MoreI18N;
-use Illuminate\Support\Collection;
-use Fisharebest\Webtrees\I18N;
 
 //original view (easier to monkeypatch than to extend properly)
 ob_start();
 echo view('::admin/trees-preferences', [
-            'all_family_facts'         => $all_family_facts,
-            'all_individual_facts'     => $all_individual_facts,
+            'all_fam_facts'            => $all_fam_facts,
+            'all_indi_facts'           => $all_indi_facts,
+            'all_name_facts'           => $all_name_facts,
+            'all_plac_facts'           => $all_plac_facts,
+            'all_repo_facts'           => $all_repo_facts,
+            'all_sour_facts'           => $all_sour_facts,
             'all_surname_traditions'   => $all_surname_traditions,
+            'base_url'                 => $base_url,
             'calendar_formats'         => $calendar_formats,
             'data_folder'              => $data_folder,
             'formats'                  => $formats,
@@ -17,11 +20,13 @@ echo view('::admin/trees-preferences', [
             'french_calendar_start'    => $french_calendar_start,
             'gregorian_calendar_start' => $gregorian_calendar_start,
             'members'                  => $members,
+            'page_layouts'             => $page_layouts,
             'pedigree_individual'      => $pedigree_individual,
             'privacy_options'          => $privacy_options,
             'relatives_events'         => $relatives_events,
             'source_types'             => $source_types,
             'surname_list_styles'      => $surname_list_styles,
+            'theme_options'            => $theme_options,
             'title'                    => $title,
             'tree'                     => $tree,
             'tree_count'               => $tree_count,
@@ -29,13 +34,10 @@ echo view('::admin/trees-preferences', [
 
 $parentHtml = ob_get_clean();
 
-$search = "<h2>" . MoreI18N::xlate('Other preferences') . "</h2>";
+$search = "<h3>" . MoreI18N::xlate('Facts for repository records') . "</h3>";
 
-$coll = new Collection();
-$all_sour_data_even_facts = $coll
-                ->merge($all_family_facts)
-                ->merge($all_individual_facts)
-                ->sort(I18N::comparator());
+$all_sour_data_even_facts = array_merge($all_indi_facts, $all_fam_facts);
+uasort($all_sour_data_even_facts, '\Fisharebest\Webtrees\I18N::strcasecmp');
 
 $ext = view('admin/trees-preferences-ext', [
             'tree'                     => $tree,

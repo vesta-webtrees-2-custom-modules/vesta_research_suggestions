@@ -2,7 +2,6 @@
 
 namespace Cissee\Webtrees\Module\ResearchSuggestions;
 
-use Fisharebest\Webtrees\GedcomTag;
 use Fisharebest\Webtrees\I18N;
 use Vesta\CommonI18N;
 use Vesta\ControlPanelUtils\Model\ControlPanelCheckbox;
@@ -11,6 +10,7 @@ use Vesta\ControlPanelUtils\Model\ControlPanelPreferences;
 use Vesta\ControlPanelUtils\Model\ControlPanelRange;
 use Vesta\ControlPanelUtils\Model\ControlPanelSection;
 use Vesta\ControlPanelUtils\Model\ControlPanelSubsection;
+use Vesta\ControlPanelUtils\Model\PicklistFacts;
 
 trait ResearchSuggestionsModuleTrait {
 
@@ -69,12 +69,12 @@ trait ResearchSuggestionsModuleTrait {
             /* I18N: Module Configuration */I18N::translate('Grouped events'),
             array(
         new ControlPanelFactRestriction(
-                array_intersect_key(GedcomTag::getPicklistFacts('INDI'), array_flip(ResearchSuggestionsService::BIRT_GROUPED_FACTS)),
+                array_intersect_key(PicklistFacts::getPicklistFactsINDI(), array_flip(ResearchSuggestionsService::BIRT_GROUPED_FACTS)),
                 /* I18N: Module Configuration */I18N::translate('Events related to Birth. If there is a source for one of these events, no suggestions will be made for other events in this group. Note that strictly BAPM is not necessarily an event occuring shortly after Birth, but it is often used that way (when CHR would actually be more appropriate, according to the GEDCOM specification). If you only use one of CHR/BAPM, it\'s recommended to deselect the other one here.'),
                 'BIRT_GROUPED_FACTS',
                 implode(',',ResearchSuggestionsService::BIRT_GROUPED_FACTS)),
         new ControlPanelFactRestriction(
-                array_intersect_key(GedcomTag::getPicklistFacts('INDI'), array_flip(ResearchSuggestionsService::DEAT_GROUPED_FACTS)),
+                array_intersect_key(PicklistFacts::getPicklistFactsINDI(), array_flip(ResearchSuggestionsService::DEAT_GROUPED_FACTS)),
                 /* I18N: Module Configuration */I18N::translate('Events related to Death. If there is a source for one of these events, no suggestions will be made for other events in this group.'),
                 'DEAT_GROUPED_FACTS',
                 implode(',',ResearchSuggestionsService::DEAT_GROUPED_FACTS))));

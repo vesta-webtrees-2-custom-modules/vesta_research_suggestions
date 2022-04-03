@@ -2,15 +2,14 @@
 
 use Cissee\WebtreesExt\MoreI18N;
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Query\JoinClause;
 
 /**
- * @var Collection<int,Source> $sources
- * @var Tree                   $tree
+ * @var Collection<Source> $sources
+ * @var Tree               $tree
  */
 
 ?>
@@ -73,11 +72,8 @@ $count_notes = DB::table('other')
     class="table table-bordered table-sm wt-table-source datatables d-none"
     <?= view('lists/datatables-attributes') ?>
     data-columns="<?= e(json_encode([
-        ['type' => 'html'],
-        
-        //[RC] added
         null,
-        
+        null,
         null,
         null,
         null,
@@ -86,18 +82,15 @@ $count_notes = DB::table('other')
         ['visible' => array_sum($count_media) > 0],
         ['visible' => array_sum($count_notes) > 0],
         ['visible' => (bool) $tree->getPreference('SHOW_LAST_CHANGE'), 'searchable' => false],
-    ], JSON_THROW_ON_ERROR)) ?>"
+    ])) ?>"
 >
-    <caption class="visually-hidden">
+    <caption class="sr-only">
         <?= $caption ?? MoreI18N::xlate('Sources') ?>
     </caption>
 
     <thead>
         <tr>
             <th><?= MoreI18N::xlate('Title') ?></th>
-            <?php
-            //[RC] added
-            ?>
             <th class="d-none d-md-table-cell"><?= I18N::translate('Event data?') ?></th>
             <th class="d-none d-md-table-cell"><?= MoreI18N::xlate('Abbreviation') ?></th>
             <th class="d-none d-md-table-cell"><?= MoreI18N::xlate('Author') ?></th>
@@ -119,12 +112,9 @@ $count_notes = DB::table('other')
                         <?= $source->fullName() ?>
                     </a>
                 </td>
- 
-                <?php
-                //[RC] added
-                ?>
+
                 <!-- Event data -->
-                <td class="d-none d-md-table-cell">
+                <td class="text-center">
                     <?php if ($source->facts(['DATA'])->isNotEmpty()) : ?>
                       <span class="wt-icon-save"><i class="fas fa-check fa-fw" aria-hidden="true"></i></span>
                     <?php endif ?>
@@ -142,7 +132,7 @@ $count_notes = DB::table('other')
 
                 <!-- Publisher -->
                 <td class="d-none d-md-table-cell">
-                    <?= Registry::elementFactory()->make('SOUR:PUBL')->value($source->facts(['PUBL'])->isNotEmpty() ? $source->facts(['PUBL'])->first()->value() : '', $tree) ?>
+                    <?= e($source->facts(['PUBL'])->isNotEmpty() ? $source->facts(['PUBL'])->first()->value() : '') ?>
                 </td>
 
                 <!-- Count of linked individuals -->
@@ -166,7 +156,7 @@ $count_notes = DB::table('other')
                 </td>
 
                 <!-- Last change -->
-                <td data-sort="<?= $source->lastChangeTimestamp()->timestamp() ?>">
+                <td data-sort="<?= $source->lastChangeTimestamp()->unix() ?>">
                     <?= view('components/datetime', ['timestamp' => $source->lastChangeTimestamp()]) ?>
                 </td>
             </tr>

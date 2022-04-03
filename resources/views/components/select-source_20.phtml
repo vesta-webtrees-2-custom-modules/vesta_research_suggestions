@@ -1,0 +1,158 @@
+<?php
+
+use Cissee\Webtrees\Module\ResearchSuggestions\ResearchSuggestionsService;
+use Fisharebest\Webtrees\Http\RequestHandlers\Select2Source;
+use Fisharebest\Webtrees\Source;
+use Fisharebest\Webtrees\View;
+
+/**
+ * @var string      $at     "@" or "" (or unset).
+ * @var Source|null $source
+ * @var string|null $class
+ * @var string|null $id
+ * @var string      $name
+ * @var Tree        $tree
+ */
+
+$at = $at ?? '';
+
+  
+  //defaults from original view
+  //$defaultLength = e(Select2Source::MINIMUM_INPUT_LENGTH);
+  $defaultUrl = e(route(Select2Source::class, ['tree' => $tree->name(), 'at' => $at]));
+
+  $adjustedLength = "0";
+  //placeholder url
+  $adjustedUrl = app(ResearchSuggestionsService::class)->routeSelect2Source($tree, '__GEDCOM__'); 
+
+  $selectId = e($id ?? $name);
+
+  //apparently we must not set select2 data via attributes if we want to modify dynamically
+
+  //TODO: span dir auto, clearing
+?>
+
+<select
+    autocomplete="off"
+    class="form-control select2 <?= $class ?? '' ?>"
+    id="<?= $selectId ?>"
+    name="<?= e($name) ?>"
+    <?= ($disabled ?? false) ? 'disabled' : '' ?>
+    <?= ($required ?? false) ? 'required' : '' ?>
+    style="width:100%"
+>
+    <?php if (($source ?? null) instanceof Source) : ?>
+        <option value="<?= e($source->xref()) ?>"d>
+            <?= view('selects/source', ['source' => $source]) ?>
+        </option>
+    <?php else : ?>
+        <option value="">&nbsp;</option>
+    <?php endif ?>
+</select>
+
+<?php View::push('javascript') ?>
+<script>
+$(document).ready(function() {
+
+  //see webtrees.js, but we cannot rely on these being set at this point
+  const lang = document.documentElement.lang;
+  const select2_languages = {
+    'zh-Hans': 'zh-CN',
+    'zh-Hant': 'zh-TW'
+  };
+
+  var selectControl = document.getElementById("<?= $selectId ?>");
+
+  var initSelectControlWithoutSuggestions = function() {
+    $(selectControl).select2({
+      minimumInputLength: 2,
+      allowClear: true,
+      placeholder: "",
+      ajax: {
+        delay: <?= e(Select2Source::AJAX_DELAY) ?>,
+        type: "POST",
+        url: "<?= $defaultUrl ?>"
+      },
+
+      //stuff from webtrees.js
+      language: select2_languages[lang] || lang,
+      // Needed for elements that are initially hidden.
+      width: '100%',
+      // Do not escape - we do it on the server.
+      escapeMarkup: function (x) {
+        return x;
+      }
+    });
+  };
+
+  var firstTagInput = document.querySelector('input[name=tag\\[\\]]');  
+  var firstDateInput = document.querySelector('[id^=DATE]');
+  var firstPlacInput = document.querySelector('[id^=PLAC]');
+
+  <?php
+    //the view is used in several other places, e.g. via the favorites module, and in the 'merge records' dialog,
+    //and as a standalone fact (which is not distinguishable here!).
+    //in these cases, or if required inputs aren't set, use standard functionality!
+  ?>
+
+  if (firstTagInput && firstDateInput && firstPlacInput) {
+
+    var firstGovInput = document.querySelector('[id^=_GOV]');
+    var firstLocInput = document.querySelector('[id^=_LOC]');
+
+    var changeListener = function() {
+
+      var tagValue = firstTagInput.value;
+      var dateValue = firstDateInput.value;
+      var placValue = firstPlacInput.value;
+      
+      if (dateValue && placValue) {
+        var govValue = firstGovInput?firstGovInput.value:"";
+        var locValue = firstLocInput?firstLocInput.value:"";
+        
+        var gedcom = "1 "+ tagValue + "\n2 DATE " + dateValue + "\n2 PLAC " + placValue;
+        if (govValue) {
+          gedcom += "\n3 _GOV " + govValue;
+        } 
+        if (locValue) {
+          gedcom += "\n3 _LOC @" + locValue + "@";
+        }
+        
+        var finalUrl = "<?= $adjustedUrl ?>".replace("__GEDCOM__", encodeURIComponent(gedcom));
+
+        $(selectControl).select2({
+          minimumInputLength: <?= $adjustedLength ?>,
+          allowClear: true,
+          placeholder: "",
+          ajax: {
+            delay: <?= e(Select2Source::AJAX_DELAY) ?>,
+            type: "POST",
+            url: finalUrl
+          },
+
+          //stuff from webtrees.js
+          language: select2_languages[lang] || lang,
+          // Needed for elements that are initially hidden.
+          width: '100%',
+          // Do not escape - we do it on the server.
+          escapeMarkup: function (x) {
+            return x;
+          }
+        });
+      } else {
+        initSelectControlWithoutSuggestions();
+      }  
+    };
+
+    firstDateInput.addEventListener('change', changeListener);
+    firstPlacInput.addEventListener('change', changeListener);
+
+    //also initialize!
+    changeListener();
+  } else {    
+    //initialize normally
+    initSelectControlWithoutSuggestions();
+  }
+});
+</script>
+<?php View::endpush() ?>

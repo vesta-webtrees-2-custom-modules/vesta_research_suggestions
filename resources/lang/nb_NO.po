@@ -7,11 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2021-10-10 11:58+0200\n"
+"POT-Creation-Date: 2022-04-03 20:23+0200\n"
 "PO-Revision-Date: 2021-10-10 13:05+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
-"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
-"vesta-webtrees-custom-modules/vesta-research-suggestions/nb_NO/>\n"
+"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-research-suggestions/nb_NO/>\n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -34,7 +33,7 @@ msgstr "Aldersgruppe for konfirmasjonshendelser"
 msgid "Allow persistent toggle (user may show/hide research suggestions as additional facts)"
 msgstr "Tillat vedvarende valg (brukeren kan vise/skjule forskningsforslag som flere fakta)"
 
-#: resources/views/lists/sources-table.phtml:94
+#: resources/views/lists/sources-table.phtml:101
 msgid "Event data?"
 msgstr "Hendelsesdata?"
 
@@ -48,7 +47,7 @@ msgstr "Hendelser relatert til fødsel. Hvis det finnes en kilde til en av disse
 msgid "Events related to Death. If there is a source for one of these events, no suggestions will be made for other events in this group."
 msgstr "Hendelser relatert til død. Hvis det finnes en kilde til en av disse hendelsene, vil det ikke komme forslag til andre hendelser i denne gruppen."
 
-#: resources/views/admin/trees-preferences-ext.phtml:10
+#: resources/views/admin/trees-preferences-ext.phtml:13
 msgid "Facts recorded in sources"
 msgstr "Fakta registrert i kilder"
 
@@ -67,23 +66,23 @@ msgstr "Maksimum alder i år"
 msgid "Minimal age in years"
 msgstr "Minimum alder i år"
 
-#: ResearchSuggestionsService.php:251 ResearchSuggestionsService.php:382
-#: ResearchSuggestionsService.php:434 ResearchSuggestionsService.php:485
-#: ResearchSuggestionsService.php:580
+#: ResearchSuggestionsService.php:261 ResearchSuggestionsService.php:393
+#: ResearchSuggestionsService.php:444 ResearchSuggestionsService.php:496
+#: ResearchSuggestionsService.php:592
 #, php-format
 msgid "Missing source for %1$s - Possible source:"
 msgstr "Manglende kilde for %1$s - Mulig kilde:"
 
-#: ResearchSuggestionsService.php:384
+#: ResearchSuggestionsService.php:395
 msgid "Possible source:"
 msgstr "Mulig kilde:"
 
-#: ResearchSuggestionsModule.php:121
+#: ResearchSuggestionsModule.php:138
 msgid "Research Suggestions"
 msgstr "Forskningsforslag"
 
 #. I18N: Help text for the “Facts recorded in sources” configuration setting
-#: resources/views/admin/trees-preferences-ext.phtml:18
+#: resources/views/admin/trees-preferences-ext.phtml:21
 msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. This is the list of those GEDCOM facts. You can modify this list by removing or adding fact names, even custom ones, as necessary. "
 msgstr "Kilder kan kommenteres, via \"data\"-faktum, for å beskrive hvilke individuelle og familiefakta de inneholder. Dette er listen over disse GEDCOM fakta. Du kan endre denne listen ved å fjerne eller legge til faktanavn, til og med egendefinerte, etter behov. "
 

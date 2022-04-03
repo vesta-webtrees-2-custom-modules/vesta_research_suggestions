@@ -48,4 +48,9 @@ if (!$ok) {
   return;
 }
 
-return new ResearchSuggestionsModule();
+if (str_starts_with(Webtrees::VERSION, '2.1')) {
+    return app(ResearchSuggestionsModule::class);
+}
+
+return app(ResearchSuggestionsModule_20::class);
+

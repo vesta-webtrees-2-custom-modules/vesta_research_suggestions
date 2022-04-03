@@ -1,0 +1,132 @@
+<?php
+//adapted from webtrees.js: webtrees.initializeTomSelect 
+?>
+
+<script>
+webtrees.initializeTomSelectSWS = function (element) {
+    var defaultUrl = element.dataset.defaultUrl;
+    var adjustedUrl = element.dataset.adjustedUrl;
+    
+    var ts = null;
+    var options = {};
+
+    let plugins = ['dropdown_input', 'virtual_scroll'];
+    if (element.multiple) {
+      plugins.push('remove_button');
+    } else if (!element.required) {
+      plugins.push('clear_button');
+    }
+
+    options = {
+      plugins: plugins,
+      render: {
+        item: (data, escape) => '<div>' + data.text + '</div>',
+        option: (data, escape) => '<div>' + data.text + '</div>',
+      },
+      maxOptions: false,
+      firstUrl: query => 1,
+      onDropdownOpen:function() {
+        <?php
+        //TODO: improve this: there may be additional SOUR (e.g. for ASSO)
+        ?>
+        var firstTagInput = document.querySelector('input[name=tags\\[\\]]');  
+        var firstDateInput = document.querySelector('[id$=DATE]');
+        var firstPlacInput = document.querySelector('[id$=PLAC]');
+
+        if (firstTagInput && firstDateInput && firstPlacInput) {
+
+            var dateValue = firstDateInput.value;
+            var placValue = firstPlacInput.value;
+
+            if (dateValue && placValue) {
+                <?php
+                //preload:'focus' does the same, but unconditionally
+                //TODO: no_results doesn't render here! explicit ts.refreshOptions(); doesn't help
+                ?>
+                ts.load('');            
+            }
+        }
+      },
+      load: function (query, callback) {
+        <?php
+        //careful, calling this resets the pagination, i.e. do not call more than once!
+        //https://github.com/orchidjs/tom-select/blob/master/src/plugins/virtual_scroll/plugin.ts
+        //function is actually intended to manage the full url, but may just as well be used for pagination only!
+        ?>
+        var curr = this.getUrl(query);
+        //console.log(curr);
+        var next = curr+1;
+
+        var thisUrl = defaultUrl;
+
+        if (query === '') {
+            <?php
+            //note: we should get here only though onDropdownOpen, otherwise not triggered (e.g. by clearing input)
+            ?>
+
+            <?php
+            //TODO: improve this: there may be additional SOUR (e.g. for ASSO)
+            ?>
+            var firstTagInput = document.querySelector('input[name=tags\\[\\]]');  
+            var firstDateInput = document.querySelector('[id$=DATE]');
+            var firstPlacInput = document.querySelector('[id$=PLAC]');
+
+            <?php
+            //the view is used in several other places, e.g. via the favorites module, and in the 'merge records' dialog,
+            //and as a standalone fact (which is not distinguishable here!).
+            //in these cases, or if required inputs aren't set, use standard functionality!
+            ?>
+
+            if (firstTagInput && firstDateInput && firstPlacInput) {
+
+                var tagValue = firstTagInput.value;
+                var dateValue = firstDateInput.value;
+                var placValue = firstPlacInput.value;
+
+                if (dateValue && placValue) {
+                    var firstGovInput = document.querySelector('[id$=_GOV]');
+                    var firstLocInput = document.querySelector('[id$=_LOC]');
+
+                    var govValue = firstGovInput?firstGovInput.value:"";
+                    var locValue = firstLocInput?firstLocInput.value:"";
+
+                    var gedcom = "1 "+ tagValue + "\n2 DATE " + dateValue + "\n2 PLAC " + placValue;
+                    if (govValue) {
+                        gedcom += "\n3 _GOV " + govValue;
+                    } 
+                    if (locValue) {
+                        gedcom += "\n3 _LOC @" + locValue + "@";
+                    }
+
+                    thisUrl = adjustedUrl;
+                    query = gedcom;
+                }
+            }
+        }
+
+        var fullUrl = thisUrl + '&page=' + curr + '&query=' + encodeURIComponent(query);    
+        //console.log(fullUrl);
+
+        fetch(fullUrl)
+          .then(response => response.json())
+          .then(json => {
+            if (json.nextUrl !== null) {
+                <?php
+                //we paginate ourselves, and use json.nextUrl only as a flag
+                ?>
+                this.setNextUrl(query, next);
+            }
+
+            callback(json.data);
+          })
+          .catch(callback);
+      },
+    };
+
+    ts = new TomSelect(element, options);
+    return ts;
+}
+</script>
+
+
+

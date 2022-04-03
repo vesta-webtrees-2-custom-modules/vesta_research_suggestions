@@ -7,17 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2021-10-10 11:58+0200\n"
+"POT-Creation-Date: 2022-04-03 20:23+0200\n"
 "PO-Revision-Date: 2021-12-28 12:27+0000\n"
 "Last-Translator: Олег <uolega@yandex.ru>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/"
-"vesta-webtrees-custom-modules/vesta-research-suggestions/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-research-suggestions/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 4.10.1\n"
 
 #. I18N: Module Configuration
@@ -35,7 +33,7 @@ msgstr "Возрастной диапазон для событий Конфир
 msgid "Allow persistent toggle (user may show/hide research suggestions as additional facts)"
 msgstr "Разрешить постоянное переключение (пользователь может показывать/скрывать исследовательские предложения в качестве дополнительных фактов)"
 
-#: resources/views/lists/sources-table.phtml:94
+#: resources/views/lists/sources-table.phtml:101
 msgid "Event data?"
 msgstr "Данные о событиях?"
 
@@ -49,7 +47,7 @@ msgstr "События, связанные с рождением. Если ес�
 msgid "Events related to Death. If there is a source for one of these events, no suggestions will be made for other events in this group."
 msgstr "События, связанные со смертью. Если есть источник для одного из этих событий, никакие предложения не будут сделаны для других событий в этой группе."
 
-#: resources/views/admin/trees-preferences-ext.phtml:10
+#: resources/views/admin/trees-preferences-ext.phtml:13
 msgid "Facts recorded in sources"
 msgstr "Факты, зафиксированные в источниках"
 
@@ -68,23 +66,23 @@ msgstr "Максимальный возраст, лет"
 msgid "Minimal age in years"
 msgstr "Минимальный возвраст, лет"
 
-#: ResearchSuggestionsService.php:251 ResearchSuggestionsService.php:382
-#: ResearchSuggestionsService.php:434 ResearchSuggestionsService.php:485
-#: ResearchSuggestionsService.php:580
+#: ResearchSuggestionsService.php:261 ResearchSuggestionsService.php:393
+#: ResearchSuggestionsService.php:444 ResearchSuggestionsService.php:496
+#: ResearchSuggestionsService.php:592
 #, php-format
 msgid "Missing source for %1$s - Possible source:"
 msgstr "Отсутствует источник для for %1$s - Возможный источник:"
 
-#: ResearchSuggestionsService.php:384
+#: ResearchSuggestionsService.php:395
 msgid "Possible source:"
 msgstr "Возможный источник:"
 
-#: ResearchSuggestionsModule.php:121
+#: ResearchSuggestionsModule.php:138
 msgid "Research Suggestions"
 msgstr "Возможности для исследований"
 
 #. I18N: Help text for the “Facts recorded in sources” configuration setting
-#: resources/views/admin/trees-preferences-ext.phtml:18
+#: resources/views/admin/trees-preferences-ext.phtml:21
 msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. This is the list of those GEDCOM facts. You can modify this list by removing or adding fact names, even custom ones, as necessary. "
 msgstr "Источники могут быть связаны с фактами, чтобы описать, какие индивидуальные и семейные факты они содержат. Вот список этих фактов из GEDCOM. Вы можете изменить этот список, удалив или добавив имена фактов, даже пользовательские, по мере необходимости. "
 
