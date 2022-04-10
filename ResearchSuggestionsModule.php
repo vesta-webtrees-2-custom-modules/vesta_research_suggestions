@@ -5,9 +5,11 @@ namespace Cissee\Webtrees\Module\ResearchSuggestions;
 use Aura\Router\Route;
 use Aura\Router\RouterContainer;
 use Cissee\WebtreesExt\AbstractModule;
+use Cissee\WebtreesExt\Elements\EventsRecordedExt;
 use Cissee\WebtreesExt\Module\ModuleMetaInterface;
 use Cissee\WebtreesExt\Module\ModuleMetaTrait;
 use Cissee\WebtreesExt\MoreI18N;
+use Exception;
 use Fisharebest\Webtrees\Elements\Marriage;
 use Fisharebest\Webtrees\Http\RequestHandlers\TreePreferencesAction;
 use Fisharebest\Webtrees\I18N;
@@ -22,6 +24,7 @@ use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\SearchService;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\View;
+use Fisharebest\Webtrees\Webtrees;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -31,6 +34,7 @@ use Vesta\Hook\HookInterfaces\IndividualFactsTabExtenderInterface;
 use Vesta\Model\GenericViewElement;
 use Vesta\VestaModuleTrait;
 use function app;
+use function view;
 
 
 class ResearchSuggestionsModule extends AbstractModule implements 
@@ -104,13 +108,15 @@ class ResearchSuggestionsModule extends AbstractModule implements
         $ef = Registry::elementFactory();
         $ef->registerTags(['INDI:MARR' => new Marriage(MoreI18N::xlate('Marriage'))]);
 
+        $ef->registerTags(['SOUR:DATA:EVEN' => new EventsRecordedExt(I18N::translate('Events'))]);
+        
         $this->flashWhatsNew('\Cissee\Webtrees\Module\ResearchSuggestions\WhatsNew', 1);
     }
   
     //webtrees 2.0 only!
     public function postSelect2SourceAction(ServerRequestInterface $request): ResponseInterface {
         if (str_starts_with(Webtrees::VERSION, '2.1')) {
-            throw new \Exception();
+            throw new Exception();
         }
         return app(Select2SourceWithSuggestions::class)->handle($request);
     }
