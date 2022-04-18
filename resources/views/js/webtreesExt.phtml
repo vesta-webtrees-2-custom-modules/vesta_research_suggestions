@@ -104,7 +104,14 @@ webtrees.initializeTomSelectSWS = function (element) {
             }
         }
 
-        var fullUrl = thisUrl + '&page=' + curr + '&query=' + encodeURIComponent(query);    
+        <?php
+        //safer to use api. Do not encodeURIComponent, that's done internally!
+        ?>
+        var url_ = new URL(thisUrl);
+        url_.searchParams.set('page', curr);
+        url_.searchParams.set('query', query);
+
+        var fullUrl = url_.href;
         //console.log(fullUrl);
 
         fetch(fullUrl)

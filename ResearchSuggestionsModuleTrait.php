@@ -106,6 +106,7 @@ trait ResearchSuggestionsModuleTrait {
     */
     
     $sections[] = new ControlPanelSection(
+            //TODO: also used on the family page!
             CommonI18N::factsAndEventsTabSettings(),
             null,
             $factsSub);

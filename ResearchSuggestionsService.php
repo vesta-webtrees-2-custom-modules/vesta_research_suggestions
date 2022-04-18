@@ -5,6 +5,8 @@ namespace Cissee\Webtrees\Module\ResearchSuggestions;
 use Cissee\WebtreesExt\VirtualFact;
 use Exception;
 use Fisharebest\Webtrees\Fact;
+use Fisharebest\Webtrees\Family;
+use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Registry;
@@ -64,7 +66,7 @@ class ResearchSuggestionsService {
             Tree $tree,
             bool $ignorePartialRanges = false): Collection {
 
-        [, $tag] = explode(':', $fact->tag());
+        $tag = explode(':', $fact->tag())[1];
         $collection = new Collection();
 
         $factWithPlace = null;
@@ -156,9 +158,23 @@ class ResearchSuggestionsService {
     }
 
     public function getAdditionalFacts(
-            Individual $person,
+            GedcomRecord $record,
             $ignorePartialRanges = false,
             $tags = null) {
+
+        $individuals = [];
+        $families = [];
+        
+        if ($record instanceof Individual) {
+            $individuals = [$record];
+            $families = $record->spouseFamilies()->toArray();
+        
+        } else if ($record instanceof Family) {
+            $families = [$record];
+            
+        } else {
+            return [];
+        }
 
         $birtTags = explode(',', $this->module->getPreference('BIRT_GROUPED_FACTS', implode(',', self::BIRT_GROUPED_FACTS)));
         //intersect because we want to have a specific order!
@@ -188,153 +204,15 @@ class ResearchSuggestionsService {
             $factsWithPlace = array();
             $interval = null;
             $isSourced = false;
-            foreach ($person->facts() as $fact) {
-                [, $tag] = explode(':', $fact->tag());
-                if (!in_array($tag, $birtTags)) {
-                    continue;
-                }
-                if ($fact->attribute("SOUR")) {
-                    $isSourced = true;
-                    break;
-                }
-
-                $place = $fact->attribute("PLAC");
-                if ($place) {
-                    $date = $fact->attribute("DATE");
-                    if ($date) {
-                        $currentInterval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
-                        //intersect to min common interval - 
-                        //this is to avoid bogus recommendations for fact combinations such as
-                        //BIRT 01 JAN 1715
-                        //BAPM AFT 01 JAN 1715 -> matches e.g. 1715 - 1850, even if meaning here is "shortly after BIRT"
-                        //(if option 'ignore partial ranges' isn't checked)
-                        //
-                        //on the other hand, if we actually have different dates,
-                        //expand to interval
-                        if ($interval !== null) {
-                            $intersected = $interval->intersect($currentInterval);
-                            if ($intersected !== null) {
-                                $interval = $intersected;
-                            } else {
-                                $interval = $interval->expand($currentInterval);
-                            }
-                        } else {
-                            $interval = $currentInterval;
-                        }
-
-                        $factsWithPlace[] = $fact;
-                    }
-                }
-            }
-
-            if ((!$isSourced) && ($interval !== null)) {
-                $resolvedPlaces = array();
-                foreach ($factsWithPlace as $factWithPlace) {
-                    $resolvedPlaces = array_merge(
-                            $resolvedPlaces,
-                            $this->resolvePlace(
-                                    PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval),
-                                    ['POLI', 'RELI']));
-                }
-
-                $events = $this->getSourceEvents($person->tree(), $birtTags, $resolvedPlaces);
-
-                foreach ($events as $event) {
-                    $sourceId = $event->getSourceXref();
-                    $match = $interval->intersect($event->getInterval());
-                    if ($match !== null) {
-                        $asType = null;
-                        //'preferred' order
-                        foreach ($birtTags as $type) {
-                            if (in_array($type, $event->getEventTypes())) {
-                                $asType = $type;
-                                break;
-                            }
-                        }
-
-                        //TODO I18N
-                        $labels = collect($birtTags)
-                                        ->map(function (string $t) {
-                                            return Registry::elementFactory()->make('INDI:'.$t)->label();
-                                        })->implode('/');
-
-                        $gedcom = "1 " . $asType . " " . I18N::translate('Missing source for %1$s - Possible source:', $labels);
-
-                        //conceptually a bit nicer, but leads to ugly sorting of facts:
-                        //EVEN with date 'pulls' up other non-dated events, such as OCCU (cf Functions.sortFacts/Fact.compareType)
-                        //$gedcom = "1 EVEN Missing source for birth/christening - Possible source:";
-                        //$gedcom .= "\n2 TYPE Research Suggestion";
-                        //"assuming birth in the interval xy ..."
-                        $gedcom .= $match->toGedcomString(2);
-
-                        $gedcom .= "\n" . $event->getPlaceGedcomAsLevel2Tag();
-                        $gedcom .= "\n" . '2 SOUR @' . $sourceId . '@';
-
-                        $research = new VirtualFact($gedcom, $person, 'research');
-                        $facts[] = $research;
-                    }//else unexpected, shouldn't have been returned!					
-                }
-            }
-        }
-
-        //2. research suggestion for confirmation (even without event)?
-        if (($tags === null) || (array_intersect($tags, ['CONF']))) {
-
-            $factsWithPlace = array();
-            $interval = null;
-            $hasEvent = false;
-            $isSourced = false;
-
-            //2a. do we already have a CONF event?
-            foreach ($person->facts() as $fact) {
-                [, $tag] = explode(':', $fact->tag());
-                if ($tag !== 'CONF') {
-                    continue;
-                }
-
-                $hasEvent = true;
-
-                if ($fact->attribute("SOUR")) {
-                    $isSourced = true;
-                    break;
-                }
-
-                $place = $fact->attribute("PLAC");
-                if ($place) {
-                    $date = $fact->attribute("DATE");
-                    if ($date) {
-                        $interval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
-                        $factsWithPlace[] = $fact;
-                    }
-                }
-
-                //there should be only one CONF event
-                break;
-            }
-
-            if ((!$isSourced) && (!$hasEvent)) {
-                //2b. extrapolate via birth/christening, if still alive
-                //(assuming family didn't move in the meantime)
-                //first get death date, if any
-                $maxUntil = null;
+            foreach ($individuals as $person) {
                 foreach ($person->facts() as $fact) {
-                    [, $tag] = explode(':', $fact->tag());
-                    if (!in_array($tag, self::DEAT_GROUPED_FACTS)) {
+                    $tag = explode(':', $fact->tag())[1];
+                    if (!in_array($tag, $birtTags)) {
                         continue;
                     }
-
-                    if ($maxUntil === null) {
-                        $date = $fact->attribute("DATE");
-                        if ($date) {
-                            $maxUntil = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
-                        }
-                    }
-                }
-
-                foreach ($person->facts() as $fact) {
-                    [, $tag] = explode(':', $fact->tag());
-                    if (!in_array($tag, self::BIRT_GROUPED_FACTS)) {
-                        continue;
+                    if ($fact->attribute("SOUR")) {
+                        $isSourced = true;
+                        break;
                     }
 
                     $place = $fact->attribute("PLAC");
@@ -342,6 +220,14 @@ class ResearchSuggestionsService {
                         $date = $fact->attribute("DATE");
                         if ($date) {
                             $currentInterval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
+                            //intersect to min common interval - 
+                            //this is to avoid bogus recommendations for fact combinations such as
+                            //BIRT 01 JAN 1715
+                            //BAPM AFT 01 JAN 1715 -> matches e.g. 1715 - 1850, even if meaning here is "shortly after BIRT"
+                            //(if option 'ignore partial ranges' isn't checked)
+                            //
+                            //on the other hand, if we actually have different dates,
+                            //expand to interval
                             if ($interval !== null) {
                                 $intersected = $interval->intersect($currentInterval);
                                 if ($intersected !== null) {
@@ -358,119 +244,203 @@ class ResearchSuggestionsService {
                     }
                 }
 
-                if ($interval !== null) {
-                    //confirmation usually around easter
-                    //individuals aged 14 or almost 14
-                    //
-                    //simply use year of birth + 14/15 years
-                    $minAge = intval($this->module->getPreference('CONF_MIN_AGE', '13'));
-                    $maxAge = intval($this->module->getPreference('CONF_MIN_AGE', '14'));
-                    $interval = $interval->shiftYears($minAge + 1, $maxAge + 1);
-                    //still alive? else reset interval to null
-                    if ($maxUntil) {
-                        $interval = $interval->maxUntil($maxUntil);
+                if ((!$isSourced) && ($interval !== null)) {
+                    $resolvedPlaces = array();
+                    foreach ($factsWithPlace as $factWithPlace) {
+                        $resolvedPlaces = array_merge(
+                                $resolvedPlaces,
+                                $this->resolvePlace(
+                                        PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval),
+                                        ['POLI', 'RELI']));
+                    }
+
+                    $events = $this->getSourceEvents($person->tree(), $birtTags, $resolvedPlaces);
+
+                    foreach ($events as $event) {
+                        $sourceId = $event->getSourceXref();
+                        $match = $interval->intersect($event->getInterval());
+                        if ($match !== null) {
+                            $asType = null;
+                            //'preferred' order
+                            foreach ($birtTags as $type) {
+                                if (in_array($type, $event->getEventTypes())) {
+                                    $asType = $type;
+                                    break;
+                                }
+                            }
+
+                            //TODO I18N
+                            $labels = collect($birtTags)
+                                            ->map(function (string $t) {
+                                                return Registry::elementFactory()->make('INDI:'.$t)->label();
+                                            })->implode('/');
+
+                            $gedcom = "1 " . $asType . " " . I18N::translate('Missing source for %1$s - Possible source:', $labels);
+
+                            //conceptually a bit nicer, but leads to ugly sorting of facts:
+                            //EVEN with date 'pulls' up other non-dated events, such as OCCU (cf Functions.sortFacts/Fact.compareType)
+                            //$gedcom = "1 EVEN Missing source for birth/christening - Possible source:";
+                            //$gedcom .= "\n2 TYPE Research Suggestion";
+                            //"assuming birth in the interval xy ..."
+                            $gedcom .= $match->toGedcomString(2);
+
+                            $gedcom .= "\n" . $event->getPlaceGedcomAsLevel2Tag();
+                            $gedcom .= "\n" . '2 SOUR @' . $sourceId . '@';
+
+                            $research = new VirtualFact($gedcom, $person, 'research');
+                            $facts[] = $research;
+                        }//else unexpected, shouldn't have been returned!					
                     }
                 }
             }
+        }
 
-            if ((!$isSourced) && ($interval !== null)) {
-                $resolvedPlaces = array();
-                foreach ($factsWithPlace as $factWithPlace) {
-                    $resolvedPlaces = array_merge(
-                            $resolvedPlaces,
-                            $this->resolvePlace(
-                                    PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval),
-                                    ['POLI', 'RELI']));
+        //2. research suggestion for confirmation (even without event)?
+        if (($tags === null) || (array_intersect($tags, ['CONF']))) {
+
+            $factsWithPlace = array();
+            $interval = null;
+            $hasEvent = false;
+            $isSourced = false;
+
+            //2a. do we already have a CONF event?
+            foreach ($individuals as $person) {
+                foreach ($person->facts() as $fact) {
+                    $tag = explode(':', $fact->tag())[1];
+                    if ($tag !== 'CONF') {
+                        continue;
+                    }
+
+                    $hasEvent = true;
+
+                    if ($fact->attribute("SOUR")) {
+                        $isSourced = true;
+                        break;
+                    }
+
+                    $place = $fact->attribute("PLAC");
+                    if ($place) {
+                        $date = $fact->attribute("DATE");
+                        if ($date) {
+                            $interval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
+                            $factsWithPlace[] = $fact;
+                        }
+                    }
+
+                    //there should be only one CONF event
+                    break;
                 }
 
-                $events = $this->getSourceEvents($person->tree(), ['CONF'], $resolvedPlaces);
-                foreach ($events as $event) {
-                    $sourceId = $event->getSourceXref();
-                    $match = $event->getInterval()->intersect($interval);
-                    if ($match !== null) {
-
-                        if ($hasEvent) {
-                            $gedcom = "1 CONF " . I18N::translate('Missing source for %1$s - Possible source:', Registry::elementFactory()->make('INDI:CONF')->label());
-                        } else {
-                            $gedcom = "1 CONF " . I18N::translate('Possible source:');
+                if ((!$isSourced) && (!$hasEvent)) {
+                    //2b. extrapolate via birth/christening, if still alive
+                    //(assuming family didn't move in the meantime)
+                    //first get death date, if any
+                    $maxUntil = null;
+                    foreach ($person->facts() as $fact) {
+                        $tag = explode(':', $fact->tag())[1];
+                        if (!in_array($tag, self::DEAT_GROUPED_FACTS)) {
+                            continue;
                         }
 
-                        $gedcom .= $match->toGedcomString(2);
+                        if ($maxUntil === null) {
+                            $date = $fact->attribute("DATE");
+                            if ($date) {
+                                $maxUntil = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
+                            }
+                        }
+                    }
 
-                        $gedcom .= "\n" . $event->getPlaceGedcomAsLevel2Tag();
-                        $gedcom .= "\n" . '2 SOUR @' . $sourceId . '@';
+                    foreach ($person->facts() as $fact) {
+                        $tag = explode(':', $fact->tag())[1];
+                        if (!in_array($tag, self::BIRT_GROUPED_FACTS)) {
+                            continue;
+                        }
 
-                        $research = new VirtualFact($gedcom, $person, 'research');
-                        $facts[] = $research;
-                    }//else unexpected, shouldn't have been returned!					
+                        $place = $fact->attribute("PLAC");
+                        if ($place) {
+                            $date = $fact->attribute("DATE");
+                            if ($date) {
+                                $currentInterval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
+                                if ($interval !== null) {
+                                    $intersected = $interval->intersect($currentInterval);
+                                    if ($intersected !== null) {
+                                        $interval = $intersected;
+                                    } else {
+                                        $interval = $interval->expand($currentInterval);
+                                    }
+                                } else {
+                                    $interval = $currentInterval;
+                                }
+
+                                $factsWithPlace[] = $fact;
+                            }
+                        }
+                    }
+
+                    if ($interval !== null) {
+                        //confirmation usually around easter
+                        //individuals aged 14 or almost 14
+                        //
+                        //simply use year of birth + 14/15 years
+                        $minAge = intval($this->module->getPreference('CONF_MIN_AGE', '13'));
+                        $maxAge = intval($this->module->getPreference('CONF_MIN_AGE', '14'));
+                        $interval = $interval->shiftYears($minAge + 1, $maxAge + 1);
+                        //still alive? else reset interval to null
+                        if ($maxUntil) {
+                            $interval = $interval->maxUntil($maxUntil);
+                        }
+                    }
+                }
+
+                if ((!$isSourced) && ($interval !== null)) {
+                    $resolvedPlaces = array();
+                    foreach ($factsWithPlace as $factWithPlace) {
+                        $resolvedPlaces = array_merge(
+                                $resolvedPlaces,
+                                $this->resolvePlace(
+                                        PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval),
+                                        ['POLI', 'RELI']));
+                    }
+
+                    $events = $this->getSourceEvents($person->tree(), ['CONF'], $resolvedPlaces);
+                    foreach ($events as $event) {
+                        $sourceId = $event->getSourceXref();
+                        $match = $event->getInterval()->intersect($interval);
+                        if ($match !== null) {
+
+                            if ($hasEvent) {
+                                $gedcom = "1 CONF " . I18N::translate('Missing source for %1$s - Possible source:', Registry::elementFactory()->make('INDI:CONF')->label());
+                            } else {
+                                $gedcom = "1 CONF " . I18N::translate('Possible source:');
+                            }
+
+                            $gedcom .= $match->toGedcomString(2);
+
+                            $gedcom .= "\n" . $event->getPlaceGedcomAsLevel2Tag();
+                            $gedcom .= "\n" . '2 SOUR @' . $sourceId . '@';
+
+                            $research = new VirtualFact($gedcom, $person, 'research');
+                            $facts[] = $research;
+                        }//else unexpected, shouldn't have been returned!					
+                    }
                 }
             }
         }
 
         //3a. research suggestion for other sourced individual events?
-        $sour_indi_facts = collect(explode(',', $person->tree()->getPreference('SOUR_DATA_EVEN_FACTS', 'BIRT,BAPM,CHR,CONF,MARR,DEAT,BURI')))
+        $sour_indi_facts = collect(explode(',', $record->tree()->getPreference('SOUR_DATA_EVEN_FACTS', 'BIRT,BAPM,CHR,CONF,MARR,DEAT,BURI')))
                 ->intersect(array_keys(PicklistFacts::getPicklistFactsINDI()))
                 ->filter(function (string $t) use ($birtTags, $deatTags): bool {
             return !in_array($t, $birtTags) && !in_array($t, $deatTags) && ($t !== 'CONF');
         });
 
         //cannot use ->except because that operates on collection keys!
-        //3a. research suggestion for sourced family events?
+        //3a. research suggestion for sourced individual events?
         if (!empty($sour_indi_facts) && (($tags === null) || (array_intersect($tags, $sour_indi_facts)))) {
-            foreach ($person->facts() as $fact) {
-                [, $tag] = explode(':', $fact->tag());
-                if (!$sour_indi_facts->contains($tag)) {
-                    continue;
-                }
-
-                if ($fact->attribute("SOUR")) {
-                    continue;
-                }
-
-                $place = $fact->attribute("PLAC");
-                if ($place) {
-                    $date = $fact->attribute("DATE");
-                    if ($date) {
-                        $interval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
-                        $resolvedPlaces = $this->resolvePlace(
-                                PlaceStructure::fromFactWithExplicitInterval($fact, $interval),
-                                ['POLI', 'RELI']);
-                        $events = $this->getSourceEvents($person->tree(), [$tag], $resolvedPlaces);
-
-                        foreach ($events as $event) {
-                            $sourceId = $event->getSourceXref();
-                            $match = $interval->intersect($event->getInterval());
-                            if ($match !== null) {
-                                $gedcom = "1 " . $tag . " " . I18N::translate('Missing source for %1$s - Possible source:', Registry::elementFactory()->make('INDI:'.$tag)->label());
-
-                                //conceptually a bit nicer, but leads to ugly sorting of facts:
-                                //EVEN with date 'pulls' up other non-dated events, such as OCCU (cf Functions.sortFacts/Fact.compareType)
-                                //$gedcom = "1 EVEN Missing source for marriage - Possible source:";
-                                //$gedcom .= "\n2 TYPE Research Suggestion";
-
-                                $gedcom .= $match->toGedcomString(2);
-
-                                $gedcom .= "\n" . $event->getPlaceGedcomAsLevel2Tag();
-                                $gedcom .= "\n" . '2 SOUR @' . $sourceId . '@';
-
-                                $research = new VirtualFact($gedcom, $person, 'research');
-                                $facts[] = $research;
-                            }//else unexpected, shouldn't have been returned!					
-                        }
-                    }
-                }
-            }
-        }
-
-        $sour_fam_facts = collect(explode(',', $person->tree()->getPreference('SOUR_DATA_EVEN_FACTS', 'BIRT,BAPM,CHR,CONF,MARR,DEAT,BURI')))
-                ->intersect(array_keys(PicklistFacts::getPicklistFactsFAM()));
-
-        //3b. research suggestion for sourced family events?
-        if (!empty($sour_fam_facts) && (($tags === null) || (array_intersect($tags, $sour_fam_facts)))) {
-            foreach ($person->spouseFamilies() as $family) {
-                foreach ($family->facts() as $fact) {
-                    [, $tag] = explode(':', $fact->tag());
-                    if (!$sour_fam_facts->contains($tag)) {
+            foreach ($individuals as $person) {
+                foreach ($person->facts() as $fact) {
+                    $tag = explode(':', $fact->tag())[1];
+                    if (!$sour_indi_facts->contains($tag)) {
                         continue;
                     }
 
@@ -486,7 +456,6 @@ class ResearchSuggestionsService {
                             $resolvedPlaces = $this->resolvePlace(
                                     PlaceStructure::fromFactWithExplicitInterval($fact, $interval),
                                     ['POLI', 'RELI']);
-
                             $events = $this->getSourceEvents($person->tree(), [$tag], $resolvedPlaces);
 
                             foreach ($events as $event) {
@@ -515,6 +484,59 @@ class ResearchSuggestionsService {
             }
         }
 
+        $sour_fam_facts = collect(explode(',', $record->tree()->getPreference('SOUR_DATA_EVEN_FACTS', 'BIRT,BAPM,CHR,CONF,MARR,DEAT,BURI')))
+                ->intersect(array_keys(PicklistFacts::getPicklistFactsFAM()));
+
+        //3b. research suggestion for sourced family events?
+        if (!empty($sour_fam_facts) && (($tags === null) || (array_intersect($tags, $sour_fam_facts)))) {
+            foreach ($families as $family) {
+                foreach ($family->facts() as $fact) {
+                    $tag = explode(':', $fact->tag())[1];
+                    if (!$sour_fam_facts->contains($tag)) {
+                        continue;
+                    }
+
+                    if ($fact->attribute("SOUR")) {
+                        continue;
+                    }
+
+                    $place = $fact->attribute("PLAC");
+                    if ($place) {
+                        $date = $fact->attribute("DATE");
+                        if ($date) {
+                            $interval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
+                            $resolvedPlaces = $this->resolvePlace(
+                                    PlaceStructure::fromFactWithExplicitInterval($fact, $interval),
+                                    ['POLI', 'RELI']);
+
+                            $events = $this->getSourceEvents($record->tree(), [$tag], $resolvedPlaces);
+
+                            foreach ($events as $event) {
+                                $sourceId = $event->getSourceXref();
+                                $match = $interval->intersect($event->getInterval());
+                                if ($match !== null) {
+                                    $gedcom = "1 " . $tag . " " . I18N::translate('Missing source for %1$s - Possible source:', Registry::elementFactory()->make('INDI:'.$tag)->label());
+
+                                    //conceptually a bit nicer, but leads to ugly sorting of facts:
+                                    //EVEN with date 'pulls' up other non-dated events, such as OCCU (cf Functions.sortFacts/Fact.compareType)
+                                    //$gedcom = "1 EVEN Missing source for marriage - Possible source:";
+                                    //$gedcom .= "\n2 TYPE Research Suggestion";
+
+                                    $gedcom .= $match->toGedcomString(2);
+
+                                    $gedcom .= "\n" . $event->getPlaceGedcomAsLevel2Tag();
+                                    $gedcom .= "\n" . '2 SOUR @' . $sourceId . '@';
+
+                                    $research = new VirtualFact($gedcom, $record, 'research');
+                                    $facts[] = $research;
+                                }//else unexpected, shouldn't have been returned!					
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         //4. research suggestion for death/burial?
 
         if (!empty($deatTags) && (($tags === null) || (array_intersect($tags, $deatTags)))) {
@@ -524,81 +546,83 @@ class ResearchSuggestionsService {
             $factsWithPlace = array();
             $interval = null;
             $isSourced = false;
-            foreach ($person->facts() as $fact) {
-                [, $tag] = explode(':', $fact->tag());
-                if (!in_array($tag, $deatTags)) {
-                    continue;
-                }
-                if ($fact->attribute("SOUR")) {
-                    $isSourced = true;
-                    break;
-                }
+            foreach ($individuals as $person) {
+                foreach ($person->facts() as $fact) {
+                    $tag = explode(':', $fact->tag())[1];
+                    if (!in_array($tag, $deatTags)) {
+                        continue;
+                    }
+                    if ($fact->attribute("SOUR")) {
+                        $isSourced = true;
+                        break;
+                    }
 
-                $place = $fact->attribute("PLAC");
-                if ($place) {
-                    $date = $fact->attribute("DATE");
-                    if ($date) {
-                        $currentInterval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
+                    $place = $fact->attribute("PLAC");
+                    if ($place) {
+                        $date = $fact->attribute("DATE");
+                        if ($date) {
+                            $currentInterval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
 
-                        //intersect to min common interval - 
-                        //this is to avoid bogus recommendations for fact combinations such as
-                        //BIRT 01 JAN 1715
-                        //BAPM AFT 01 JAN 1715 -> matches e.g. 1950 - 1850, even if meaning here is "shortly after BIRT"
-                        if ($interval !== null) {
-                            $intersected = $interval->intersect($currentInterval);
-                            if ($intersected !== null) {
-                                $interval = $intersected;
+                            //intersect to min common interval - 
+                            //this is to avoid bogus recommendations for fact combinations such as
+                            //BIRT 01 JAN 1715
+                            //BAPM AFT 01 JAN 1715 -> matches e.g. 1950 - 1850, even if meaning here is "shortly after BIRT"
+                            if ($interval !== null) {
+                                $intersected = $interval->intersect($currentInterval);
+                                if ($intersected !== null) {
+                                    $interval = $intersected;
+                                } else {
+                                    $interval = $interval->expand($currentInterval);
+                                }
                             } else {
-                                $interval = $interval->expand($currentInterval);
+                                $interval = $currentInterval;
                             }
-                        } else {
-                            $interval = $currentInterval;
-                        }
 
-                        $factsWithPlace[] = $fact;
+                            $factsWithPlace[] = $fact;
+                        }
                     }
                 }
-            }
 
-            if ((!$isSourced) && ($interval !== null)) {
-                $resolvedPlaces = array();
-                foreach ($factsWithPlace as $factWithPlace) {
-                    $resolvedPlaces = array_merge(
-                            $resolvedPlaces,
-                            $this->resolvePlace(
-                                    PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval),
-                                    ['POLI', 'RELI']));
-                }
+                if ((!$isSourced) && ($interval !== null)) {
+                    $resolvedPlaces = array();
+                    foreach ($factsWithPlace as $factWithPlace) {
+                        $resolvedPlaces = array_merge(
+                                $resolvedPlaces,
+                                $this->resolvePlace(
+                                        PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval),
+                                        ['POLI', 'RELI']));
+                    }
 
-                $events = $this->getSourceEvents($person->tree(), $deatTags, $resolvedPlaces);
+                    $events = $this->getSourceEvents($person->tree(), $deatTags, $resolvedPlaces);
 
-                foreach ($events as $event) {
-                    $sourceId = $event->getSourceXref();
-                    $match = $event->getInterval()->intersect($interval);
-                    if ($match !== null) {
-                        $asType = null;
-                        //'preferred' order
-                        foreach ($deatTags as $type) {
-                            if (in_array($type, $event->getEventTypes())) {
-                                $asType = $type;
-                                break;
+                    foreach ($events as $event) {
+                        $sourceId = $event->getSourceXref();
+                        $match = $event->getInterval()->intersect($interval);
+                        if ($match !== null) {
+                            $asType = null;
+                            //'preferred' order
+                            foreach ($deatTags as $type) {
+                                if (in_array($type, $event->getEventTypes())) {
+                                    $asType = $type;
+                                    break;
+                                }
                             }
-                        }
-                        $labels = collect($deatTags)
-                                        ->map(function (string $t) {
-                                            return Registry::elementFactory()->make('INDI:'.$t)->label();
-                                        })->implode('/');
+                            $labels = collect($deatTags)
+                                            ->map(function (string $t) {
+                                                return Registry::elementFactory()->make('INDI:'.$t)->label();
+                                            })->implode('/');
 
-                        $gedcom = "1 " . $asType . " " . I18N::translate('Missing source for %1$s - Possible source:', $labels);
+                            $gedcom = "1 " . $asType . " " . I18N::translate('Missing source for %1$s - Possible source:', $labels);
 
-                        $gedcom .= $match->toGedcomString(2);
+                            $gedcom .= $match->toGedcomString(2);
 
-                        $gedcom .= "\n" . $event->getPlaceGedcomAsLevel2Tag();
-                        $gedcom .= "\n" . '2 SOUR @' . $sourceId . '@';
+                            $gedcom .= "\n" . $event->getPlaceGedcomAsLevel2Tag();
+                            $gedcom .= "\n" . '2 SOUR @' . $sourceId . '@';
 
-                        $research = new VirtualFact($gedcom, $person, 'research');
-                        $facts[] = $research;
-                    }//else unexpected, shouldn't have been returned!					
+                            $research = new VirtualFact($gedcom, $person, 'research');
+                            $facts[] = $research;
+                        }//else unexpected, shouldn't have been returned!					
+                    }
                 }
             }
         }

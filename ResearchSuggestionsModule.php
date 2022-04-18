@@ -11,9 +11,9 @@ use Cissee\WebtreesExt\Module\ModuleMetaTrait;
 use Cissee\WebtreesExt\MoreI18N;
 use Exception;
 use Fisharebest\Webtrees\Elements\Marriage;
+use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Http\RequestHandlers\TreePreferencesAction;
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module\ModuleConfigTrait;
 use Fisharebest\Webtrees\Module\ModuleCustomInterface;
@@ -123,7 +123,9 @@ class ResearchSuggestionsModule extends AbstractModule implements
 
     //IndividualFactsTabExtenderInterface
   
-    public function hFactsTabGetOutputBeforeTab(Individual $person) {
+    public function hFactsTabGetOutputBeforeTab(
+        GedcomRecord $record): GenericViewElement {
+        
         $pre = '<link href="' . $this->assetUrl('css/style.css') . '" type="text/css" rel="stylesheet" />';
 	return new GenericViewElement($pre, '');
     }
@@ -134,7 +136,9 @@ class ResearchSuggestionsModule extends AbstractModule implements
 	return $styleadds;
     }
 
-    public function hFactsTabGetOutputInDBox(Individual $person) {
+    public function hFactsTabGetOutputInDBox(
+        GedcomRecord $record): GenericViewElement {
+        
 	$toggleableResearch = boolval($this->getPreference('TAB_TOGGLEABLE_RESEARCH', '1'));	
 	return $this->getOutputInDescriptionBox($toggleableResearch, 'show-research-suggestions-factstab', 'wt-research-fact-pfh', I18N::translate('Research Suggestions'));
     }
@@ -149,7 +153,7 @@ class ResearchSuggestionsModule extends AbstractModule implements
         if ($toggleableResearch) {
           ?>
           <label>
-              <input id="<?php echo $id; ?>" type="checkbox" data-bs-toggle="collapse" data-bs-target=".<?php echo $targetClass; ?>" data-wt-persist="<?php echo $targetClass; ?>">
+              <input id="<?php echo $id; ?>" type="checkbox" data-bs-toggle="collapse" data-bs-target=".<?php echo $targetClass; ?>" data-wt-persist="<?php echo $targetClass; ?>" autocomplete="off">
               <?php echo $label; ?>
           </label>
           <?php
@@ -158,7 +162,15 @@ class ResearchSuggestionsModule extends AbstractModule implements
         return new GenericViewElement(ob_get_clean(), '');
     }
   
-    public function hFactsTabGetOutputAfterTab(Individual $person) {
+    public function hFactsTabGetOutputAfterTab(
+        GedcomRecord $record,
+        bool $ajax): GenericViewElement {
+        
+        if (!$ajax) {
+            //nothing to do - in fact must not initialize twice!
+            return GenericViewElement::createEmpty();
+        }
+        
         $toggleableResearch = boolval($this->getPreference('TAB_TOGGLEABLE_RESEARCH', '1'));
         return $this->getOutputAfterTab($toggleableResearch, 'show-research-suggestions-factstab');
     }
@@ -183,11 +195,11 @@ class ResearchSuggestionsModule extends AbstractModule implements
         return ob_get_clean();
     }
   
-    public function hFactsTabGetAdditionalFacts(Individual $person) {
+    public function hFactsTabGetAdditionalFacts(GedcomRecord $record) {
 	//TODO make this configurable! here and elsewhere!
 	$ignorePartialRanges = true;
 
-	return app(ResearchSuggestionsService::class)->getAdditionalFacts($person, $ignorePartialRanges);
+	return app(ResearchSuggestionsService::class)->getAdditionalFacts($record, $ignorePartialRanges);
     }
   
     //TODO Issue #2
