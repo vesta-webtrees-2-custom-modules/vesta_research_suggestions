@@ -108,7 +108,7 @@ class ResearchSuggestionsModule extends AbstractModule implements
         $ef = Registry::elementFactory();
         $ef->registerTags(['INDI:MARR' => new Marriage(MoreI18N::xlate('Marriage'))]);
 
-        $ef->registerTags(['SOUR:DATA:EVEN' => new EventsRecordedExt(I18N::translate('Events'))]);
+        $ef->registerTags(['SOUR:DATA:EVEN' => new EventsRecordedExt(MoreI18N::xlate('Events'))]);
         
         $this->flashWhatsNew('\Cissee\Webtrees\Module\ResearchSuggestions\WhatsNew', 1);
     }
