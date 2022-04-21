@@ -31,11 +31,16 @@ This is a webtrees 2.x module - It cannot be used with webtrees 1.x. There is no
 
 #### Annotating Sources
 
-* How does this work? First, you have to annotate your sources in order to define the events recorded in the respective source. These annotations are primarily useful for sources which you expect to use for multiple individuals. They are part of the GEDCOM source data structure (they just haven't been used so far in webtrees). First, you may have to activate the 'data' fact in your tree preferences (in the control panel), under 'Facts for source records'. This is a unique source fact (optionally also a quick source fact). You may also adjust the types of events recorded in sources here.
+* How does this work? First, you have to annotate your sources in order to define the events recorded in the respective source. These annotations are primarily useful for sources which you expect to use for multiple individuals. They are part of the GEDCOM source data structure. 
+You have to activate the 'data' subtags fact in the GEDCOM Tags preferences (in the control panel), under 'Sources'. 
+
+<p align="center"><img src="tags.png" alt="Screenshot" align="center" width="67%"></p>
+
+You may also adjust the types of events recorded in sources in your tree preferences.
 
 <p align="center"><img src="prefs.png" alt="Screenshot" align="center" width="67%"></p>
 
-* Now, when editing a source, add a 'data' object and list the types of events (such as births/baptisms, marriages, deaths/burials), the date and the place (e.g. a county, or a parish) the source refers to. You can set multiple events with different dates and places, if necessary.
+* Now, when editing a source, add a 'data' object and list the types of events (such as births/christenings, marriages, deaths/burials), the date and the place (e.g. a county, or a parish) the source refers to. You can set multiple events with different dates and places, if necessary.
 
 <p align="center"><img src="data0.png" alt="Screenshot" align="center" width="67%"></p>
 <p align="center"><img src="data1.png" alt="Screenshot" align="center" width="67%"></p>
