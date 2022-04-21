@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2022-04-20 23:22+0200\n"
-"PO-Revision-Date: 2022-04-21 09:06+0000\n"
+"PO-Revision-Date: 2022-04-21 11:09+0000\n"
 "Last-Translator: TheDutchJewel <thedutchjewel@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-research-suggestions/nl/>\n"
@@ -92,6 +92,8 @@ msgstr "Onderzoekssuggesties"
 #: resources/views/admin/trees-preferences-ext.phtml:18
 msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. "
 msgstr ""
+"Bronnen kunnen worden geannoteerd, via het feit 'gegevens', om te "
+"beschrijven welke persoons- en gezinsfeiten zij bevatten. "
 
 #. I18N: Help text for the “Facts recorded in sources” configuration setting
 #: resources/views/admin/trees-preferences-ext_20.phtml:18
