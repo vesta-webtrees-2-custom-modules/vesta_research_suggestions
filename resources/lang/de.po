@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2022-04-20 23:22+0200\n"
-"PO-Revision-Date: 2022-04-22 09:08+0000\n"
+"PO-Revision-Date: 2022-04-22 11:07+0000\n"
 "Last-Translator: mpwt <der@bauschaffen.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/"
 "vesta-webtrees-custom-modules/vesta-research-suggestions/de/>\n"
@@ -92,6 +92,9 @@ msgstr "Forschungsvorschläge"
 #: resources/views/admin/trees-preferences-ext.phtml:18
 msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. "
 msgstr ""
+"Quellen können über das Feld \"Daten\" mit Anmerkungen versehen werden, um "
+"zu beschreiben, welche persönlichen und familiären Ereignisse enthalten "
+"sind. "
 
 #. I18N: Help text for the “Facts recorded in sources” configuration setting
 #: resources/views/admin/trees-preferences-ext_20.phtml:18
