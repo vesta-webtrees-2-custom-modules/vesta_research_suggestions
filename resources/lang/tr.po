@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2022-04-20 23:22+0200\n"
+"POT-Creation-Date: 2022-04-24 21:11+0200\n"
 "PO-Revision-Date: 2022-03-12 16:54+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-research-suggestions/tr/>\n"
@@ -72,14 +72,19 @@ msgstr "Yıl olarak maksimum yaş"
 msgid "Minimal age in years"
 msgstr "Yıl olarak minimum yaş"
 
-#: ResearchSuggestionsService.php:278 ResearchSuggestionsService.php:412
-#: ResearchSuggestionsService.php:465 ResearchSuggestionsService.php:518
-#: ResearchSuggestionsService.php:615
+#: ResearchSuggestionsService.php:332 ResearchSuggestionsService.php:469
+#: ResearchSuggestionsService.php:522 ResearchSuggestionsService.php:575
+#: ResearchSuggestionsService.php:672
 #, php-format
 msgid "Missing source for %1$s - Possible source:"
 msgstr "%1$s için eksik kaynak - Olası kaynak:"
 
-#: ResearchSuggestionsService.php:414
+#: ResearchSuggestionsService.php:199
+#, php-format
+msgid "Possible source for %1$s:"
+msgstr ""
+
+#: ResearchSuggestionsService.php:471
 msgid "Possible source:"
 msgstr "Olası kaynak:"
 

@@ -199,7 +199,9 @@ class ResearchSuggestionsModule extends AbstractModule implements
 	//TODO make this configurable! here and elsewhere!
 	$ignorePartialRanges = true;
 
-	return app(ResearchSuggestionsService::class)->getAdditionalFacts($record, $ignorePartialRanges);
+	return app(ResearchSuggestionsService::class)->getAdditionalFacts(
+            $record, 
+            $ignorePartialRanges);
     }
   
     //TODO Issue #2

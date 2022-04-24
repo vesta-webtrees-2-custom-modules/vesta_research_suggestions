@@ -4,11 +4,13 @@ namespace Cissee\Webtrees\Module\ResearchSuggestions;
 
 use Cissee\WebtreesExt\VirtualFact;
 use Exception;
+use Fisharebest\Webtrees\Elements\UnknownElement;
 use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
+use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\SearchService;
 use Fisharebest\Webtrees\Tree;
@@ -17,7 +19,9 @@ use Illuminate\Support\Collection;
 use Vesta\ControlPanelUtils\Model\PicklistFacts;
 use Vesta\Hook\HookInterfaces\FunctionsPlaceUtils;
 use Vesta\Model\GedcomDateInterval;
+use Vesta\Model\LocReference;
 use Vesta\Model\PlaceStructure;
+use Vesta\Model\Trace;
 use function collect;
 use function route;
 
@@ -115,7 +119,7 @@ class ResearchSuggestionsService {
 
         //(TODO: handle BAPM/CHR confusion)
 
-        $events = $this->getSourceEvents($tree, [$tag], $resolvedPlaces);
+        $events = $this->getSourceEvents($tree, $resolvedPlaces, [$tag]);
 
         foreach ($events as $event) {         
             $match = $interval->intersect($event->getInterval());
@@ -157,10 +161,58 @@ class ResearchSuggestionsService {
                         ->toArray();
     }
 
+    public function getAdditionalLocFacts(
+            GedcomRecord $record,
+            bool $ignorePartialRanges = false): array {
+    
+        $ps = FunctionsPlaceUtils::loc2plac(
+            $this->module,
+            new LocReference($record->xref(), $record->tree(), new Trace('')));
+        
+        if ($ps == null) {
+            return [];
+        }
+        $place = $ps->getGedcomName();
+        
+        $resolvedPlaces = $this->resolvePlace(
+            $ps,
+            ['POLI', 'RELI']);
+        
+        $sourceEvents = $this->getSourceEvents($record->tree(), $resolvedPlaces);
+
+        $facts = [];
+        
+        foreach ($sourceEvents as $sourceEvent) {
+                
+            $asType = $sourceEvent->getEventTypes()[0];
+            
+            $labels = collect($sourceEvent->getEventTypes())
+                            ->map(function (string $t) {
+                                //uargh ugly
+                                $element = Registry::elementFactory()->make('INDI:'.$t);
+                                if ($element instanceof UnknownElement) {
+                                    $element = Registry::elementFactory()->make('FAM:'.$t);
+                                }
+                                return $element->label();
+                            })->implode('/');
+
+            $gedcom = "1 EVEN " . I18N::translate('Possible source for %1$s:', $labels);
+            $gedcom .= "\n2 TYPE Research Suggestion";
+            $gedcom .= $sourceEvent->getInterval()->toGedcomString(2);
+            $gedcom .= "\n" . $sourceEvent->getPlaceGedcomAsLevel2Tag();
+            $gedcom .= "\n" . '2 SOUR @' . $sourceEvent->getSourceXref() . '@';
+            
+            $research = new VirtualFact($gedcom, $record, 'research');
+            $facts[] = $research;
+        }
+        
+        return $facts;
+    }
+    
     public function getAdditionalFacts(
             GedcomRecord $record,
-            $ignorePartialRanges = false,
-            $tags = null) {
+            bool $ignorePartialRanges = false,
+            $tags = null): array {
 
         $individuals = [];
         $families = [];
@@ -171,6 +223,9 @@ class ResearchSuggestionsService {
         
         } else if ($record instanceof Family) {
             $families = [$record];
+            
+        } else if ($record instanceof Location) {
+            return $this->getAdditionalLocFacts($record, $ignorePartialRanges);
             
         } else {
             return [];
@@ -254,7 +309,7 @@ class ResearchSuggestionsService {
                                         ['POLI', 'RELI']));
                     }
 
-                    $events = $this->getSourceEvents($person->tree(), $birtTags, $resolvedPlaces);
+                    $events = $this->getSourceEvents($person->tree(), $resolvedPlaces, $birtTags);
 
                     foreach ($events as $event) {
                         $sourceId = $event->getSourceXref();
@@ -269,7 +324,6 @@ class ResearchSuggestionsService {
                                 }
                             }
 
-                            //TODO I18N
                             $labels = collect($birtTags)
                                             ->map(function (string $t) {
                                                 return Registry::elementFactory()->make('INDI:'.$t)->label();
@@ -277,6 +331,9 @@ class ResearchSuggestionsService {
 
                             $gedcom = "1 " . $asType . " " . I18N::translate('Missing source for %1$s - Possible source:', $labels);
 
+                            //TODO should be ok in 2.1 to use EVEN
+                            //change here and elsewhere!
+                            //
                             //conceptually a bit nicer, but leads to ugly sorting of facts:
                             //EVEN with date 'pulls' up other non-dated events, such as OCCU (cf Functions.sortFacts/Fact.compareType)
                             //$gedcom = "1 EVEN Missing source for birth/christening - Possible source:";
@@ -402,7 +459,7 @@ class ResearchSuggestionsService {
                                         ['POLI', 'RELI']));
                     }
 
-                    $events = $this->getSourceEvents($person->tree(), ['CONF'], $resolvedPlaces);
+                    $events = $this->getSourceEvents($person->tree(), $resolvedPlaces, ['CONF']);
                     foreach ($events as $event) {
                         $sourceId = $event->getSourceXref();
                         $match = $event->getInterval()->intersect($interval);
@@ -456,7 +513,7 @@ class ResearchSuggestionsService {
                             $resolvedPlaces = $this->resolvePlace(
                                     PlaceStructure::fromFactWithExplicitInterval($fact, $interval),
                                     ['POLI', 'RELI']);
-                            $events = $this->getSourceEvents($person->tree(), [$tag], $resolvedPlaces);
+                            $events = $this->getSourceEvents($person->tree(), $resolvedPlaces, [$tag]);
 
                             foreach ($events as $event) {
                                 $sourceId = $event->getSourceXref();
@@ -509,7 +566,7 @@ class ResearchSuggestionsService {
                                     PlaceStructure::fromFactWithExplicitInterval($fact, $interval),
                                     ['POLI', 'RELI']);
 
-                            $events = $this->getSourceEvents($record->tree(), [$tag], $resolvedPlaces);
+                            $events = $this->getSourceEvents($record->tree(), $resolvedPlaces, [$tag]);
 
                             foreach ($events as $event) {
                                 $sourceId = $event->getSourceXref();
@@ -593,7 +650,7 @@ class ResearchSuggestionsService {
                                         ['POLI', 'RELI']));
                     }
 
-                    $events = $this->getSourceEvents($person->tree(), $deatTags, $resolvedPlaces);
+                    $events = $this->getSourceEvents($person->tree(), $resolvedPlaces, $deatTags);
 
                     foreach ($events as $event) {
                         $sourceId = $event->getSourceXref();
@@ -630,15 +687,23 @@ class ResearchSuggestionsService {
         return $facts;
     }
 
-    public function getSourceEvents($tree, $matchEventTypes, $places) {
-        return $this->doGetSourceEvents($tree, $matchEventTypes, $places);
+    public function getSourceEvents(
+        Tree $tree, 
+        array $places, 
+        ?array $matchEventTypes = null): array {
+        
+        return $this->doGetSourceEvents($tree, $places, $matchEventTypes);
     }
 
     /**
      * 	 	
      * @return array (array of key: source id, value: SourceEvent)	 
      */
-    protected function doGetSourceEvents($tree, $matchEventTypes, $places) {
+    protected function doGetSourceEvents(
+        Tree $tree, 
+        array $places, 
+        ?array $matchEventTypes = null): array {
+        
         $events = array();
 
         $sources = array();
@@ -676,7 +741,7 @@ class ResearchSuggestionsService {
                 $eventTypes = array();
                 foreach (preg_split('/ *, */', $evenMatch[1]) as $event) {
                     $eventTypes [] = $event;
-                    if (in_array($event, $matchEventTypes)) {
+                    if (($matchEventTypes === null) || (in_array($event, $matchEventTypes))) {
                         $eventTypeMatches = true;
                     }
                 }
