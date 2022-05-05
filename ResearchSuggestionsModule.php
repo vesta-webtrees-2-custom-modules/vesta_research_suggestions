@@ -6,6 +6,7 @@ use Aura\Router\Route;
 use Aura\Router\RouterContainer;
 use Cissee\WebtreesExt\AbstractModule;
 use Cissee\WebtreesExt\Elements\EventsRecordedExt;
+use Cissee\WebtreesExt\Elements\XrefSourceExt;
 use Cissee\WebtreesExt\Module\ModuleMetaInterface;
 use Cissee\WebtreesExt\Module\ModuleMetaTrait;
 use Cissee\WebtreesExt\MoreI18N;
@@ -94,7 +95,9 @@ class ResearchSuggestionsModule extends AbstractModule implements
         $router->get(TomSelectSourceWithSuggestions::class, '/tree/{tree}/tom-select-source-with-suggestions', TomSelectSourceWithSuggestions::class);
 
         // Replace existing views with our own versions.
-        View::registerCustomView('::components/select-source', $this->name() . '::components/select-source');
+        //but not everywhere (i.e. not when merging records)
+        //used via XrefSourceExt
+        View::registerCustomView('::components/select-source-ext', $this->name() . '::components/select-source');
 
         // Replace existing views with our own versions.
         View::registerCustomView('::lists/sources-table', $this->name() . '::lists/sources-table');
@@ -110,6 +113,36 @@ class ResearchSuggestionsModule extends AbstractModule implements
 
         $ef->registerTags(['SOUR:DATA:EVEN' => new EventsRecordedExt(MoreI18N::xlate('Events'))]);
         
+        //replace XrefSource everywhere
+        $ef->registerTags([
+            'FAM:*:SOUR'               => new XrefSourceExt(I18N::translate('Source citation')),
+            'FAM:SOUR'                 => new XrefSourceExt(I18N::translate('Source citation')),
+            'INDI:*:SOUR'              => new XrefSourceExt(I18N::translate('Source citation')),
+            'INDI:SOUR'                => new XrefSourceExt(I18N::translate('Source citation')),
+            'NOTE:SOUR'                => new XrefSourceExt(I18N::translate('Source citation')),
+            'OBJE:SOUR'                => new XrefSourceExt(I18N::translate('Source citation')),
+        ]);
+        
+        //Gedcom-L
+        $ef->registerTags([
+            'FAM:*:_ASSO:SOUR'                => new XrefSourceExt(I18N::translate('Source citation')),
+            'INDI:*:_ASSO:SOUR'               => new XrefSourceExt(I18N::translate('Source citation')),
+            '_LOC:EVEN:SOUR'                  => new XrefSourceExt(I18N::translate('Source citation')),
+            '_LOC:NAME:SOUR'                  => new XrefSourceExt(I18N::translate('Source')),
+            '_LOC:SOUR'                       => new XrefSourceExt(I18N::translate('Source')),
+            '_LOC:TYPE:SOUR'                  => new XrefSourceExt(I18N::translate('Source')),
+            '_LOC:_AIDN:SOUR'                 => new XrefSourceExt(I18N::translate('Source')),
+            '_LOC:_DMGD:SOUR'                 => new XrefSourceExt(I18N::translate('Source')),
+            '_LOC:_LOC:SOUR'                  => new XrefSourceExt(I18N::translate('Source')),
+            '_LOC:_POST:SOUR'                 => new XrefSourceExt(I18N::translate('Source')),
+        ]);   
+            
+        //webtrees
+        $ef->registerTags([
+            'FAM:*:_ASSO:SOUR'            => new XrefSourceExt(I18N::translate('Source citation')),
+            'INDI:*:_ASSO:SOUR'           => new XrefSourceExt(I18N::translate('Source citation')),
+        ]);  
+            
         $this->flashWhatsNew('\Cissee\Webtrees\Module\ResearchSuggestions\WhatsNew', 1);
     }
   
@@ -206,8 +239,6 @@ class ResearchSuggestionsModule extends AbstractModule implements
   
     //TODO Issue #2
     public function bodyContent(): string {
-        //WAIT for https://github.com/fisharebest/webtrees/issues/4239
-        //this is anyway probably obsolete
         if (true) {
             //we need additional javascript for tom select sources
             return view($this->name() . '::js/webtreesExt');
