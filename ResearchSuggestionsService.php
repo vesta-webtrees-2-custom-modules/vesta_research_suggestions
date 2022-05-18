@@ -2,6 +2,7 @@
 
 namespace Cissee\Webtrees\Module\ResearchSuggestions;
 
+use Cissee\WebtreesExt\PlaceAsTopLevelRecord;
 use Cissee\WebtreesExt\VirtualFact;
 use Exception;
 use Fisharebest\Webtrees\Elements\UnknownElement;
@@ -162,8 +163,7 @@ class ResearchSuggestionsService {
     }
 
     public function getAdditionalLocFacts(
-            GedcomRecord $record,
-            bool $ignorePartialRanges = false): array {
+            GedcomRecord $record): array {
     
         $ps = FunctionsPlaceUtils::loc2plac(
             $this->module,
@@ -172,13 +172,21 @@ class ResearchSuggestionsService {
         if ($ps == null) {
             return [];
         }
+        
+        return $this->getAdditionalFactsViaPlaceStructure($record, $ps);
+    }
+            
+    public function getAdditionalFactsViaPlaceStructure(
+            GedcomRecord $record,
+            PlaceStructure $ps): array {
+        
         $place = $ps->getGedcomName();
         
         $resolvedPlaces = $this->resolvePlace(
             $ps,
             ['POLI', 'RELI']);
         
-        $sourceEvents = $this->getSourceEvents($record->tree(), $resolvedPlaces);
+        $sourceEvents = $this->getSourceEvents($ps->tree(), $resolvedPlaces);
 
         $facts = [];
         
@@ -225,8 +233,10 @@ class ResearchSuggestionsService {
             $families = [$record];
             
         } else if ($record instanceof Location) {
-            return $this->getAdditionalLocFacts($record, $ignorePartialRanges);
+            return $this->getAdditionalLocFacts($record);
             
+        } else if ($record instanceof PlaceAsTopLevelRecord) {
+            return $this->getAdditionalFactsViaPlaceStructure($record, $record->placeStructure());
         } else {
             return [];
         }

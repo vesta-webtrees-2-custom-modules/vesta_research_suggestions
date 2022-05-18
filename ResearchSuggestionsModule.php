@@ -3,7 +3,6 @@
 namespace Cissee\Webtrees\Module\ResearchSuggestions;
 
 use Aura\Router\Route;
-use Aura\Router\RouterContainer;
 use Cissee\WebtreesExt\AbstractModule;
 use Cissee\WebtreesExt\Elements\EventsRecordedExt;
 use Cissee\WebtreesExt\Elements\XrefSourceExt;
@@ -88,9 +87,13 @@ class ResearchSuggestionsModule extends AbstractModule implements
         //webtrees isn't interested in solving this properly, see
         //https://www.webtrees.net/index.php/en/forum/2-open-discussion/33687-pretty-urls-in-2-x
 
+        /*
         $router_container = app(RouterContainer::class);
         assert($router_container instanceof RouterContainer);
         $router = $router_container->getMap();
+        */
+
+        $router = Registry::routeFactory()->routeMap();
         
         $router->get(TomSelectSourceWithSuggestions::class, '/tree/{tree}/tom-select-source-with-suggestions', TomSelectSourceWithSuggestions::class);
 
