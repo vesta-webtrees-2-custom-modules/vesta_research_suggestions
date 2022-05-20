@@ -112,10 +112,13 @@ class ResearchSuggestionsService {
 
         $resolvedPlaces = array();
         if ($factWithPlace !== null) {
-            $resolvedPlaces = 
-                    $this->resolvePlace(
-                            PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval),
-                            ['POLI', 'RELI']);
+            $ps = PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval);
+            if ($ps === null) {
+                //unexpected: this is supposed to be a fact with plac!
+            } else {
+                $resolvedPlaces = 
+                    $this->resolvePlace($ps, ['POLI', 'RELI']);
+            }
         }
 
         //(TODO: handle BAPM/CHR confusion)
@@ -182,9 +185,7 @@ class ResearchSuggestionsService {
         
         $place = $ps->getGedcomName();
         
-        $resolvedPlaces = $this->resolvePlace(
-            $ps,
-            ['POLI', 'RELI']);
+        $resolvedPlaces = $this->resolvePlace($ps, ['POLI', 'RELI']);
         
         $sourceEvents = $this->getSourceEvents($ps->tree(), $resolvedPlaces);
 
@@ -312,11 +313,14 @@ class ResearchSuggestionsService {
                 if ((!$isSourced) && ($interval !== null)) {
                     $resolvedPlaces = array();
                     foreach ($factsWithPlace as $factWithPlace) {
-                        $resolvedPlaces = array_merge(
+                        $ps = PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval);
+                        if ($ps === null) {
+                            //unexpected: this is supposed to be a fact with plac!
+                        } else {
+                            $resolvedPlaces = array_merge(
                                 $resolvedPlaces,
-                                $this->resolvePlace(
-                                        PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval),
-                                        ['POLI', 'RELI']));
+                                $this->resolvePlace($ps, ['POLI', 'RELI']));                            
+                        }
                     }
 
                     $events = $this->getSourceEvents($person->tree(), $resolvedPlaces, $birtTags);
@@ -462,11 +466,14 @@ class ResearchSuggestionsService {
                 if ((!$isSourced) && ($interval !== null)) {
                     $resolvedPlaces = array();
                     foreach ($factsWithPlace as $factWithPlace) {
-                        $resolvedPlaces = array_merge(
+                        $ps = PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval);
+                        if ($ps === null) {
+                            //unexpected: this is supposed to be a fact with plac!
+                        } else {
+                            $resolvedPlaces = array_merge(
                                 $resolvedPlaces,
-                                $this->resolvePlace(
-                                        PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval),
-                                        ['POLI', 'RELI']));
+                                $this->resolvePlace($ps, ['POLI', 'RELI']));
+                        }
                     }
 
                     $events = $this->getSourceEvents($person->tree(), $resolvedPlaces, ['CONF']);
@@ -519,31 +526,35 @@ class ResearchSuggestionsService {
                     if ($place) {
                         $date = $fact->attribute("DATE");
                         if ($date) {
-                            $interval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
-                            $resolvedPlaces = $this->resolvePlace(
-                                    PlaceStructure::fromFactWithExplicitInterval($fact, $interval),
-                                    ['POLI', 'RELI']);
-                            $events = $this->getSourceEvents($person->tree(), $resolvedPlaces, [$tag]);
+                            $ps = PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval);
+                            if ($ps === null) {
+                                //unexpected: this is supposed to be a fact with plac!
+                            } else {
+                                $interval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
+                                $resolvedPlaces = $this->resolvePlace($ps, ['POLI', 'RELI']);
+                                
+                                $events = $this->getSourceEvents($person->tree(), $resolvedPlaces, [$tag]);
 
-                            foreach ($events as $event) {
-                                $sourceId = $event->getSourceXref();
-                                $match = $interval->intersect($event->getInterval());
-                                if ($match !== null) {
-                                    $gedcom = "1 " . $tag . " " . I18N::translate('Missing source for %1$s - Possible source:', Registry::elementFactory()->make('INDI:'.$tag)->label());
+                                foreach ($events as $event) {
+                                    $sourceId = $event->getSourceXref();
+                                    $match = $interval->intersect($event->getInterval());
+                                    if ($match !== null) {
+                                        $gedcom = "1 " . $tag . " " . I18N::translate('Missing source for %1$s - Possible source:', Registry::elementFactory()->make('INDI:'.$tag)->label());
 
-                                    //conceptually a bit nicer, but leads to ugly sorting of facts:
-                                    //EVEN with date 'pulls' up other non-dated events, such as OCCU (cf Functions.sortFacts/Fact.compareType)
-                                    //$gedcom = "1 EVEN Missing source for marriage - Possible source:";
-                                    //$gedcom .= "\n2 TYPE Research Suggestion";
+                                        //conceptually a bit nicer, but leads to ugly sorting of facts:
+                                        //EVEN with date 'pulls' up other non-dated events, such as OCCU (cf Functions.sortFacts/Fact.compareType)
+                                        //$gedcom = "1 EVEN Missing source for marriage - Possible source:";
+                                        //$gedcom .= "\n2 TYPE Research Suggestion";
 
-                                    $gedcom .= $match->toGedcomString(2);
+                                        $gedcom .= $match->toGedcomString(2);
 
-                                    $gedcom .= "\n" . $event->getPlaceGedcomAsLevel2Tag();
-                                    $gedcom .= "\n" . '2 SOUR @' . $sourceId . '@';
+                                        $gedcom .= "\n" . $event->getPlaceGedcomAsLevel2Tag();
+                                        $gedcom .= "\n" . '2 SOUR @' . $sourceId . '@';
 
-                                    $research = new VirtualFact($gedcom, $person, 'research');
-                                    $facts[] = $research;
-                                }//else unexpected, shouldn't have been returned!					
+                                        $research = new VirtualFact($gedcom, $person, 'research');
+                                        $facts[] = $research;
+                                    }//else unexpected, shouldn't have been returned!					
+                                }
                             }
                         }
                     }
@@ -571,32 +582,35 @@ class ResearchSuggestionsService {
                     if ($place) {
                         $date = $fact->attribute("DATE");
                         if ($date) {
-                            $interval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
-                            $resolvedPlaces = $this->resolvePlace(
-                                    PlaceStructure::fromFactWithExplicitInterval($fact, $interval),
-                                    ['POLI', 'RELI']);
+                            $ps = PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval);
+                            if ($ps === null) {
+                                //unexpected: this is supposed to be a fact with plac!
+                            } else {
+                                $interval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
+                                $resolvedPlaces = $this->resolvePlace($ps, ['POLI', 'RELI']);
 
-                            $events = $this->getSourceEvents($record->tree(), $resolvedPlaces, [$tag]);
+                                $events = $this->getSourceEvents($record->tree(), $resolvedPlaces, [$tag]);
 
-                            foreach ($events as $event) {
-                                $sourceId = $event->getSourceXref();
-                                $match = $interval->intersect($event->getInterval());
-                                if ($match !== null) {
-                                    $gedcom = "1 " . $tag . " " . I18N::translate('Missing source for %1$s - Possible source:', Registry::elementFactory()->make('INDI:'.$tag)->label());
+                                foreach ($events as $event) {
+                                    $sourceId = $event->getSourceXref();
+                                    $match = $interval->intersect($event->getInterval());
+                                    if ($match !== null) {
+                                        $gedcom = "1 " . $tag . " " . I18N::translate('Missing source for %1$s - Possible source:', Registry::elementFactory()->make('INDI:'.$tag)->label());
 
-                                    //conceptually a bit nicer, but leads to ugly sorting of facts:
-                                    //EVEN with date 'pulls' up other non-dated events, such as OCCU (cf Functions.sortFacts/Fact.compareType)
-                                    //$gedcom = "1 EVEN Missing source for marriage - Possible source:";
-                                    //$gedcom .= "\n2 TYPE Research Suggestion";
+                                        //conceptually a bit nicer, but leads to ugly sorting of facts:
+                                        //EVEN with date 'pulls' up other non-dated events, such as OCCU (cf Functions.sortFacts/Fact.compareType)
+                                        //$gedcom = "1 EVEN Missing source for marriage - Possible source:";
+                                        //$gedcom .= "\n2 TYPE Research Suggestion";
 
-                                    $gedcom .= $match->toGedcomString(2);
+                                        $gedcom .= $match->toGedcomString(2);
 
-                                    $gedcom .= "\n" . $event->getPlaceGedcomAsLevel2Tag();
-                                    $gedcom .= "\n" . '2 SOUR @' . $sourceId . '@';
+                                        $gedcom .= "\n" . $event->getPlaceGedcomAsLevel2Tag();
+                                        $gedcom .= "\n" . '2 SOUR @' . $sourceId . '@';
 
-                                    $research = new VirtualFact($gedcom, $record, 'research');
-                                    $facts[] = $research;
-                                }//else unexpected, shouldn't have been returned!					
+                                        $research = new VirtualFact($gedcom, $record, 'research');
+                                        $facts[] = $research;
+                                    }//else unexpected, shouldn't have been returned!					
+                                }
                             }
                         }
                     }
@@ -653,11 +667,14 @@ class ResearchSuggestionsService {
                 if ((!$isSourced) && ($interval !== null)) {
                     $resolvedPlaces = array();
                     foreach ($factsWithPlace as $factWithPlace) {
-                        $resolvedPlaces = array_merge(
+                        $ps = PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval);
+                        if ($ps === null) {
+                            //unexpected: this is supposed to be a fact with plac!
+                        } else {
+                            $resolvedPlaces = array_merge(
                                 $resolvedPlaces,
-                                $this->resolvePlace(
-                                        PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval),
-                                        ['POLI', 'RELI']));
+                                $this->resolvePlace($ps, ['POLI', 'RELI']));
+                        }
                     }
 
                     $events = $this->getSourceEvents($person->tree(), $resolvedPlaces, $deatTags);
