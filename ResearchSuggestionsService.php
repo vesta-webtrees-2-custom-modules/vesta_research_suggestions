@@ -4,7 +4,6 @@ namespace Cissee\Webtrees\Module\ResearchSuggestions;
 
 use Cissee\WebtreesExt\PlaceAsTopLevelRecord;
 use Cissee\WebtreesExt\VirtualFact;
-use Exception;
 use Fisharebest\Webtrees\Elements\UnknownElement;
 use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\Family;
@@ -15,7 +14,6 @@ use Fisharebest\Webtrees\Location;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\SearchService;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\Webtrees;
 use Illuminate\Support\Collection;
 use Vesta\ControlPanelUtils\Model\PicklistFacts;
 use Vesta\Hook\HookInterfaces\FunctionsPlaceUtils;
@@ -24,7 +22,6 @@ use Vesta\Model\LocReference;
 use Vesta\Model\PlaceStructure;
 use Vesta\Model\Trace;
 use function collect;
-use function route;
 
 class ResearchSuggestionsService {
 
@@ -40,20 +37,6 @@ class ResearchSuggestionsService {
 
         $this->module = $module;
         $this->searchService = $searchService;
-    }
-
-    //webtrees 2.0 only!
-    public function routeSelect2Source(Tree $tree, string $gedcom) {
-        if (str_starts_with(Webtrees::VERSION, '2.1')) {
-            throw new Exception();
-        }
-        
-        return route('module', [
-            'module' => $this->module->name(),
-            'action' => 'Select2Source',
-            'tree' => $tree->name(),
-            'gedcom' => $gedcom,
-        ]);
     }
 
     //impl overlaps with getAdditionalFacts - should be cleaned up!
@@ -526,7 +509,7 @@ class ResearchSuggestionsService {
                     if ($place) {
                         $date = $fact->attribute("DATE");
                         if ($date) {
-                            $ps = PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval);
+                            $ps = PlaceStructure::fromFactWithExplicitInterval($fact, $interval);
                             if ($ps === null) {
                                 //unexpected: this is supposed to be a fact with plac!
                             } else {
@@ -582,7 +565,7 @@ class ResearchSuggestionsService {
                     if ($place) {
                         $date = $fact->attribute("DATE");
                         if ($date) {
-                            $ps = PlaceStructure::fromFactWithExplicitInterval($factWithPlace, $interval);
+                            $ps = PlaceStructure::fromFactWithExplicitInterval($fact, $interval);
                             if ($ps === null) {
                                 //unexpected: this is supposed to be a fact with plac!
                             } else {

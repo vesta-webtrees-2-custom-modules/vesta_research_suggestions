@@ -148,14 +148,6 @@ class ResearchSuggestionsModule extends AbstractModule implements
             
         $this->flashWhatsNew('\Cissee\Webtrees\Module\ResearchSuggestions\WhatsNew', 1);
     }
-  
-    //webtrees 2.0 only!
-    public function postSelect2SourceAction(ServerRequestInterface $request): ResponseInterface {
-        if (str_starts_with(Webtrees::VERSION, '2.1')) {
-            throw new Exception();
-        }
-        return app(Select2SourceWithSuggestions::class)->handle($request);
-    }
 
     //IndividualFactsTabExtenderInterface
   
@@ -242,53 +234,8 @@ class ResearchSuggestionsModule extends AbstractModule implements
   
     //TODO Issue #2
     public function bodyContent(): string {
-        if (true) {
-            //we need additional javascript for tom select sources
-            return view($this->name() . '::js/webtreesExt');
-        }
-        
-        $script = "<script>";
-        $script .= "$(document).ready(function() { ";
-        $script .= "$('select.select2ordered').select2({ ";
-        // Needed for elements that are initially hidden.    
-        $script .= "  width: '100%'";  
-        $script .= "}); ";
-
-        $script .= "$('select.select2ordered').on('select2:select', function (evt) { ";
-
-        //preserve insertion order, see https://github.com/select2/select2/issues/3106
-        //unfortunately this also affects dropdown order - ugly!
-        $script .= "  var id = evt.params.data.id; ";
-        $script .= "  var option = $(evt.target).children('[value='+id+']'); ";
-        $script .= "  option.detach(); ";
-        $script .= "  $(evt.target).append(option).change(); ";
-
-        //update actual value
-        //spec strictly has ', ' as delimiter, seems a bit confused about this though ("Each enumeration is separated by a comma.")
-        $script .= "  var idRefSelector = '#' + $(evt.target).attr('id') + '_REF'; ";
-        $script .= "  console.log('append: ' + id); ";
-        $script .= "  var updated = $(idRefSelector).val().split(',').filter(function(item){return item.trim()}); ";
-        $script .= "  updated.push(id); ";
-        $script .= "  $(idRefSelector).val(updated.join(', ')); ";
-        $script .= "}); ";
-
-        $script .= "$('select.select2ordered').on('select2:unselect', function (evt) { ";
-        $script .= "  var id = evt.params.data.id; ";
-
-        //we should re-order back to original position here (in dropdown)!
-
-        //update actual value
-        //spec strictly has ', ' as delimiter, seems a bit confused about this though ("Each enumeration is separated by a comma.")
-        $script .= "  var idRefSelector = '#' + $(evt.target).attr('id') + '_REF'; ";
-        $script .= "  console.log('remove: ' + id); ";
-        $script .= "  var updated = $(idRefSelector).val().split(','); ";
-        $script .= "  updated = updated.filter(function(item){return item.trim() !== id}); ";
-        $script .= "  $(idRefSelector).val(updated.join(', ')); ";
-        $script .= "}); ";
-
-        $script .= "}); ";
-        $script .= "</script>";
-        return $script;
+        //we need additional javascript for tom select sources
+        return view($this->name() . '::js/webtreesExt');
     }
   
     //TODO Issue #2
