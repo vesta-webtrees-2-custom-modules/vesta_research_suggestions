@@ -509,11 +509,11 @@ class ResearchSuggestionsService {
                     if ($place) {
                         $date = $fact->attribute("DATE");
                         if ($date) {
+                            $interval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
                             $ps = PlaceStructure::fromFactWithExplicitInterval($fact, $interval);
                             if ($ps === null) {
                                 //unexpected: this is supposed to be a fact with plac!
                             } else {
-                                $interval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
                                 $resolvedPlaces = $this->resolvePlace($ps, ['POLI', 'RELI']);
                                 
                                 $events = $this->getSourceEvents($person->tree(), $resolvedPlaces, [$tag]);
@@ -565,11 +565,11 @@ class ResearchSuggestionsService {
                     if ($place) {
                         $date = $fact->attribute("DATE");
                         if ($date) {
+                            $interval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
                             $ps = PlaceStructure::fromFactWithExplicitInterval($fact, $interval);
                             if ($ps === null) {
                                 //unexpected: this is supposed to be a fact with plac!
                             } else {
-                                $interval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
                                 $resolvedPlaces = $this->resolvePlace($ps, ['POLI', 'RELI']);
 
                                 $events = $this->getSourceEvents($record->tree(), $resolvedPlaces, [$tag]);
