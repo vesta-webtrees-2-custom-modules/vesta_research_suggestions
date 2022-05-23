@@ -220,7 +220,11 @@ class ResearchSuggestionsService {
             return $this->getAdditionalLocFacts($record);
             
         } else if ($record instanceof PlaceAsTopLevelRecord) {
-            return $this->getAdditionalFactsViaPlaceStructure($record, $record->placeStructure());
+            $ps = $record->placeStructure();
+            if ($ps === null) {
+                return [];
+            }
+            return $this->getAdditionalFactsViaPlaceStructure($record, $ps);
         } else {
             return [];
         }
