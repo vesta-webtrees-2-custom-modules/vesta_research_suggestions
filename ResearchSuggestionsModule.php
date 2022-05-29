@@ -9,8 +9,8 @@ use Cissee\WebtreesExt\Elements\XrefSourceExt;
 use Cissee\WebtreesExt\Module\ModuleMetaInterface;
 use Cissee\WebtreesExt\Module\ModuleMetaTrait;
 use Cissee\WebtreesExt\MoreI18N;
-use Exception;
 use Fisharebest\Webtrees\Elements\Marriage;
+use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Http\RequestHandlers\TreePreferencesAction;
 use Fisharebest\Webtrees\I18N;
@@ -24,7 +24,6 @@ use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\SearchService;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\View;
-use Fisharebest\Webtrees\Webtrees;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -154,18 +153,31 @@ class ResearchSuggestionsModule extends AbstractModule implements
     public function hFactsTabGetOutputBeforeTab(
         GedcomRecord $record): GenericViewElement {
         
+        if (sizeof($this->hFactsTabGetAdditionalFacts($record)) === 0) {
+            return GenericViewElement::createEmpty();
+        }
+        
         $pre = '<link href="' . $this->assetUrl('css/style.css') . '" type="text/css" rel="stylesheet" />';
 	return new GenericViewElement($pre, '');
     }
   
-    public function hFactsTabGetStyleadds() {
-	$styleadds = array();
-	$styleadds['research'] = 'wt-research-fact-pfh collapse'; //see style.css, and hFactsTabGetOutputInDBox
+    public function hFactsTabGetStyleadds(
+        GedcomRecord $record,
+        Fact $fact): array {
+        
+	$styleadds = [];
+        if ($fact->id() === 'research') {
+            $styleadds['research'] = 'wt-research-fact-pfh collapse'; //see style.css, and hFactsTabGetOutputInDBox
+        }	
 	return $styleadds;
     }
 
     public function hFactsTabGetOutputInDBox(
         GedcomRecord $record): GenericViewElement {
+        
+        if (sizeof($this->hFactsTabGetAdditionalFacts($record)) === 0) {
+            return GenericViewElement::createEmpty();
+        }
         
 	$toggleableResearch = boolval($this->getPreference('TAB_TOGGLEABLE_RESEARCH', '1'));	
 	return $this->getOutputInDescriptionBox($toggleableResearch, 'show-research-suggestions-factstab', 'wt-research-fact-pfh', I18N::translate('Research Suggestions'));
@@ -199,6 +211,10 @@ class ResearchSuggestionsModule extends AbstractModule implements
             return GenericViewElement::createEmpty();
         }
         
+        if (sizeof($this->hFactsTabGetAdditionalFacts($record)) === 0) {
+            return GenericViewElement::createEmpty();
+        }
+        
         $toggleableResearch = boolval($this->getPreference('TAB_TOGGLEABLE_RESEARCH', '1'));
         return $this->getOutputAfterTab($toggleableResearch, 'show-research-suggestions-factstab');
     }
@@ -223,13 +239,20 @@ class ResearchSuggestionsModule extends AbstractModule implements
         return ob_get_clean();
     }
   
-    public function hFactsTabGetAdditionalFacts(GedcomRecord $record) {
-	//TODO make this configurable! here and elsewhere!
-	$ignorePartialRanges = true;
+    public function hFactsTabGetAdditionalFacts(
+        GedcomRecord $record) {
+        
+        $cacheKey = Gov4WebtreesModule::class . '_hFactsTabGetAdditionalFacts_' . $record->tree()->id() . $record->xref();
+        $ret = Registry::cache()->array()->remember($cacheKey, static function () use ($record): array {
+            //TODO make this configurable! here and elsewhere!
+            $ignorePartialRanges = true;
 
-	return app(ResearchSuggestionsService::class)->getAdditionalFacts(
-            $record, 
-            $ignorePartialRanges);
+            return app(ResearchSuggestionsService::class)->getAdditionalFacts(
+                $record, 
+                $ignorePartialRanges);
+        });
+        
+	return $ret;
     }
   
     //TODO Issue #2
