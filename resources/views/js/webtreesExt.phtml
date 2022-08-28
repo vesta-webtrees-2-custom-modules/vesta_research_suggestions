@@ -7,6 +7,10 @@ webtrees.initializeTomSelectSWS = function (element) {
     var defaultUrl = element.dataset.defaultUrl;
     var adjustedUrl = element.dataset.adjustedUrl;
     
+    let lio = element.id.lastIndexOf("-");
+    let tag = (lio === -1)?null:element.id.substring(lio+1).replace("INDI:", "").replace("FAM:", "").replace(":SOUR", "");
+    //console.log("sws for "+tag);
+    
     var ts = null;
     var options = {};
 
@@ -26,17 +30,13 @@ webtrees.initializeTomSelectSWS = function (element) {
       maxOptions: false,
       firstUrl: query => 1,
       onDropdownOpen:function() {
-        <?php
-        //TODO: improve this: there may be additional SOUR (e.g. for ASSO)
-        ?>
-        var firstTagInput = document.querySelector('input[name=tags\\[\\]]');  
-        var firstDateInput = document.querySelector('[id$=DATE]');
-        var firstPlacInput = document.querySelector('[id$=PLAC]');
+        var ownDateInput = document.querySelector('[id$=' + tag + '\\:DATE]');
+        var ownPlacInput = document.querySelector('[id$=' + tag + '\\:PLAC]');
 
-        if (firstTagInput && firstDateInput && firstPlacInput) {
+        if ((tag !== null) && ownDateInput && ownPlacInput) {
 
-            var dateValue = firstDateInput.value;
-            var placValue = firstPlacInput.value;
+            var dateValue = ownDateInput.value;
+            var placValue = ownPlacInput.value;
 
             if (dateValue && placValue) {
                 <?php
@@ -64,12 +64,8 @@ webtrees.initializeTomSelectSWS = function (element) {
             //note: we should get here only though onDropdownOpen, otherwise not triggered (e.g. by clearing input)
             ?>
 
-            <?php
-            //TODO: improve this: there may be additional SOUR (e.g. for ASSO)
-            ?>
-            var firstTagInput = document.querySelector('input[name=tags\\[\\]]');  
-            var firstDateInput = document.querySelector('[id$=DATE]');
-            var firstPlacInput = document.querySelector('[id$=PLAC]');
+            var ownDateInput = document.querySelector('[id$=' + tag + '\\:DATE]');
+            var ownPlacInput = document.querySelector('[id$=' + tag + '\\:PLAC]');
 
             <?php
             //the view is used in several other places, e.g. via the favorites module, and in the 'merge records' dialog,
@@ -77,18 +73,18 @@ webtrees.initializeTomSelectSWS = function (element) {
             //in these cases, or if required inputs aren't set, use standard functionality!
             ?>
 
-            if (firstTagInput && firstDateInput && firstPlacInput) {
+            if ((tag !== null) && ownDateInput && ownPlacInput) {
 
-                var tagValue = firstTagInput.value;
-                var dateValue = firstDateInput.value;
-                var placValue = firstPlacInput.value;
+                var tagValue = tag;
+                var dateValue = ownDateInput.value;
+                var placValue = ownPlacInput.value;
 
                 if (dateValue && placValue) {
-                    var firstGovInput = document.querySelector('[id$=_GOV]');
-                    var firstLocInput = document.querySelector('[id$=_LOC]');
+                    var ownGovInput = document.querySelector('[id$=' + tag + '\\:PLAC\\:_GOV]');
+                    var ownLocInput = document.querySelector('[id$=' + tag + '\\:PLAC\\:_LOC]');
 
-                    var govValue = firstGovInput?firstGovInput.value:"";
-                    var locValue = firstLocInput?firstLocInput.value:"";
+                    var govValue = ownGovInput?ownGovInput.value:"";
+                    var locValue = ownLocInput?ownLocInput.value:"";
 
                     var gedcom = "1 "+ tagValue + "\n2 DATE " + dateValue + "\n2 PLAC " + placValue;
                     if (govValue) {
