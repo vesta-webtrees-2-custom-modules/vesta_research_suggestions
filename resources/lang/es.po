@@ -1,0 +1,110 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the vesta package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: vesta 1.0\n"
+"Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
+"POT-Creation-Date: 2022-04-24 21:11+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ResearchSuggestionsModule.php:143 ResearchSuggestionsModule_20.php:125
+msgid "Research Suggestions"
+msgstr ""
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:22 ResearchSuggestionsModuleTrait.php:28
+msgid "A module providing suggestions for additional research, based on available sources."
+msgstr ""
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:63
+msgid "Allow persistent toggle (user may show/hide research suggestions as additional facts)"
+msgstr ""
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:69
+msgid "Grouped events"
+msgstr ""
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:73
+msgid "Events related to Birth. If there is a source for one of these events, no suggestions will be made for other events in this group. Note that strictly BAPM is not necessarily an event occuring shortly after Birth, but it is often used that way (when CHR would actually be more appropriate, according to the GEDCOM specification). If you only use one of CHR/BAPM, it's recommended to deselect the other one here."
+msgstr ""
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:78
+msgid "Events related to Death. If there is a source for one of these events, no suggestions will be made for other events in this group."
+msgstr ""
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:83
+msgid "Age range for Confirmation events"
+msgstr ""
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:86
+msgid "Minimal age in years"
+msgstr ""
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:93
+msgid "Maximal age in years"
+msgstr ""
+
+#. I18N: Module Configuration
+#: ResearchSuggestionsModuleTrait.php:94
+msgid "Used to calculate date range for suggestions for Confirmation (CONF) events, based on birth or similar event (in case there is no explicit Confirmation event)."
+msgstr ""
+
+#: ResearchSuggestionsService.php:199
+#, php-format
+msgid "Possible source for %1$s:"
+msgstr ""
+
+#: ResearchSuggestionsService.php:332 ResearchSuggestionsService.php:469
+#: ResearchSuggestionsService.php:522 ResearchSuggestionsService.php:575
+#: ResearchSuggestionsService.php:672
+#, php-format
+msgid "Missing source for %1$s - Possible source:"
+msgstr ""
+
+#: ResearchSuggestionsService.php:471
+msgid "Possible source:"
+msgstr ""
+
+#: WhatsNew/WhatsNew0.php:11
+msgid "Vesta Research Suggestions: A new custom module. See the Readme for details."
+msgstr ""
+
+#: resources/views/admin/trees-preferences-ext.phtml:8
+msgid "Facts for source records"
+msgstr ""
+
+#: resources/views/admin/trees-preferences-ext.phtml:13
+#: resources/views/admin/trees-preferences-ext_20.phtml:10
+msgid "Facts recorded in sources"
+msgstr ""
+
+#. I18N: Help text for the “Facts recorded in sources” configuration setting
+#: resources/views/admin/trees-preferences-ext.phtml:18
+msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. "
+msgstr ""
+
+#. I18N: Help text for the “Facts recorded in sources” configuration setting
+#: resources/views/admin/trees-preferences-ext_20.phtml:18
+msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. This is the list of those GEDCOM facts. You can modify this list by removing or adding fact names, even custom ones, as necessary. "
+msgstr ""
+
+#: resources/views/lists/sources-table.phtml:101
+#: resources/views/lists/sources-table_20.phtml:94
+msgid "Event data?"
+msgstr ""
