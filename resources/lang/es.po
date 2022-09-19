@@ -8,103 +8,132 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2022-04-24 21:11+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2022-09-19 13:21+0000\n"
+"Last-Translator: Jose Antonio Corral <calducho@gmail.com>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-research-suggestions/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #: ResearchSuggestionsModule.php:143 ResearchSuggestionsModule_20.php:125
 msgid "Research Suggestions"
-msgstr ""
+msgstr "Sugerencias de investigación"
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:22 ResearchSuggestionsModuleTrait.php:28
 msgid "A module providing suggestions for additional research, based on available sources."
 msgstr ""
+"Un módulo que proporciona sugerencias para investigaciones adicionales, "
+"según las fuentes disponibles."
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:63
 msgid "Allow persistent toggle (user may show/hide research suggestions as additional facts)"
 msgstr ""
+"Permitir cambios persistentes (el usuario puede mostrar/ocultar sugerencias "
+"de investigación como hechos adicionales)"
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:69
 msgid "Grouped events"
-msgstr ""
+msgstr "Eventos agrupados"
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:73
 msgid "Events related to Birth. If there is a source for one of these events, no suggestions will be made for other events in this group. Note that strictly BAPM is not necessarily an event occuring shortly after Birth, but it is often used that way (when CHR would actually be more appropriate, according to the GEDCOM specification). If you only use one of CHR/BAPM, it's recommended to deselect the other one here."
 msgstr ""
+"Eventos relacionados con el Nacimiento. Si hay una fuente para uno de estos "
+"eventos, no se harán sugerencias para otros eventos en este grupo. Tenga en "
+"cuenta que BAPM no es necesariamente un evento que ocurre poco después del "
+"nacimiento, pero a menudo se usa de esa manera (de acuerdo con la "
+"especificación GEDCOM, CHR sería realmente más apropiado). Si solo usa uno "
+"de CHR/BAPM, se recomienda anular la selección del otro aquí. Tenga en "
+"cuenta que BAPM corresponde a Bautismo católico o anglicano (baptism) y CHR "
+"corresponde al acto de poner nombre al recien nacido (christening), sin el "
+"acto bautismal."
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:78
 msgid "Events related to Death. If there is a source for one of these events, no suggestions will be made for other events in this group."
 msgstr ""
+"Eventos relacionados con la Muerte. Si hay una fuente para uno de estos "
+"eventos, no se harán sugerencias para otros eventos en este grupo."
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:83
 msgid "Age range for Confirmation events"
-msgstr ""
+msgstr "Rango de edad para eventos de Confirmación"
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:86
 msgid "Minimal age in years"
-msgstr ""
+msgstr "Edad mínima en años"
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:93
 msgid "Maximal age in years"
-msgstr ""
+msgstr "Edad máxima en años"
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:94
 msgid "Used to calculate date range for suggestions for Confirmation (CONF) events, based on birth or similar event (in case there is no explicit Confirmation event)."
 msgstr ""
+"Se utiliza para calcular el rango de fechas para las sugerencias de eventos "
+"de Confirmación (CONF), según el nacimiento o un evento similar (en caso de "
+"que no haya un evento de Confirmación explícito)."
 
 #: ResearchSuggestionsService.php:199
 #, php-format
 msgid "Possible source for %1$s:"
-msgstr ""
+msgstr "Posible fuente de %1$s:"
 
 #: ResearchSuggestionsService.php:332 ResearchSuggestionsService.php:469
 #: ResearchSuggestionsService.php:522 ResearchSuggestionsService.php:575
 #: ResearchSuggestionsService.php:672
 #, php-format
 msgid "Missing source for %1$s - Possible source:"
-msgstr ""
+msgstr "Fuente ausente para %1$s - Posible fuente:"
 
 #: ResearchSuggestionsService.php:471
 msgid "Possible source:"
-msgstr ""
+msgstr "Posible fuente:"
 
 #: WhatsNew/WhatsNew0.php:11
 msgid "Vesta Research Suggestions: A new custom module. See the Readme for details."
 msgstr ""
+"Sugerencias de investigación de Vesta: un nuevo módulo personalizado. "
+"Consulte el archivo Léame para obtener más detalles."
 
 #: resources/views/admin/trees-preferences-ext.phtml:8
 msgid "Facts for source records"
-msgstr ""
+msgstr "Hechos para registros fuente"
 
 #: resources/views/admin/trees-preferences-ext.phtml:13
 #: resources/views/admin/trees-preferences-ext_20.phtml:10
 msgid "Facts recorded in sources"
-msgstr ""
+msgstr "Hechos registrados en fuentes"
 
 #. I18N: Help text for the “Facts recorded in sources” configuration setting
 #: resources/views/admin/trees-preferences-ext.phtml:18
 msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. "
 msgstr ""
+"Las fuentes se pueden comentar, a través del hecho de 'datos', para "
+"describir qué hechos individuales y familiares contienen. "
 
 #. I18N: Help text for the “Facts recorded in sources” configuration setting
 #: resources/views/admin/trees-preferences-ext_20.phtml:18
 msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. This is the list of those GEDCOM facts. You can modify this list by removing or adding fact names, even custom ones, as necessary. "
 msgstr ""
+"Las fuentes se pueden comentar , a través del hecho de 'datos', para "
+"describir qué eventos individuales y familiares contienen. Esta es la lista "
+"de esos hechos GEDCOM. Puede modificar esta lista eliminando o agregando "
+"nombres de eventos, incluso personalizados, según sea necesario. "
 
 #: resources/views/lists/sources-table.phtml:101
 #: resources/views/lists/sources-table_20.phtml:94
 msgid "Event data?"
-msgstr ""
+msgstr "¿Datos de eventos?"
