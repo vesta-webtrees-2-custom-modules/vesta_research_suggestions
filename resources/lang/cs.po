@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2022-04-24 21:11+0200\n"
-"PO-Revision-Date: 2021-01-19 12:32+0000\n"
+"PO-Revision-Date: 2022-11-30 16:47+0000\n"
 "Last-Translator: Josef Prause <josef.prause@gmail.com>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-research-suggestions/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-research-suggestions/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:22 ResearchSuggestionsModuleTrait.php:28
@@ -36,7 +37,7 @@ msgstr "Připustit setrvalý přepínač (uživatel může zobrazit/skrýt návr
 #: resources/views/lists/sources-table.phtml:101
 #: resources/views/lists/sources-table_20.phtml:94
 msgid "Event data?"
-msgstr ""
+msgstr "Data události?"
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:73
@@ -50,7 +51,7 @@ msgstr "Události vztažené k úmrtí. Jestliže pro jednu z těchto událostí
 
 #: resources/views/admin/trees-preferences-ext.phtml:8
 msgid "Facts for source records"
-msgstr ""
+msgstr "Fakty pro záznamy pramene"
 
 #: resources/views/admin/trees-preferences-ext.phtml:13
 #: resources/views/admin/trees-preferences-ext_20.phtml:10
@@ -82,7 +83,7 @@ msgstr "Chybí pramen pro %1$s ‒ možný pramen:"
 #: ResearchSuggestionsService.php:199
 #, php-format
 msgid "Possible source for %1$s:"
-msgstr ""
+msgstr "Možný pramen pro %1$s:"
 
 #: ResearchSuggestionsService.php:471
 msgid "Possible source:"
@@ -96,6 +97,8 @@ msgstr "Návrhy na výzkum"
 #: resources/views/admin/trees-preferences-ext.phtml:18
 msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. "
 msgstr ""
+"Prameny je možno glosovat pomocí faktu 'data' a popsat tak, které fakty "
+"osoby nebo rodiny obsahují. "
 
 #. I18N: Help text for the “Facts recorded in sources” configuration setting
 #: resources/views/admin/trees-preferences-ext_20.phtml:18
