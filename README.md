@@ -66,8 +66,8 @@ You have to activate the 'data' subtags in the GEDCOM Tags preferences (in the c
 
 ### Download<a name="download"/>
 
-* Current version: 2.1.15.0.0
-* Based on and tested with webtrees 2.1.15. Requires webtrees 2.1.8 or later.
+* Current version: 2.1.16.0.0
+* Based on and tested with webtrees 2.1.16. Requires webtrees 2.1.8 or later.
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 
 * Download the zip file, which includes all Vesta modules, [here](https://cissee.de/vesta.latest.zip).
@@ -85,7 +85,7 @@ You have to activate the 'data' subtags in the GEDCOM Tags preferences (in the c
 ### License<a name="license"/>
 
 * **vesta_research_suggestions: a webtrees custom module**
-* Copyright (C) 2020 – 2022 Richard Cissée
+* Copyright (C) 2020 – 2023 Richard Cissée
 * Derived from **webtrees** - Copyright 2022 webtrees development team.
 * Dutch translations provided by TheDutchJewel.
 * Czech translations provided by Josef Prause.
