@@ -15,6 +15,25 @@ webtrees.initializeTomSelectSWS = function (element) {
     let tag = (lio === -1)?null:element.id.substring(lio).replace("INDI-", "").replace("FAM-", "").replace("-SOUR", "");
     //console.log("sws for "+tag);
     
+    //using the tag isn't sufficient in case there are multiple facts with the same tag!
+    //(which is possible on special multi-fact dialogs)
+    //
+    //therefore additionally use the DOM tree itself as context
+    //note: this does not work for edit-record (which is hidden functionality anyway) in case of multiple same tags,
+    //because that dialog doesn't structure the facts.
+    //also note: for 'structured' dialogs, the tag itself wouldn't even be required, 
+    //because there is max one PLAC/DATE per fact)
+
+    //in multi-fact dialogs, per-fact top-level element has id starting with 'fact-'
+    //in single-fact dialogs, just use document itself
+    
+    var fact = element.closest('[id^=fact-]');
+    if (!fact) {
+        fact = document;
+    } else {
+        //console.log("sp for "+fact.id);
+    }
+    
     var ts = null;
     var options = {};
 
@@ -34,8 +53,8 @@ webtrees.initializeTomSelectSWS = function (element) {
       maxOptions: false,
       firstUrl: query => 1,
       onDropdownOpen:function() {
-        var ownDateInput = document.querySelector('[id$=' + tag + '-DATE]');
-        var ownPlacInput = document.querySelector('[id$=' + tag + '-PLAC]');
+        var ownDateInput = fact.querySelector('[id$=' + tag + '-DATE]');
+        var ownPlacInput = fact.querySelector('[id$=' + tag + '-PLAC]');
 
         if ((tag !== null) && ownDateInput && ownPlacInput) {
             var dateValue = ownDateInput.value;
@@ -67,8 +86,8 @@ webtrees.initializeTomSelectSWS = function (element) {
             //note: we should get here only though onDropdownOpen, otherwise not triggered (e.g. by clearing input)
             ?>
 
-            var ownDateInput = document.querySelector('[id$=' + tag + '-DATE]');
-            var ownPlacInput = document.querySelector('[id$=' + tag + '-PLAC]');
+            var ownDateInput = fact.querySelector('[id$=' + tag + '-DATE]');
+            var ownPlacInput = fact.querySelector('[id$=' + tag + '-PLAC]');
 
             <?php
             //the view is used in several other places, e.g. via the favorites module, and in the 'merge records' dialog,
@@ -83,8 +102,8 @@ webtrees.initializeTomSelectSWS = function (element) {
                 var placValue = ownPlacInput.value;
 
                 if (dateValue && placValue) {
-                    var ownGovInput = document.querySelector('[id$=' + tag + '-PLAC-_GOV]');
-                    var ownLocInput = document.querySelector('[id$=' + tag + '-PLAC-_LOC]');
+                    var ownGovInput = fact.querySelector('[id$=' + tag + '-PLAC-_GOV]');
+                    var ownLocInput = fact.querySelector('[id$=' + tag + '-PLAC-_LOC]');
 
                     var govValue = ownGovInput?ownGovInput.value:"";
                     var locValue = ownLocInput?ownLocInput.value:"";

@@ -66,7 +66,7 @@ You have to activate the 'data' subtags in the GEDCOM Tags preferences (in the c
 
 ### Download<a name="download"/>
 
-* Current version: 2.1.16.1.3
+* Current version: 2.1.16.1.5
 * Based on and tested with webtrees 2.1.16. Requires webtrees 2.1.8 or later.
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 
