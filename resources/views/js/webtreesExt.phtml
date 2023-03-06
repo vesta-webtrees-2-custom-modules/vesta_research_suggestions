@@ -7,32 +7,39 @@ webtrees.initializeTomSelectSWS = function (element) {
     var defaultUrl = element.dataset.defaultUrl;
     var adjustedUrl = element.dataset.adjustedUrl;
     
+    //used in
+    //a) 'structured' dialogs (single-fact or multi-fact)
+    //b) unstructured SOUR:DATA:EVEN dialog
+    //c) unstructured edit-record dialog (for top-level _LOC, otherwise hidden functionality)
+    
+    //in unstructured dialogs with multiple tags of same type, we have to count overall elements 
+    //in order to assign X:DATE to X:PLAC:_LOC properly
+    
+    //(in structured dialogs we could simply determine X by id (such as 'fact-') and just use that, like this
+    //var fact = element.closest('[id^=fact-]');
+    
     //element.id has structure 'id-235a7975c6194772bd348f4b5740af11-INDI-CHR-SOUR'
     //we're looking for 'id-4393f90138404a5f92c0523de58d2810-INDI-CHR-DATE' and '...-PLAC'
+    
     let lio1 = element.id.lastIndexOf("INDI-");
     let lio2 = element.id.lastIndexOf("FAM-");
-    let lio = (lio1 === -1)?lio2:lio1;
-    let tag = (lio === -1)?null:element.id.substring(lio).replace("INDI-", "").replace("FAM-", "").replace("-SOUR", "");
-    //console.log("sws for "+tag);
+    let lio3 = element.id.lastIndexOf("SOUR-"); //for top level source
+    let lio4 = element.id.lastIndexOf("_LOC-"); //for top level shared place
+    let lio = (lio1 === -1)?((lio2 === -1)?((lio3 === -1)?lio4:lio3):lio2):lio1;
+    let skip = (lio1 === -1)?((lio2 === -1)?5:4):5;
+    let tag = (lio === -1)?null:element.id.substring(lio+skip).replace("-SOUR", "");
+    //console.log("sp for "+tag);
     
-    //using the tag isn't sufficient in case there are multiple facts with the same tag!
-    //(which is possible on special multi-fact dialogs)
-    //
-    //therefore additionally use the DOM tree itself as context
-    //note: this does not work for edit-record (which is hidden functionality anyway) in case of multiple same tags,
-    //because that dialog doesn't structure the facts.
-    //also note: for 'structured' dialogs, the tag itself wouldn't even be required, 
-    //because there is max one PLAC/DATE per fact)
-
-    //in multi-fact dialogs, per-fact top-level element has id starting with 'fact-'
-    //in single-fact dialogs, just use document itself
-    
-    var fact = element.closest('[id^=fact-]');
-    if (!fact) {
-        fact = document;
-    } else {
-        //console.log("sp for "+fact.id);
+    var allLoc = document.querySelectorAll('[id^=id][id$='+tag+'-SOUR]');
+    var overallCount = allLoc.length;
+    var overallPosition = -1;
+    for (let i = 0; i < allLoc.length; i++) {
+        if (allLoc[i] === element) {
+            overallPosition = i;
+        }
     }
+    //console.log("sp count: "+overallCount);
+    //console.log("sp position: "+overallPosition);
     
     var ts = null;
     var options = {};
@@ -53,12 +60,15 @@ webtrees.initializeTomSelectSWS = function (element) {
       maxOptions: false,
       firstUrl: query => 1,
       onDropdownOpen:function() {
-        var ownDateInput = fact.querySelector('[id$=' + tag + '-DATE]');
-        var ownPlacInput = fact.querySelector('[id$=' + tag + '-PLAC]');
+        var allPlac = document.querySelectorAll('[id^=id][id$='+tag+'-PLAC]');
+        var allDate = document.querySelectorAll('[id^=id][id$='+tag+'-PLAC]');
 
-        if ((tag !== null) && ownDateInput && ownPlacInput) {
-            var dateValue = ownDateInput.value;
+        if ((tag !== null) && (allPlac.length === overallCount) && (allDate.length === overallCount) && (overallPosition !== -1)) {            
+            var ownPlacInput = allPlac[overallPosition];
+            var ownDateInput = allDate[overallPosition];
+            
             var placValue = ownPlacInput.value;
+            var dateValue = ownDateInput.value;
 
             if (dateValue && placValue) {
                 <?php
@@ -67,7 +77,7 @@ webtrees.initializeTomSelectSWS = function (element) {
                 ?>
                 ts.load('');            
             }
-        }
+        } //else DATE hidden, apparently
       },
       load: function (query, callback) {
         <?php
@@ -86,33 +96,40 @@ webtrees.initializeTomSelectSWS = function (element) {
             //note: we should get here only though onDropdownOpen, otherwise not triggered (e.g. by clearing input)
             ?>
 
-            var ownDateInput = fact.querySelector('[id$=' + tag + '-DATE]');
-            var ownPlacInput = fact.querySelector('[id$=' + tag + '-PLAC]');
-
             <?php
             //the view is used in several other places, e.g. via the favorites module, and in the 'merge records' dialog,
             //and as a standalone fact (which is not distinguishable here!).
             //in these cases, or if required inputs aren't set, use standard functionality!
             ?>
 
-            if ((tag !== null) && ownDateInput && ownPlacInput) {
+            var allPlac = document.querySelectorAll('[id^=id][id$='+tag+'-PLAC]');
+            var allDate = document.querySelectorAll('[id^=id][id$='+tag+'-DATE]');
+
+            if ((tag !== null) && (allPlac.length === overallCount) && (allDate.length === overallCount) && (overallPosition !== -1)) {
 
                 var tagValue = tag;
-                var dateValue = ownDateInput.value;
+                
+                var ownPlacInput = allPlac[overallPosition];
+                var ownDateInput = allDate[overallPosition];
+            
                 var placValue = ownPlacInput.value;
+                var dateValue = ownDateInput.value;
 
                 if (dateValue && placValue) {
-                    var ownGovInput = fact.querySelector('[id$=' + tag + '-PLAC-_GOV]');
-                    var ownLocInput = fact.querySelector('[id$=' + tag + '-PLAC-_LOC]');
-
-                    var govValue = ownGovInput?ownGovInput.value:"";
-                    var locValue = ownLocInput?ownLocInput.value:"";
+                    
+                    var allGov = document.querySelectorAll('[id^=id][id$='+tag+'-PLAC-_GOV]');
+                    var allLoc = document.querySelectorAll('[id^=id][id$='+tag+'-PLAC-_LOC]');
 
                     var gedcom = "1 "+ tagValue + "\n2 DATE " + dateValue + "\n2 PLAC " + placValue;
-                    if (govValue) {
+                    
+                    if (allGov.length === overallCount) {
+                        var ownGovInput = allGov[overallPosition];
+                        var govValue = ownGovInput.value;
                         gedcom += "\n3 _GOV " + govValue;
                     } 
-                    if (locValue) {
+                    if (allLoc.length === overallCount) {
+                        var ownLocInput = allLoc[overallPosition];
+                        var locValue = ownLocInput.value;
                         gedcom += "\n3 _LOC @" + locValue + "@";
                     }
 
