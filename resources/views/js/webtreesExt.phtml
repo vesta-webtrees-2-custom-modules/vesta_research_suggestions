@@ -30,16 +30,26 @@ webtrees.initializeTomSelectSWS = function (element) {
     let tag = (lio === -1)?null:element.id.substring(lio+skip).replace("-SOUR", "");
     //console.log("sp for "+tag);
     
-    var allLoc = document.querySelectorAll('[id^=id][id$='+tag+'-SOUR]');
-    var overallCount = allLoc.length;
+    var allSour = document.querySelectorAll('[id^=id][id$='+tag+'-SOUR]');
+    var overallCount = allSour.length;
     var overallPosition = -1;
-    for (let i = 0; i < allLoc.length; i++) {
-        if (allLoc[i] === element) {
+    for (let i = 0; i < allSour.length; i++) {
+        if (allSour[i] === element) {
             overallPosition = i;
         }
     }
+    
     //console.log("sp count: "+overallCount);
     //console.log("sp position: "+overallPosition);
+ 
+    var allPlac = document.querySelectorAll('[id^=id][id$='+tag+'-PLAC]');
+    var allDate = document.querySelectorAll('[id^=id][id$='+tag+'-DATE]');
+   
+    if ((allPlac.length === 1) && (allDate.length === 1)) {
+        //always ok (structured dialog with single PLAC and DATE, may have multiple SOUR which all refer the same DATE/PLAC)
+        overallCount = 1;
+        overallPosition = 0;
+    }
     
     var ts = null;
     var options = {};
@@ -60,8 +70,6 @@ webtrees.initializeTomSelectSWS = function (element) {
       maxOptions: false,
       firstUrl: query => 1,
       onDropdownOpen:function() {
-        var allPlac = document.querySelectorAll('[id^=id][id$='+tag+'-PLAC]');
-        var allDate = document.querySelectorAll('[id^=id][id$='+tag+'-PLAC]');
 
         if ((tag !== null) && (allPlac.length === overallCount) && (allDate.length === overallCount) && (overallPosition !== -1)) {            
             var ownPlacInput = allPlac[overallPosition];
@@ -101,9 +109,6 @@ webtrees.initializeTomSelectSWS = function (element) {
             //and as a standalone fact (which is not distinguishable here!).
             //in these cases, or if required inputs aren't set, use standard functionality!
             ?>
-
-            var allPlac = document.querySelectorAll('[id^=id][id$='+tag+'-PLAC]');
-            var allDate = document.querySelectorAll('[id^=id][id$='+tag+'-DATE]');
 
             if ((tag !== null) && (allPlac.length === overallCount) && (allDate.length === overallCount) && (overallPosition !== -1)) {
 
