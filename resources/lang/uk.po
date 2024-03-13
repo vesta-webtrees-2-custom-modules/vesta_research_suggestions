@@ -7,17 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2022-04-24 21:11+0200\n"
+"POT-Creation-Date: 2024-03-13 19:54+0100\n"
 "PO-Revision-Date: 2022-05-28 12:18+0000\n"
 "Last-Translator: Artem <artem@molotov.work>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/"
-"vesta-webtrees-custom-modules/vesta-research-suggestions/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-research-suggestions/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 4.13-dev\n"
 
 #. I18N: Module Configuration
@@ -35,8 +33,7 @@ msgstr "Віковий діапазон для подій Конфірмації
 msgid "Allow persistent toggle (user may show/hide research suggestions as additional facts)"
 msgstr "Дозволити постійне перемикання (користувач може показувати / приховувати пропозиції щодо досліджень як додаткові факти)"
 
-#: resources/views/lists/sources-table.phtml:101
-#: resources/views/lists/sources-table_20.phtml:94
+#: resources/views/lists/sources-table.phtml:105
 msgid "Event data?"
 msgstr "Дані подій?"
 
@@ -50,12 +47,11 @@ msgstr "Події, пов'язані з народженням. Якщо є д�
 msgid "Events related to Death. If there is a source for one of these events, no suggestions will be made for other events in this group."
 msgstr "Події, пов'язані зі Смертю. Якщо є джерело для однієї з цих подій, пропозиції щодо інших подій у цій групі не подаватимуться."
 
-#: resources/views/admin/trees-preferences-ext.phtml:8
+#: resources/views/admin/trees-preferences-ext.phtml:7
 msgid "Facts for source records"
 msgstr "Факти для вихідних записів"
 
-#: resources/views/admin/trees-preferences-ext.phtml:13
-#: resources/views/admin/trees-preferences-ext_20.phtml:10
+#: resources/views/admin/trees-preferences-ext.phtml:12
 msgid "Facts recorded in sources"
 msgstr "Факти, зафіксовані в джерелах"
 
@@ -74,37 +70,35 @@ msgstr "Максимальний вік у роках"
 msgid "Minimal age in years"
 msgstr "Мінімальний вік у роках"
 
-#: ResearchSuggestionsService.php:332 ResearchSuggestionsService.php:469
-#: ResearchSuggestionsService.php:522 ResearchSuggestionsService.php:575
-#: ResearchSuggestionsService.php:672
+#: ResearchSuggestionsService.php:339 ResearchSuggestionsService.php:479
+#: ResearchSuggestionsService.php:535 ResearchSuggestionsService.php:591
+#: ResearchSuggestionsService.php:692
 #, php-format
 msgid "Missing source for %1$s - Possible source:"
 msgstr "Відсутнє джерело для %1$s - Можливе джерело:"
 
-#: ResearchSuggestionsService.php:199
+#: ResearchSuggestionsService.php:197
 #, php-format
 msgid "Possible source for %1$s:"
 msgstr "Можливе джерело для %1$s:"
 
-#: ResearchSuggestionsService.php:471
+#: ResearchSuggestionsService.php:481
 msgid "Possible source:"
 msgstr "Можливе джерело:"
 
-#: ResearchSuggestionsModule.php:143 ResearchSuggestionsModule_20.php:125
+#. I18N: custom type for virtual EVEN
+#: ResearchSuggestionsService.php:168
+msgid "Research Suggestion"
+msgstr ""
+
+#: ResearchSuggestionsModule.php:183
 msgid "Research Suggestions"
 msgstr "Пропозиції щодо досліджень"
 
 #. I18N: Help text for the “Facts recorded in sources” configuration setting
-#: resources/views/admin/trees-preferences-ext.phtml:18
+#: resources/views/admin/trees-preferences-ext.phtml:17
 msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. "
-msgstr ""
-"Джерела можуть бути анотовані за допомогою факту «data», щоб описати, які "
-"індивідуальні та сімейні факти вони містять. "
-
-#. I18N: Help text for the “Facts recorded in sources” configuration setting
-#: resources/views/admin/trees-preferences-ext_20.phtml:18
-msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. This is the list of those GEDCOM facts. You can modify this list by removing or adding fact names, even custom ones, as necessary. "
-msgstr "Джерела можна коментувати за допомогою факту \"даних\", щоб описати, які окремі та сімейні факти вони містять. Це перелік цих фактів GEDCOM. Ви можете змінити цей список, видаляючи або додаючи імена фактів, навіть власні, за потреби. "
+msgstr "Джерела можуть бути анотовані за допомогою факту «data», щоб описати, які індивідуальні та сімейні факти вони містять. "
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:94
@@ -114,3 +108,6 @@ msgstr "Використовується для обчислення діапа�
 #: WhatsNew/WhatsNew0.php:11
 msgid "Vesta Research Suggestions: A new custom module. See the Readme for details."
 msgstr "Vesta Research Suggestions: Новий спеціальний модуль. Дивіться Readme для деталей."
+
+#~ msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. This is the list of those GEDCOM facts. You can modify this list by removing or adding fact names, even custom ones, as necessary. "
+#~ msgstr "Джерела можна коментувати за допомогою факту \"даних\", щоб описати, які окремі та сімейні факти вони містять. Це перелік цих фактів GEDCOM. Ви можете змінити цей список, видаляючи або додаючи імена фактів, навіть власні, за потреби. "

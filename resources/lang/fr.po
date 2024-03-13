@@ -7,11 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2022-04-24 21:11+0200\n"
+"POT-Creation-Date: 2024-03-13 19:54+0100\n"
 "PO-Revision-Date: 2022-09-01 09:21+0000\n"
 "Last-Translator: Vincent DENIS <vincent.denis06@gmail.com>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/"
-"vesta-webtrees-custom-modules/vesta-research-suggestions/fr/>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-research-suggestions/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -34,8 +33,7 @@ msgstr "Tranche d'âge pour les événements de confirmation"
 msgid "Allow persistent toggle (user may show/hide research suggestions as additional facts)"
 msgstr "Autoriser le basculement persistant (l'utilisateur peut afficher / masquer les suggestions de recherche en tant que faits supplémentaires)"
 
-#: resources/views/lists/sources-table.phtml:101
-#: resources/views/lists/sources-table_20.phtml:94
+#: resources/views/lists/sources-table.phtml:105
 msgid "Event data?"
 msgstr "Données d'événement ?"
 
@@ -49,12 +47,11 @@ msgstr "Événements liés à la naissance. S'il existe une source pour l'un de 
 msgid "Events related to Death. If there is a source for one of these events, no suggestions will be made for other events in this group."
 msgstr "Événements liés à la mort. S'il existe une source pour l'un de ces événements, aucune suggestion ne sera faite pour d'autres événements de ce groupe."
 
-#: resources/views/admin/trees-preferences-ext.phtml:8
+#: resources/views/admin/trees-preferences-ext.phtml:7
 msgid "Facts for source records"
 msgstr "Faits pour les enregistrements source"
 
-#: resources/views/admin/trees-preferences-ext.phtml:13
-#: resources/views/admin/trees-preferences-ext_20.phtml:10
+#: resources/views/admin/trees-preferences-ext.phtml:12
 msgid "Facts recorded in sources"
 msgstr "Faits enregistrés dans les sources"
 
@@ -73,37 +70,35 @@ msgstr "Âge maximal en années"
 msgid "Minimal age in years"
 msgstr "Âge minimal en années"
 
-#: ResearchSuggestionsService.php:332 ResearchSuggestionsService.php:469
-#: ResearchSuggestionsService.php:522 ResearchSuggestionsService.php:575
-#: ResearchSuggestionsService.php:672
+#: ResearchSuggestionsService.php:339 ResearchSuggestionsService.php:479
+#: ResearchSuggestionsService.php:535 ResearchSuggestionsService.php:591
+#: ResearchSuggestionsService.php:692
 #, php-format
 msgid "Missing source for %1$s - Possible source:"
 msgstr "Source manquante pour %1$s - Source possible :"
 
-#: ResearchSuggestionsService.php:199
+#: ResearchSuggestionsService.php:197
 #, php-format
 msgid "Possible source for %1$s:"
 msgstr "Source possible pour %1$s :"
 
-#: ResearchSuggestionsService.php:471
+#: ResearchSuggestionsService.php:481
 msgid "Possible source:"
 msgstr "Source possible :"
 
-#: ResearchSuggestionsModule.php:143 ResearchSuggestionsModule_20.php:125
+#. I18N: custom type for virtual EVEN
+#: ResearchSuggestionsService.php:168
+msgid "Research Suggestion"
+msgstr ""
+
+#: ResearchSuggestionsModule.php:183
 msgid "Research Suggestions"
 msgstr "Suggestions de recherche"
 
 #. I18N: Help text for the “Facts recorded in sources” configuration setting
-#: resources/views/admin/trees-preferences-ext.phtml:18
+#: resources/views/admin/trees-preferences-ext.phtml:17
 msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. "
-msgstr ""
-"Les sources peuvent être annotées, via le fait « données », afin de décrire "
-"les faits individuels et familiaux qu’elles contiennent. "
-
-#. I18N: Help text for the “Facts recorded in sources” configuration setting
-#: resources/views/admin/trees-preferences-ext_20.phtml:18
-msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. This is the list of those GEDCOM facts. You can modify this list by removing or adding fact names, even custom ones, as necessary. "
-msgstr "Les sources peuvent être annotées, via le fait «data», afin de décrire les faits individuels et familiaux qu'elles contiennent. Voici la liste de ces faits GEDCOM. Vous pouvez modifier cette liste en supprimant ou en ajoutant des noms de faits, même personnalisés, si nécessaire. "
+msgstr "Les sources peuvent être annotées, via le fait « données », afin de décrire les faits individuels et familiaux qu’elles contiennent. "
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:94
@@ -113,3 +108,6 @@ msgstr "Utilisé pour calculer la plage de dates pour les suggestions d'événem
 #: WhatsNew/WhatsNew0.php:11
 msgid "Vesta Research Suggestions: A new custom module. See the Readme for details."
 msgstr "Suggestions de recherche Vesta : Un nouveau module personnalisé. Consultez le Readme pour plus de détails."
+
+#~ msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. This is the list of those GEDCOM facts. You can modify this list by removing or adding fact names, even custom ones, as necessary. "
+#~ msgstr "Les sources peuvent être annotées, via le fait «data», afin de décrire les faits individuels et familiaux qu'elles contiennent. Voici la liste de ces faits GEDCOM. Vous pouvez modifier cette liste en supprimant ou en ajoutant des noms de faits, même personnalisés, si nécessaire. "

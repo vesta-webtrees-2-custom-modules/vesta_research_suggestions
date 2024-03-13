@@ -161,7 +161,13 @@ class ResearchSuggestionsService {
         
         return $this->getAdditionalFactsViaPlaceStructure($record, $ps);
     }
-            
+    
+    public static function customTypeEven(): void {
+        //this is just to get this string into *.po,
+        //actual translation is done via Fact::label
+        /* I18N: custom type for virtual EVEN */ I18N::translate("Research Suggestion");
+    }
+    
     public function getAdditionalFactsViaPlaceStructure(
             GedcomRecord $record,
             PlaceStructure $ps): array {

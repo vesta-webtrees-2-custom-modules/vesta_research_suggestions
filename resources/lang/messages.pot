@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2022-04-24 21:11+0200\n"
+"POT-Creation-Date: 2024-03-13 19:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ResearchSuggestionsModule.php:143 ResearchSuggestionsModule_20.php:125
+#: ResearchSuggestionsModule.php:183
 msgid "Research Suggestions"
 msgstr ""
 
@@ -66,19 +66,24 @@ msgstr ""
 msgid "Used to calculate date range for suggestions for Confirmation (CONF) events, based on birth or similar event (in case there is no explicit Confirmation event)."
 msgstr ""
 
-#: ResearchSuggestionsService.php:199
+#. I18N: custom type for virtual EVEN
+#: ResearchSuggestionsService.php:168
+msgid "Research Suggestion"
+msgstr ""
+
+#: ResearchSuggestionsService.php:197
 #, php-format
 msgid "Possible source for %1$s:"
 msgstr ""
 
-#: ResearchSuggestionsService.php:332 ResearchSuggestionsService.php:469
-#: ResearchSuggestionsService.php:522 ResearchSuggestionsService.php:575
-#: ResearchSuggestionsService.php:672
+#: ResearchSuggestionsService.php:339 ResearchSuggestionsService.php:479
+#: ResearchSuggestionsService.php:535 ResearchSuggestionsService.php:591
+#: ResearchSuggestionsService.php:692
 #, php-format
 msgid "Missing source for %1$s - Possible source:"
 msgstr ""
 
-#: ResearchSuggestionsService.php:471
+#: ResearchSuggestionsService.php:481
 msgid "Possible source:"
 msgstr ""
 
@@ -86,26 +91,19 @@ msgstr ""
 msgid "Vesta Research Suggestions: A new custom module. See the Readme for details."
 msgstr ""
 
-#: resources/views/admin/trees-preferences-ext.phtml:8
+#: resources/views/admin/trees-preferences-ext.phtml:7
 msgid "Facts for source records"
 msgstr ""
 
-#: resources/views/admin/trees-preferences-ext.phtml:13
-#: resources/views/admin/trees-preferences-ext_20.phtml:10
+#: resources/views/admin/trees-preferences-ext.phtml:12
 msgid "Facts recorded in sources"
 msgstr ""
 
 #. I18N: Help text for the “Facts recorded in sources” configuration setting
-#: resources/views/admin/trees-preferences-ext.phtml:18
+#: resources/views/admin/trees-preferences-ext.phtml:17
 msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. "
 msgstr ""
 
-#. I18N: Help text for the “Facts recorded in sources” configuration setting
-#: resources/views/admin/trees-preferences-ext_20.phtml:18
-msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. This is the list of those GEDCOM facts. You can modify this list by removing or adding fact names, even custom ones, as necessary. "
-msgstr ""
-
-#: resources/views/lists/sources-table.phtml:101
-#: resources/views/lists/sources-table_20.phtml:94
+#: resources/views/lists/sources-table.phtml:105
 msgid "Event data?"
 msgstr ""

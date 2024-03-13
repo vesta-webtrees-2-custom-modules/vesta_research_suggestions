@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Cissee\WebtreesExt\Elements;
 
+use Cissee\WebtreesExt\MoreI18N;
 use Fisharebest\Webtrees\Elements\XrefSource;
 use Fisharebest\Webtrees\Gedcom;
 use Fisharebest\Webtrees\Http\RequestHandlers\CreateSourceModal;
-use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use function e;
@@ -37,7 +37,7 @@ class XrefSourceExt extends XrefSource
 
             return
                 '<div class="input-group">' .
-                '<button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-backdrop="static" data-bs-target="#wt-ajax-modal" data-wt-href="' . e(route(CreateSourceModal::class, ['tree' => $tree->name()])) . '" data-wt-select-id="' . $id . '" title="' . I18N::translate('Create a source') . '">' .
+                '<button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-backdrop="static" data-bs-target="#wt-ajax-modal" data-wt-href="' . e(route(CreateSourceModal::class, ['tree' => $tree->name()])) . '" data-wt-select-id="' . $id . '" title="' . MoreI18N::xlate('Create a source') . '">' .
                 view('icons/add') .
                 '</button>' .
                 $select .

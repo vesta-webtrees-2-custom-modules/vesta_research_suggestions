@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
-"POT-Creation-Date: 2022-04-24 21:11+0200\n"
+"POT-Creation-Date: 2024-03-13 19:54+0100\n"
 "PO-Revision-Date: 2022-03-12 16:54+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/vesta-webtrees-custom-modules/vesta-research-suggestions/tr/>\n"
@@ -33,8 +33,7 @@ msgstr "Onay olayları için yaş aralığı"
 msgid "Allow persistent toggle (user may show/hide research suggestions as additional facts)"
 msgstr "Kalıcı geçişlere izin ver (kullanıcı araştırma önerilerini ek gerçekler olarak gösterebilir/gizleyebilir)"
 
-#: resources/views/lists/sources-table.phtml:101
-#: resources/views/lists/sources-table_20.phtml:94
+#: resources/views/lists/sources-table.phtml:105
 msgid "Event data?"
 msgstr "Olay verileri?"
 
@@ -48,12 +47,11 @@ msgstr "Doğumla ilgili olaylar. Bu olaylardan biri için bir kaynak varsa, bu g
 msgid "Events related to Death. If there is a source for one of these events, no suggestions will be made for other events in this group."
 msgstr "Ölümle ilgili olaylar. Bu olaylardan biri için bir kaynak varsa, bu gruptaki diğer olaylar için herhangi bir öneride bulunulmayacaktır."
 
-#: resources/views/admin/trees-preferences-ext.phtml:8
+#: resources/views/admin/trees-preferences-ext.phtml:7
 msgid "Facts for source records"
 msgstr ""
 
-#: resources/views/admin/trees-preferences-ext.phtml:13
-#: resources/views/admin/trees-preferences-ext_20.phtml:10
+#: resources/views/admin/trees-preferences-ext.phtml:12
 msgid "Facts recorded in sources"
 msgstr "Kaynaklarda kaydedilen gerçekler"
 
@@ -72,35 +70,35 @@ msgstr "Yıl olarak maksimum yaş"
 msgid "Minimal age in years"
 msgstr "Yıl olarak minimum yaş"
 
-#: ResearchSuggestionsService.php:332 ResearchSuggestionsService.php:469
-#: ResearchSuggestionsService.php:522 ResearchSuggestionsService.php:575
-#: ResearchSuggestionsService.php:672
+#: ResearchSuggestionsService.php:339 ResearchSuggestionsService.php:479
+#: ResearchSuggestionsService.php:535 ResearchSuggestionsService.php:591
+#: ResearchSuggestionsService.php:692
 #, php-format
 msgid "Missing source for %1$s - Possible source:"
 msgstr "%1$s için eksik kaynak - Olası kaynak:"
 
-#: ResearchSuggestionsService.php:199
+#: ResearchSuggestionsService.php:197
 #, php-format
 msgid "Possible source for %1$s:"
 msgstr ""
 
-#: ResearchSuggestionsService.php:471
+#: ResearchSuggestionsService.php:481
 msgid "Possible source:"
 msgstr "Olası kaynak:"
 
-#: ResearchSuggestionsModule.php:143 ResearchSuggestionsModule_20.php:125
+#. I18N: custom type for virtual EVEN
+#: ResearchSuggestionsService.php:168
+msgid "Research Suggestion"
+msgstr ""
+
+#: ResearchSuggestionsModule.php:183
 msgid "Research Suggestions"
 msgstr "Araştırma Önerileri"
 
 #. I18N: Help text for the “Facts recorded in sources” configuration setting
-#: resources/views/admin/trees-preferences-ext.phtml:18
+#: resources/views/admin/trees-preferences-ext.phtml:17
 msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. "
 msgstr ""
-
-#. I18N: Help text for the “Facts recorded in sources” configuration setting
-#: resources/views/admin/trees-preferences-ext_20.phtml:18
-msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. This is the list of those GEDCOM facts. You can modify this list by removing or adding fact names, even custom ones, as necessary. "
-msgstr "Kaynaklar, hangi bireysel ve ailevi gerçekleri içerdiklerini açıklamak için 'veri' olgusu aracılığıyla açıklanabilir. Bu GEDCOM gerçeklerinin listesidir. Gerektiğinde olgu adlarını, hatta özel olanları bile kaldırarak veya ekleyerek bu listeyi değiştirebilirsiniz. "
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:94
@@ -110,3 +108,6 @@ msgstr "Doğum veya benzer olaya dayalı olarak Onay (CONF) olaylarına yönelik
 #: WhatsNew/WhatsNew0.php:11
 msgid "Vesta Research Suggestions: A new custom module. See the Readme for details."
 msgstr "Vesta Araştırma Önerileri: Yeni bir özel modül. Ayrıntılar için Beni oku sayfasına bakın."
+
+#~ msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. This is the list of those GEDCOM facts. You can modify this list by removing or adding fact names, even custom ones, as necessary. "
+#~ msgstr "Kaynaklar, hangi bireysel ve ailevi gerçekleri içerdiklerini açıklamak için 'veri' olgusu aracılığıyla açıklanabilir. Bu GEDCOM gerçeklerinin listesidir. Gerektiğinde olgu adlarını, hatta özel olanları bile kaldırarak veya ekleyerek bu listeyi değiştirebilirsiniz. "

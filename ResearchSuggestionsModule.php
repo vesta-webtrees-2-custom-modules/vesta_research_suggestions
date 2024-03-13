@@ -117,32 +117,32 @@ class ResearchSuggestionsModule extends AbstractModule implements
         
         //replace XrefSource everywhere
         $ef->registerTags([
-            'FAM:*:SOUR'               => new XrefSourceExt(I18N::translate('Source citation')),
-            'FAM:SOUR'                 => new XrefSourceExt(I18N::translate('Source citation')),
-            'INDI:*:SOUR'              => new XrefSourceExt(I18N::translate('Source citation')),
-            'INDI:SOUR'                => new XrefSourceExt(I18N::translate('Source citation')),
-            'NOTE:SOUR'                => new XrefSourceExt(I18N::translate('Source citation')),
-            'OBJE:SOUR'                => new XrefSourceExt(I18N::translate('Source citation')),
+            'FAM:*:SOUR'               => new XrefSourceExt(MoreI18N::xlate('Source citation')),
+            'FAM:SOUR'                 => new XrefSourceExt(MoreI18N::xlate('Source citation')),
+            'INDI:*:SOUR'              => new XrefSourceExt(MoreI18N::xlate('Source citation')),
+            'INDI:SOUR'                => new XrefSourceExt(MoreI18N::xlate('Source citation')),
+            'NOTE:SOUR'                => new XrefSourceExt(MoreI18N::xlate('Source citation')),
+            'OBJE:SOUR'                => new XrefSourceExt(MoreI18N::xlate('Source citation')),
         ]);
         
         //Gedcom-L
         $ef->registerTags([
-            'FAM:*:_ASSO:SOUR'                => new XrefSourceExt(I18N::translate('Source citation')),
-            'INDI:*:_ASSO:SOUR'               => new XrefSourceExt(I18N::translate('Source citation')),
-            '_LOC:EVEN:SOUR'                  => new XrefSourceExt(I18N::translate('Source citation')),
-            '_LOC:NAME:SOUR'                  => new XrefSourceExt(I18N::translate('Source')),
-            '_LOC:SOUR'                       => new XrefSourceExt(I18N::translate('Source')),
-            '_LOC:TYPE:SOUR'                  => new XrefSourceExt(I18N::translate('Source')),
-            '_LOC:_AIDN:SOUR'                 => new XrefSourceExt(I18N::translate('Source')),
-            '_LOC:_DMGD:SOUR'                 => new XrefSourceExt(I18N::translate('Source')),
-            '_LOC:_LOC:SOUR'                  => new XrefSourceExt(I18N::translate('Source')),
-            '_LOC:_POST:SOUR'                 => new XrefSourceExt(I18N::translate('Source')),
+            'FAM:*:_ASSO:SOUR'                => new XrefSourceExt(MoreI18N::xlate('Source citation')),
+            'INDI:*:_ASSO:SOUR'               => new XrefSourceExt(MoreI18N::xlate('Source citation')),
+            '_LOC:EVEN:SOUR'                  => new XrefSourceExt(MoreI18N::xlate('Source citation')),
+            '_LOC:NAME:SOUR'                  => new XrefSourceExt(MoreI18N::xlate('Source')),
+            '_LOC:SOUR'                       => new XrefSourceExt(MoreI18N::xlate('Source')),
+            '_LOC:TYPE:SOUR'                  => new XrefSourceExt(MoreI18N::xlate('Source')),
+            '_LOC:_AIDN:SOUR'                 => new XrefSourceExt(MoreI18N::xlate('Source')),
+            '_LOC:_DMGD:SOUR'                 => new XrefSourceExt(MoreI18N::xlate('Source')),
+            '_LOC:_LOC:SOUR'                  => new XrefSourceExt(MoreI18N::xlate('Source')),
+            '_LOC:_POST:SOUR'                 => new XrefSourceExt(MoreI18N::xlate('Source')),
         ]);   
             
         //webtrees
         $ef->registerTags([
-            'FAM:*:_ASSO:SOUR'            => new XrefSourceExt(I18N::translate('Source citation')),
-            'INDI:*:_ASSO:SOUR'           => new XrefSourceExt(I18N::translate('Source citation')),
+            'FAM:*:_ASSO:SOUR'            => new XrefSourceExt(MoreI18N::xlate('Source citation')),
+            'INDI:*:_ASSO:SOUR'           => new XrefSourceExt(MoreI18N::xlate('Source citation')),
         ]);  
             
         $this->flashWhatsNew('\Cissee\Webtrees\Module\ResearchSuggestions\WhatsNew', 1);
@@ -242,7 +242,7 @@ class ResearchSuggestionsModule extends AbstractModule implements
     public function hFactsTabGetAdditionalFacts(
         GedcomRecord $record) {
         
-        $cacheKey = Gov4WebtreesModule::class . '_hFactsTabGetAdditionalFacts_' . $record->tree()->id() . $record->xref();
+        $cacheKey = ResearchSuggestionsModule::class . '_hFactsTabGetAdditionalFacts_' . $record->tree()->id() . $record->xref();
         $ret = Registry::cache()->array()->remember($cacheKey, static function () use ($record): array {
             //TODO make this configurable! here and elsewhere!
             $ignorePartialRanges = true;
