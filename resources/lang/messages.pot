@@ -17,8 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ResearchSuggestionsModule.php:143 ResearchSuggestionsModule_20.php:125
+#: ResearchSuggestionsModule.php:183
 msgid "Research Suggestions"
+msgstr ""
+
+#:
+msgid "Research Suggestion"
 msgstr ""
 
 #. I18N: Module Configuration
