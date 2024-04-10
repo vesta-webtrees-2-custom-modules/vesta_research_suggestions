@@ -42,11 +42,11 @@ class ResearchSuggestionsService {
     //impl overlaps with getAdditionalFacts - should be cleaned up!
 
     /**
-     * 
+     *
      * @param Fact $fact
      * @param Tree $tree
      * @param bool $ignorePartialRanges
-     * 
+     *
      * @return Collection<SourceEvent>
      */
     public function getSourceSuggestions(
@@ -66,7 +66,7 @@ class ResearchSuggestionsService {
             $date = $fact->attribute("DATE");
             if ($date) {
                 $currentInterval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
-                //intersect to min common interval - 
+                //intersect to min common interval -
                 //this is to avoid bogus recommendations for fact combinations such as
                 //BIRT 01 JAN 1715
                 //BAPM AFT 01 JAN 1715 -> matches e.g. 1715 - 1850, even if meaning here is "shortly after BIRT"
@@ -99,7 +99,7 @@ class ResearchSuggestionsService {
             if ($ps === null) {
                 //unexpected: this is supposed to be a fact with plac!
             } else {
-                $resolvedPlaces = 
+                $resolvedPlaces =
                     $this->resolvePlace($ps, ['POLI', 'RELI']);
             }
         }
@@ -108,7 +108,7 @@ class ResearchSuggestionsService {
 
         $events = $this->getSourceEvents($tree, $resolvedPlaces, [$tag]);
 
-        foreach ($events as $event) {         
+        foreach ($events as $event) {
             $match = $interval->intersect($event->getInterval());
             if ($match !== null) {
                 $collection->push($event);
@@ -150,40 +150,40 @@ class ResearchSuggestionsService {
 
     public function getAdditionalLocFacts(
             GedcomRecord $record): array {
-    
+
         $ps = FunctionsPlaceUtils::loc2plac(
             $this->module,
             new LocReference($record->xref(), $record->tree(), new Trace('')));
-        
+
         if ($ps == null) {
             return [];
         }
-        
+
         return $this->getAdditionalFactsViaPlaceStructure($record, $ps);
     }
-    
+
     public static function customTypeEven(): void {
         //this is just to get this string into *.po,
         //actual translation is done via Fact::label
         /* I18N: custom type for virtual EVEN */ I18N::translate("Research Suggestion");
     }
-    
+
     public function getAdditionalFactsViaPlaceStructure(
             GedcomRecord $record,
             PlaceStructure $ps): array {
-        
+
         $place = $ps->getGedcomName();
-        
+
         $resolvedPlaces = $this->resolvePlace($ps, ['POLI', 'RELI']);
-        
+
         $sourceEvents = $this->getSourceEvents($ps->tree(), $resolvedPlaces);
 
         $facts = [];
-        
+
         foreach ($sourceEvents as $sourceEvent) {
-                
+
             $asType = $sourceEvent->getEventTypes()[0];
-            
+
             $labels = collect($sourceEvent->getEventTypes())
                             ->map(function (string $t) {
                                 //uargh ugly
@@ -199,14 +199,14 @@ class ResearchSuggestionsService {
             $gedcom .= $sourceEvent->getInterval()->toGedcomString(2);
             $gedcom .= "\n" . $sourceEvent->getPlaceGedcomAsLevel2Tag();
             $gedcom .= "\n" . '2 SOUR @' . $sourceEvent->getSourceXref() . '@';
-            
+
             $research = new VirtualFact($gedcom, $record, 'research');
             $facts[] = $research;
         }
-        
+
         return $facts;
     }
-    
+
     public function getAdditionalFacts(
             GedcomRecord $record,
             bool $ignorePartialRanges = false,
@@ -214,17 +214,17 @@ class ResearchSuggestionsService {
 
         $individuals = [];
         $families = [];
-        
+
         if ($record instanceof Individual) {
             $individuals = [$record];
             $families = $record->spouseFamilies()->toArray();
-        
+
         } else if ($record instanceof Family) {
             $families = [$record];
-            
+
         } else if ($record instanceof Location) {
             return $this->getAdditionalLocFacts($record);
-            
+
         } else if ($record instanceof PlaceAsTopLevelRecord) {
             $ps = $record->placeStructure();
             if ($ps === null) {
@@ -245,13 +245,13 @@ class ResearchSuggestionsService {
 
         $facts = array();
 
-        //it is a feature that even for exact dates (e.g. exact BIRT date and exact CHR date), 
+        //it is a feature that even for exact dates (e.g. exact BIRT date and exact CHR date),
         //we get an interval like 'between October 13, 1784 and October 17, 1784'.
-        //This is useful even if the source provides e.g. CHR only, 
+        //This is useful even if the source provides e.g. CHR only,
         //because some sources list CHRs under the BIRT year
         //(relevant if born in late December, and baptized early January),
         //so it's safer to include both dates.
-        //(honestly it's mainly done because it's easier to implement though) 
+        //(honestly it's mainly done because it's easier to implement though)
         //
         //TODO recheck
         //1. research suggestion for birth/christening?
@@ -279,7 +279,7 @@ class ResearchSuggestionsService {
                         $date = $fact->attribute("DATE");
                         if ($date) {
                             $currentInterval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
-                            //intersect to min common interval - 
+                            //intersect to min common interval -
                             //this is to avoid bogus recommendations for fact combinations such as
                             //BIRT 01 JAN 1715
                             //BAPM AFT 01 JAN 1715 -> matches e.g. 1715 - 1850, even if meaning here is "shortly after BIRT"
@@ -312,7 +312,7 @@ class ResearchSuggestionsService {
                         } else {
                             $resolvedPlaces = array_merge(
                                 $resolvedPlaces,
-                                $this->resolvePlace($ps, ['POLI', 'RELI']));                            
+                                $this->resolvePlace($ps, ['POLI', 'RELI']));
                         }
                     }
 
@@ -353,7 +353,7 @@ class ResearchSuggestionsService {
 
                             $research = new VirtualFact($gedcom, $person, 'research');
                             $facts[] = $research;
-                        }//else unexpected, shouldn't have been returned!					
+                        }//else unexpected, shouldn't have been returned!
                     }
                 }
             }
@@ -488,7 +488,7 @@ class ResearchSuggestionsService {
 
                             $research = new VirtualFact($gedcom, $person, 'research');
                             $facts[] = $research;
-                        }//else unexpected, shouldn't have been returned!					
+                        }//else unexpected, shouldn't have been returned!
                     }
                 }
             }
@@ -525,7 +525,7 @@ class ResearchSuggestionsService {
                                 //unexpected: this is supposed to be a fact with plac!
                             } else {
                                 $resolvedPlaces = $this->resolvePlace($ps, ['POLI', 'RELI']);
-                                
+
                                 $events = $this->getSourceEvents($person->tree(), $resolvedPlaces, [$tag]);
 
                                 foreach ($events as $event) {
@@ -546,7 +546,7 @@ class ResearchSuggestionsService {
 
                                         $research = new VirtualFact($gedcom, $person, 'research');
                                         $facts[] = $research;
-                                    }//else unexpected, shouldn't have been returned!					
+                                    }//else unexpected, shouldn't have been returned!
                                 }
                             }
                         }
@@ -602,7 +602,7 @@ class ResearchSuggestionsService {
 
                                         $research = new VirtualFact($gedcom, $record, 'research');
                                         $facts[] = $research;
-                                    }//else unexpected, shouldn't have been returned!					
+                                    }//else unexpected, shouldn't have been returned!
                                 }
                             }
                         }
@@ -637,7 +637,7 @@ class ResearchSuggestionsService {
                         if ($date) {
                             $currentInterval = GedcomDateInterval::create($fact->attribute("DATE"), $ignorePartialRanges);
 
-                            //intersect to min common interval - 
+                            //intersect to min common interval -
                             //this is to avoid bogus recommendations for fact combinations such as
                             //BIRT 01 JAN 1715
                             //BAPM AFT 01 JAN 1715 -> matches e.g. 1950 - 1850, even if meaning here is "shortly after BIRT"
@@ -698,7 +698,7 @@ class ResearchSuggestionsService {
 
                             $research = new VirtualFact($gedcom, $person, 'research');
                             $facts[] = $research;
-                        }//else unexpected, shouldn't have been returned!					
+                        }//else unexpected, shouldn't have been returned!
                     }
                 }
             }
@@ -708,22 +708,22 @@ class ResearchSuggestionsService {
     }
 
     public function getSourceEvents(
-        Tree $tree, 
-        array $places, 
+        Tree $tree,
+        array $places,
         ?array $matchEventTypes = null): array {
-        
+
         return $this->doGetSourceEvents($tree, $places, $matchEventTypes);
     }
 
     /**
-     * 	 	
-     * @return array (array of key: source id, value: SourceEvent)	 
+     *
+     * @return array (array of key: source id, value: SourceEvent)
      */
     protected function doGetSourceEvents(
-        Tree $tree, 
-        array $places, 
+        Tree $tree,
+        array $places,
         ?array $matchEventTypes = null): array {
-        
+
         $events = array();
 
         $sources = array();
@@ -738,7 +738,7 @@ class ResearchSuggestionsService {
             }
 
             //this is conceptually dubious,
-            //would be better to handle this via shared places module 
+            //would be better to handle this via shared places module
             //(although PlaceStructure itself is aware of _LOC as well)
             $loc = $eventPlace->getLoc();
             if ($loc !== null) {
@@ -753,7 +753,7 @@ class ResearchSuggestionsService {
         }
 
         foreach ($sources as $xref => $source) {
-            
+
             //collect EVEN (similar to FunctionsPrintFacts, with fix for issue #1376)
             preg_match_all('/\n2 EVEN (.*)((\n[34].*)*)/', $source->gedcom(), $evenMatches, PREG_SET_ORDER);
             foreach ($evenMatches as $evenMatch) {

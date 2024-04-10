@@ -107,7 +107,7 @@ class EventsRecordedExt extends AbstractElement
         //[RC] extended
         $filter = explode(',', $tree->getPreference('SOUR_DATA_EVEN_FACTS', 'BIRT,BAPM,CHR,CONF,MARR,DEAT,BURI'));
         $filter = array_combine($filter, $filter);
-    
+
         $options = Collection::make(self::EVENTS_RECORDED)
             //[RC] extended
             ->filter(function (string $tag) use ($filter): bool {

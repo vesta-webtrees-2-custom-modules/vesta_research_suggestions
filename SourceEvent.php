@@ -32,7 +32,7 @@ class SourceEvent {
         return $this->placeGedcomAsLevel2Tag;
     }
 
-    //note: in Gedcom, DATE and PLAC are optional. Here, they are required. 
+    //note: in Gedcom, DATE and PLAC are optional. Here, they are required.
     public function __construct(
         Source $source,
         array $eventTypes,

@@ -1,10 +1,10 @@
 
 # ⚶ Vesta Research Suggestions (Webtrees 2 Custom Module)
 
-This [webtrees](https://www.webtrees.net/) custom module provides suggestions for additional research, based on available sources. 
-It is helpful in particular if you have a large number of unsourced events (e.g. events initially taken over from another tree) which are expected to be covered by a manageable number of shared sources. 
-It may therefore be used to improve the overall data quality of a tree where source management has been neglected for some reason. 
-Note that the module does not provide research links in the form of search results from external services - This kind of functionality is planned for webtrees itself. 
+This [webtrees](https://www.webtrees.net/) custom module provides suggestions for additional research, based on available sources.
+It is helpful in particular if you have a large number of unsourced events (e.g. events initially taken over from another tree) which are expected to be covered by a manageable number of shared sources.
+It may therefore be used to improve the overall data quality of a tree where source management has been neglected for some reason.
+Note that the module does not provide research links in the form of search results from external services - This kind of functionality is planned for webtrees itself.
 
 The project’s website is [cissee.de](https://cissee.de).
 
@@ -31,8 +31,8 @@ This is a webtrees 2.x module - It cannot be used with webtrees 1.x. There is no
 
 #### Annotating Sources
 
-* How does this work? First, you have to annotate your sources in order to define the events recorded in the respective source. These annotations are primarily useful for sources which you expect to use for multiple individuals. They are part of the GEDCOM source data structure. 
-You have to activate the 'data' subtags in the GEDCOM Tags preferences (in the control panel), under 'Sources'. 
+* How does this work? First, you have to annotate your sources in order to define the events recorded in the respective source. These annotations are primarily useful for sources which you expect to use for multiple individuals. They are part of the GEDCOM source data structure.
+You have to activate the 'data' subtags in the GEDCOM Tags preferences (in the control panel), under 'Sources'.
 
 <p align="center"><img src="tags.png" alt="Screenshot" align="center" width="67%"></p>
 
@@ -56,11 +56,11 @@ You have to activate the 'data' subtags in the GEDCOM Tags preferences (in the c
 2 EVEN CONF
 3 DATE FROM 1841 TO 1852
 3 PLAC Neuenkirchen (St. Bartholomäus)
-~~~~ 
+~~~~
 
 #### Evaluating Source Data
 
-* The module then attempts to match events of individuals with sources annotated in this manner, by comparing the event type, date, and place. 
+* The module then attempts to match events of individuals with sources annotated in this manner, by comparing the event type, date, and place.
 * Note that higher-level places also match, if respective sources are available (see again the first example above).
 * The module also integrates place hierarchy data from other custom modules (currently the Gov4Webtrees module). This is useful in cases where the administrative place hierarchy cannot be used to find a source, e.g. because the respective parish is in a different county, which wasn't uncommon in particular in [fragmented Central European territories](https://en.wikipedia.org/wiki/Kleinstaaterei). See the second example above (in which the settlemant itself at that time was in the Principality of Lippe-Detmold, while the church of its parish was in the Principality of Schaumburg-Lippe). In any case, the Gov4Webtrees module is useful to determine which parish a settement belonged to at a specific date.
 
@@ -69,7 +69,7 @@ You have to activate the 'data' subtags in the GEDCOM Tags preferences (in the c
 * Current version: 2.1.20.0.0
 * Based on and tested with webtrees 2.1.20. Requires webtrees 2.1.17 or later.
 * Requires the ⚶ Vesta Common module ('vesta_common').
-* Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts'). 
+* Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts').
 * Download the zip file, which includes all Vesta modules, [here](https://cissee.de/vesta.latest.zip).
 * Support, suggestions, feature requests: <ric@richard-cissee.de>
 * Issues also via <https://github.com/vesta-webtrees-2-custom-modules/vesta_research_suggestions/issues>
@@ -103,4 +103,3 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
-

@@ -74,7 +74,7 @@ $count_notes = DB::table('other')
     <?= view('lists/datatables-attributes') ?>
     data-columns="<?= e(json_encode([
         ['type' => 'html'],
-        
+
         //[RC] added
         null,
         null,
@@ -83,7 +83,7 @@ $count_notes = DB::table('other')
         null,
         null,
         */
-        
+
         null,
         ['visible' => array_sum($count_individuals) > 0],
         ['visible' => array_sum($count_families) > 0],
@@ -128,7 +128,7 @@ $count_notes = DB::table('other')
                         <?= $source->fullName() ?>
                     </a>
                 </td>
- 
+
                 <?php
                 //[RC] added
                 ?>
@@ -138,12 +138,12 @@ $count_notes = DB::table('other')
                       <span class="wt-icon-save"><i class="fas fa-check fa-fw" aria-hidden="true"></i></span>
                     <?php endif ?>
                 </td>
-                
+
                 <!-- Repository -->
                 <td class="d-none d-md-table-cell">
                     <?= $source->facts(['REPO'])->isNotEmpty() ? Registry::elementFactory()->make('SOUR:REPO')->value($source->facts(['REPO'])->first()->value(), $tree) : '' ?>
                 </td>
-                 
+
                 <?php
                 /*
                 <!-- Abbreviation -->
