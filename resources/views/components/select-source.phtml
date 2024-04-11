@@ -30,7 +30,7 @@ $adjustedUrl = route(TomSelectSourceWithSuggestions::class, ['tree' => $tree->na
     ?>
     data-default-url="<?= $defaultUrl ?>"
     data-adjusted-url="<?= $adjustedUrl ?>"
-    
+
     id="<?= e($id ?? $name) ?>"
     name="<?= e($name) ?>"
     <?= ($disabled ?? false) ? 'disabled="disabled"' : '' ?>

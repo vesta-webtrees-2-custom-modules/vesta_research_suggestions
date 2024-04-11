@@ -36,23 +36,23 @@ use function app;
 use function view;
 
 
-class ResearchSuggestionsModule extends AbstractModule implements 
-    ModuleCustomInterface, 
-    ModuleMetaInterface, 
+class ResearchSuggestionsModule extends AbstractModule implements
+    ModuleCustomInterface,
+    ModuleMetaInterface,
     ModuleConfigInterface,
-    ModuleGlobalInterface, 
+    ModuleGlobalInterface,
     MiddlewareInterface,
     IndividualFactsTabExtenderInterface {
 
     use ModuleCustomTrait, ModuleMetaTrait, ModuleConfigTrait, ModuleGlobalTrait, VestaModuleTrait {
         VestaModuleTrait::customTranslations insteadof ModuleCustomTrait;
         VestaModuleTrait::getAssetAction insteadof ModuleCustomTrait;
-        VestaModuleTrait::assetUrl insteadof ModuleCustomTrait;    
+        VestaModuleTrait::assetUrl insteadof ModuleCustomTrait;
         VestaModuleTrait::getConfigLink insteadof ModuleConfigTrait;
         ModuleMetaTrait::customModuleVersion insteadof ModuleCustomTrait;
         ModuleMetaTrait::customModuleLatestVersion insteadof ModuleCustomTrait;
     }
-  
+
     use EmptyIndividualFactsTabExtender;
     use ResearchSuggestionsModuleTrait;
 
@@ -62,8 +62,8 @@ class ResearchSuggestionsModule extends AbstractModule implements
 
     public function customModuleMetaDatasJson(): string {
         return file_get_contents(__DIR__ . '/metadata.json');
-    } 
-  
+    }
+
     public function customModuleLatestMetaDatasJsonUrl(): string {
         return 'https://raw.githubusercontent.com/vesta-webtrees-2-custom-modules/vesta_research_suggestions/master/metadata.json';
     }
@@ -75,14 +75,14 @@ class ResearchSuggestionsModule extends AbstractModule implements
     public function resourcesFolder(): string {
         return __DIR__ . '/resources/';
     }
-  
+
     public function onBoot(): void {
         app()->instance(ResearchSuggestionsService::class, new ResearchSuggestionsService(
-                $this, 
+                $this,
                 app(SearchService::class)));
 
         //define our 'pretty' routes
-        //note: potentially problematic in case of name clashes; 
+        //note: potentially problematic in case of name clashes;
         //webtrees isn't interested in solving this properly, see
         //https://www.webtrees.net/index.php/en/forum/2-open-discussion/33687-pretty-urls-in-2-x
 
@@ -93,7 +93,7 @@ class ResearchSuggestionsModule extends AbstractModule implements
         */
 
         $router = Registry::routeFactory()->routeMap();
-        
+
         $router->get(TomSelectSourceWithSuggestions::class, '/tree/{tree}/tom-select-source-with-suggestions', TomSelectSourceWithSuggestions::class);
 
         // Replace existing views with our own versions.
@@ -114,7 +114,7 @@ class ResearchSuggestionsModule extends AbstractModule implements
         $ef->registerTags(['INDI:MARR' => new Marriage(MoreI18N::xlate('Marriage'))]);
 
         $ef->registerTags(['SOUR:DATA:EVEN' => new EventsRecordedExt(MoreI18N::xlate('Events'))]);
-        
+
         //replace XrefSource everywhere
         $ef->registerTags([
             'FAM:*:SOUR'               => new XrefSourceExt(MoreI18N::xlate('Source citation')),
@@ -124,7 +124,7 @@ class ResearchSuggestionsModule extends AbstractModule implements
             'NOTE:SOUR'                => new XrefSourceExt(MoreI18N::xlate('Source citation')),
             'OBJE:SOUR'                => new XrefSourceExt(MoreI18N::xlate('Source citation')),
         ]);
-        
+
         //Gedcom-L
         $ef->registerTags([
             'FAM:*:_ASSO:SOUR'                => new XrefSourceExt(MoreI18N::xlate('Source citation')),
@@ -137,58 +137,58 @@ class ResearchSuggestionsModule extends AbstractModule implements
             '_LOC:_DMGD:SOUR'                 => new XrefSourceExt(MoreI18N::xlate('Source')),
             '_LOC:_LOC:SOUR'                  => new XrefSourceExt(MoreI18N::xlate('Source')),
             '_LOC:_POST:SOUR'                 => new XrefSourceExt(MoreI18N::xlate('Source')),
-        ]);   
-            
+        ]);
+
         //webtrees
         $ef->registerTags([
             'FAM:*:_ASSO:SOUR'            => new XrefSourceExt(MoreI18N::xlate('Source citation')),
             'INDI:*:_ASSO:SOUR'           => new XrefSourceExt(MoreI18N::xlate('Source citation')),
-        ]);  
-            
+        ]);
+
         $this->flashWhatsNew('\Cissee\Webtrees\Module\ResearchSuggestions\WhatsNew', 1);
     }
 
     //IndividualFactsTabExtenderInterface
-  
+
     public function hFactsTabGetOutputBeforeTab(
         GedcomRecord $record): GenericViewElement {
-        
+
         if (sizeof($this->hFactsTabGetAdditionalFacts($record)) === 0) {
             return GenericViewElement::createEmpty();
         }
-        
+
         $pre = '<link href="' . $this->assetUrl('css/style.css') . '" type="text/css" rel="stylesheet" />';
-	return new GenericViewElement($pre, '');
+    return new GenericViewElement($pre, '');
     }
-  
+
     public function hFactsTabGetStyleadds(
         GedcomRecord $record,
         Fact $fact): array {
-        
-	$styleadds = [];
+
+    $styleadds = [];
         if ($fact->id() === 'research') {
             $styleadds['research'] = 'wt-research-fact-pfh collapse'; //see style.css, and hFactsTabGetOutputInDBox
-        }	
-	return $styleadds;
+        }
+    return $styleadds;
     }
 
     public function hFactsTabGetOutputInDBox(
         GedcomRecord $record): GenericViewElement {
-        
+
         if (sizeof($this->hFactsTabGetAdditionalFacts($record)) === 0) {
             return GenericViewElement::createEmpty();
         }
-        
-	$toggleableResearch = boolval($this->getPreference('TAB_TOGGLEABLE_RESEARCH', '1'));	
-	return $this->getOutputInDescriptionBox($toggleableResearch, 'show-research-suggestions-factstab', 'wt-research-fact-pfh', I18N::translate('Research Suggestions'));
+
+    $toggleableResearch = boolval($this->getPreference('TAB_TOGGLEABLE_RESEARCH', '1'));
+    return $this->getOutputInDescriptionBox($toggleableResearch, 'show-research-suggestions-factstab', 'wt-research-fact-pfh', I18N::translate('Research Suggestions'));
     }
-  
+
     protected function getOutputInDescriptionBox(
-        bool $toggleableResearch, 
-        string $id, 
-        string $targetClass,           
+        bool $toggleableResearch,
+        string $id,
+        string $targetClass,
         string $label) {
-      
+
         ob_start();
         if ($toggleableResearch) {
           ?>
@@ -201,24 +201,24 @@ class ResearchSuggestionsModule extends AbstractModule implements
 
         return new GenericViewElement(ob_get_clean(), '');
     }
-  
+
     public function hFactsTabGetOutputAfterTab(
         GedcomRecord $record,
         bool $ajax): GenericViewElement {
-        
+
         if (!$ajax) {
             //nothing to do - in fact must not initialize twice!
             return GenericViewElement::createEmpty();
         }
-        
+
         if (sizeof($this->hFactsTabGetAdditionalFacts($record)) === 0) {
             return GenericViewElement::createEmpty();
         }
-        
+
         $toggleableResearch = boolval($this->getPreference('TAB_TOGGLEABLE_RESEARCH', '1'));
         return $this->getOutputAfterTab($toggleableResearch, 'show-research-suggestions-factstab');
     }
-  
+
     protected function getOutputAfterTab($toggleableRels, $toggle) {
         $post = "";
 
@@ -238,34 +238,34 @@ class ResearchSuggestionsModule extends AbstractModule implements
         <?php
         return ob_get_clean();
     }
-  
+
     public function hFactsTabGetAdditionalFacts(
         GedcomRecord $record) {
-        
+
         $cacheKey = ResearchSuggestionsModule::class . '_hFactsTabGetAdditionalFacts_' . $record->tree()->id() . $record->xref();
         $ret = Registry::cache()->array()->remember($cacheKey, static function () use ($record): array {
             //TODO make this configurable! here and elsewhere!
             $ignorePartialRanges = true;
 
             return app(ResearchSuggestionsService::class)->getAdditionalFacts(
-                $record, 
+                $record,
                 $ignorePartialRanges);
         });
-        
-	return $ret;
+
+    return $ret;
     }
-  
+
     //TODO Issue #2
     public function bodyContent(): string {
         //we need additional javascript for tom select sources
         return view($this->name() . '::js/webtreesExt');
     }
-  
+
     //TODO Issue #2
     public function process(
-        ServerRequestInterface $request, 
+        ServerRequestInterface $request,
         RequestHandlerInterface $handler): ResponseInterface {
-      
+
         $route = $request->getAttribute('route');
         assert($route instanceof Route);
 
@@ -276,7 +276,7 @@ class ResearchSuggestionsModule extends AbstractModule implements
         // Generate the response.
         return $handler->handle($request);
     }
-  
+
     public function preferencesUpdateExt(ServerRequestInterface $request) {
         $tree = $request->getAttribute('tree');
         assert($tree instanceof Tree);

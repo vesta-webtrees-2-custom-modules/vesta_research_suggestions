@@ -1,26 +1,26 @@
 <?php
-//adapted from webtrees.js: webtrees.initializeTomSelect 
+//adapted from webtrees.js: webtrees.initializeTomSelect
 ?>
 
 <script>
 webtrees.initializeTomSelectSWS = function (element) {
     var defaultUrl = element.dataset.defaultUrl;
     var adjustedUrl = element.dataset.adjustedUrl;
-    
+
     //used in
     //a) 'structured' dialogs (single-fact or multi-fact)
     //b) unstructured SOUR:DATA:EVEN dialog
     //c) unstructured edit-record dialog (for top-level _LOC, otherwise hidden functionality)
-    
-    //in unstructured dialogs with multiple tags of same type, we have to count overall elements 
+
+    //in unstructured dialogs with multiple tags of same type, we have to count overall elements
     //in order to assign X:DATE to X:PLAC:_LOC properly
-    
+
     //(in structured dialogs we could simply determine X by id (such as 'fact-') and just use that, like this
     //var fact = element.closest('[id^=fact-]');
-    
+
     //element.id has structure 'id-235a7975c6194772bd348f4b5740af11-INDI-CHR-SOUR'
     //we're looking for 'id-4393f90138404a5f92c0523de58d2810-INDI-CHR-DATE' and '...-PLAC'
-    
+
     let lio1 = element.id.lastIndexOf("INDI-");
     let lio2 = element.id.lastIndexOf("FAM-");
     let lio3 = element.id.lastIndexOf("SOUR-"); //for top level source
@@ -29,7 +29,7 @@ webtrees.initializeTomSelectSWS = function (element) {
     let skip = (lio1 === -1)?((lio2 === -1)?5:4):5;
     let tag = (lio === -1)?null:element.id.substring(lio+skip).replace("-SOUR", "");
     //console.log("sp for "+tag);
-    
+
     var allSour = document.querySelectorAll('[id^=id][id$='+tag+'-SOUR]');
     var overallCount = allSour.length;
     var overallPosition = -1;
@@ -38,19 +38,19 @@ webtrees.initializeTomSelectSWS = function (element) {
             overallPosition = i;
         }
     }
-    
+
     //console.log("sp count: "+overallCount);
     //console.log("sp position: "+overallPosition);
- 
+
     var allPlac = document.querySelectorAll('[id^=id][id$='+tag+'-PLAC]');
     var allDate = document.querySelectorAll('[id^=id][id$='+tag+'-DATE]');
-   
+
     if ((allPlac.length === 1) && (allDate.length === 1)) {
         //always ok (structured dialog with single PLAC and DATE, may have multiple SOUR which all refer the same DATE/PLAC)
         overallCount = 1;
         overallPosition = 0;
     }
-    
+
     var ts = null;
     var options = {};
 
@@ -71,10 +71,10 @@ webtrees.initializeTomSelectSWS = function (element) {
       firstUrl: query => 1,
       onDropdownOpen:function() {
 
-        if ((tag !== null) && (allPlac.length === overallCount) && (allDate.length === overallCount) && (overallPosition !== -1)) {            
+        if ((tag !== null) && (allPlac.length === overallCount) && (allDate.length === overallCount) && (overallPosition !== -1)) {
             var ownPlacInput = allPlac[overallPosition];
             var ownDateInput = allDate[overallPosition];
-            
+
             var placValue = ownPlacInput.value;
             var dateValue = ownDateInput.value;
 
@@ -83,7 +83,7 @@ webtrees.initializeTomSelectSWS = function (element) {
                 //preload:'focus' does the same, but unconditionally
                 //TODO: no_results doesn't render here! explicit ts.refreshOptions(); doesn't help
                 ?>
-                ts.load('');            
+                ts.load('');
             }
         } //else DATE hidden, apparently
       },
@@ -113,25 +113,25 @@ webtrees.initializeTomSelectSWS = function (element) {
             if ((tag !== null) && (allPlac.length === overallCount) && (allDate.length === overallCount) && (overallPosition !== -1)) {
 
                 var tagValue = tag;
-                
+
                 var ownPlacInput = allPlac[overallPosition];
                 var ownDateInput = allDate[overallPosition];
-            
+
                 var placValue = ownPlacInput.value;
                 var dateValue = ownDateInput.value;
 
                 if (dateValue && placValue) {
-                    
+
                     var allGov = document.querySelectorAll('[id^=id][id$='+tag+'-PLAC-_GOV]');
                     var allLoc = document.querySelectorAll('[id^=id][id$='+tag+'-PLAC-_LOC]');
 
                     var gedcom = "1 "+ tagValue + "\n2 DATE " + dateValue + "\n2 PLAC " + placValue;
-                    
+
                     if (allGov.length === overallCount) {
                         var ownGovInput = allGov[overallPosition];
                         var govValue = ownGovInput.value;
                         gedcom += "\n3 _GOV " + govValue;
-                    } 
+                    }
                     if (allLoc.length === overallCount) {
                         var ownLocInput = allLoc[overallPosition];
                         var locValue = ownLocInput.value;
@@ -174,6 +174,3 @@ webtrees.initializeTomSelectSWS = function (element) {
     return ts;
 }
 </script>
-
-
-

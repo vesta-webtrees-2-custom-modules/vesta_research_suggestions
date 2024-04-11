@@ -17,7 +17,7 @@ use function view;
  */
 class TomSelectSourceWithSuggestions extends AbstractTomSelectHandler
 {
-        
+
     /**
      * Perform the search
      *
@@ -32,8 +32,8 @@ class TomSelectSourceWithSuggestions extends AbstractTomSelectHandler
     protected function search(Tree $tree, string $query, int $offset, int $limit, string $at): Collection
     {
         //return suggested sources, if there are any
-        
-        // Create a dummy record          
+
+        // Create a dummy record
         $dummy = Registry::individualFactory()->new(
             'xref',
             "0 @xref@ INDI\n1 DEAT Y\n",
@@ -49,7 +49,7 @@ class TomSelectSourceWithSuggestions extends AbstractTomSelectHandler
                   'value' => $at . $source->getSourceXref() . $at,
               ];
           });
-          
+
         return $results;
     }
 }
