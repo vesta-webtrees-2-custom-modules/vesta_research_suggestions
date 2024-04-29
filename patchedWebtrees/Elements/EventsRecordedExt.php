@@ -108,11 +108,17 @@ class EventsRecordedExt extends AbstractElement
         $filter = explode(',', $tree->getPreference('SOUR_DATA_EVEN_FACTS', 'BIRT,BAPM,CHR,CONF,MARR,DEAT,BURI'));
         $filter = array_combine($filter, $filter);
 
+        $valueArray = explode(',', str_replace(' ', '', $value));
+        $valueArray = array_combine($valueArray, $valueArray);
+
         $options = Collection::make(self::EVENTS_RECORDED)
             //[RC] extended
-            ->filter(function (string $tag) use ($filter): bool {
+            ->filter(function (string $tag) use ($filter, $valueArray): bool {
                 $key = explode(':', $tag)[1];
-                return array_key_exists($key, $filter);
+
+                //#53: keep existing value even if not set in preferences
+                //return array_key_exists($key, $filter);
+                return array_key_exists($key, $filter) || array_key_exists($key, $valueArray);
             })
             ->mapWithKeys(static function (string $tag) use ($factory): array {
                 return [explode(':', $tag)[1] => $factory->make($tag)->label()];
