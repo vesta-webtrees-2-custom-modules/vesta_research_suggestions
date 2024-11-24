@@ -47,5 +47,5 @@ if (!$ok) {
   return;
 }
 
-$placeholder = app(PlaceholderModule::class);
-return $placeholder->ifIncompatible() ?? app(ResearchSuggestionsModule::class);
+$placeholder = \Vesta\VestaUtils::get(PlaceholderModule::class);
+return $placeholder->ifIncompatible() ?? \Vesta\VestaUtils::get(ResearchSuggestionsModule::class);

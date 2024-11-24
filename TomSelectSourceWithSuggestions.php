@@ -9,7 +9,6 @@ use Fisharebest\Webtrees\Http\RequestHandlers\AbstractTomSelectHandler;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Support\Collection;
-use function app;
 use function view;
 
 /**
@@ -41,7 +40,7 @@ class TomSelectSourceWithSuggestions extends AbstractTomSelectHandler
             $tree);
 
         $fact = new Fact($query, $dummy, '');
-        $sourceEvents = app(ResearchSuggestionsService::class)->getSourceSuggestions($fact, $tree);
+        $sourceEvents = \Vesta\VestaUtils::get(ResearchSuggestionsService::class)->getSourceSuggestions($fact, $tree);
 
         $results = $sourceEvents->map(static function (SourceEvent $source) use ($at): array {
               return [

@@ -32,7 +32,6 @@ use Vesta\Hook\HookInterfaces\EmptyIndividualFactsTabExtender;
 use Vesta\Hook\HookInterfaces\IndividualFactsTabExtenderInterface;
 use Vesta\Model\GenericViewElement;
 use Vesta\VestaModuleTrait;
-use function app;
 use function view;
 
 
@@ -77,9 +76,9 @@ class ResearchSuggestionsModule extends AbstractModule implements
     }
 
     public function onBoot(): void {
-        app()->instance(ResearchSuggestionsService::class, new ResearchSuggestionsService(
+        \Vesta\VestaUtils::set(ResearchSuggestionsService::class, new ResearchSuggestionsService(
                 $this,
-                app(SearchService::class)));
+                \Vesta\VestaUtils::get(SearchService::class)));
 
         //define our 'pretty' routes
         //note: potentially problematic in case of name clashes;
@@ -87,7 +86,7 @@ class ResearchSuggestionsModule extends AbstractModule implements
         //https://www.webtrees.net/index.php/en/forum/2-open-discussion/33687-pretty-urls-in-2-x
 
         /*
-        $router_container = app(RouterContainer::class);
+        $router_container = \Vesta\VestaUtils::get(RouterContainer::class);
         assert($router_container instanceof RouterContainer);
         $router = $router_container->getMap();
         */
@@ -247,7 +246,7 @@ class ResearchSuggestionsModule extends AbstractModule implements
             //TODO make this configurable! here and elsewhere!
             $ignorePartialRanges = true;
 
-            return app(ResearchSuggestionsService::class)->getAdditionalFacts(
+            return \Vesta\VestaUtils::get(ResearchSuggestionsService::class)->getAdditionalFacts(
                 $record,
                 $ignorePartialRanges);
         });
