@@ -1,5 +1,5 @@
 
-# ⚶ Vesta Research Suggestions (Webtrees 2 Custom Module)
+# ⚶ Vesta Research Suggestions (Webtrees Custom Module)
 
 This [webtrees](https://www.webtrees.net/) custom module provides suggestions for additional research, based on available sources.
 It is helpful in particular if you have a large number of unsourced events (e.g. events initially taken over from another tree) which are expected to be covered by a manageable number of shared sources.
@@ -7,8 +7,6 @@ It may therefore be used to improve the overall data quality of a tree where sou
 Note that the module does not provide research links in the form of search results from external services - This kind of functionality is planned for webtrees itself.
 
 The project’s website is [cissee.de](https://cissee.de).
-
-This is a webtrees 2.x module - It cannot be used with webtrees 1.x. There is no webtrees 1.x counterpart.
 
 ## Contents
 
@@ -66,8 +64,8 @@ You have to activate the 'data' subtags in the GEDCOM Tags preferences (in the c
 
 ### Download<a name="download"/>
 
-* Current version: 2.2.0.0.0
-* Based on and tested with webtrees 2.2.0. Requires webtrees 2.1.17 or later.
+* Current version: 2.2.1.0.0
+* Based on and tested with webtrees 2.2.1. Requires webtrees 2.1.17 or later.
 * Requires the ⚶ Vesta Common module ('vesta_common').
 * Displays data via the ⚶ Vesta Facts and events module ('vesta_personal_facts').
 * Download the zip file, which includes all Vesta modules, [here](https://cissee.de/vesta.latest.zip).

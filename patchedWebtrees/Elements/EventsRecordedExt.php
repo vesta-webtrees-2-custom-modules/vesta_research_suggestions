@@ -20,12 +20,12 @@ use function view;
 
 class EventsRecordedExt extends AbstractElement
 {
-    protected const SUBTAGS = [
+    protected const VESTA_SUBTAGS = [
         'DATE' => '0:1',
         'PLAC' => '0:1',
     ];
 
-    protected const EVENTS_RECORDED = [
+    protected const VESTA_EVENTS_RECORDED = [
         'INDI:ADOP',
         'INDI:BAPM',
         'INDI:BARM',
@@ -72,6 +72,11 @@ class EventsRecordedExt extends AbstractElement
         'FAM:MARR',
     ];
 
+     public function __construct(string $label, $subtags = null)
+    {
+        parent::__construct($label, self::VESTA_SUBTAGS);
+    }
+    
     /**
      * Convert a value to a canonical form.
      *
@@ -111,7 +116,7 @@ class EventsRecordedExt extends AbstractElement
         $valueArray = explode(',', str_replace(' ', '', $value));
         $valueArray = array_combine($valueArray, $valueArray);
 
-        $options = Collection::make(self::EVENTS_RECORDED)
+        $options = Collection::make(self::VESTA_EVENTS_RECORDED)
             //[RC] extended
             ->filter(function (string $tag) use ($filter, $valueArray): bool {
                 $key = explode(':', $tag)[1];
