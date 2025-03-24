@@ -8,101 +8,123 @@ msgstr ""
 "Project-Id-Version: vesta 1.0\n"
 "Report-Msgid-Bugs-To: ric@richard-cissee.de\n"
 "POT-Creation-Date: 2024-03-13 19:54+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-03-24 19:02+0000\n"
+"Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
+"Language-Team: Tamil <https://hosted.weblate.org/projects/"
+"vesta-webtrees-custom-modules/vesta-research-suggestions/ta/>\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.11-dev\n"
 
 #: ResearchSuggestionsModule.php:183
 msgid "Research Suggestions"
-msgstr ""
+msgstr "ஆராய்ச்சி பரிந்துரைகள்"
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:22 ResearchSuggestionsModuleTrait.php:28
 msgid "A module providing suggestions for additional research, based on available sources."
 msgstr ""
+"கிடைக்கக்கூடிய ஆதாரங்களின் அடிப்படையில் கூடுதல் ஆராய்ச்சிக்கான பரிந்துரைகளை வழங்கும் ஒரு "
+"தொகுதி."
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:63
 msgid "Allow persistent toggle (user may show/hide research suggestions as additional facts)"
 msgstr ""
+"தொடர்ச்சியான மாற்றத்தை அனுமதிக்கவும் (பயனர் ஆராய்ச்சி பரிந்துரைகளை கூடுதல் உண்மைகளாகக் "
+"காட்டலாம்/மறைக்கலாம்)"
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:69
 msgid "Grouped events"
-msgstr ""
+msgstr "குழு நிகழ்வுகள்"
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:73
 msgid "Events related to Birth. If there is a source for one of these events, no suggestions will be made for other events in this group. Note that strictly BAPM is not necessarily an event occuring shortly after Birth, but it is often used that way (when CHR would actually be more appropriate, according to the GEDCOM specification). If you only use one of CHR/BAPM, it's recommended to deselect the other one here."
 msgstr ""
+"பிறப்பு தொடர்பான நிகழ்வுகள். இந்த நிகழ்வுகளில் ஒன்றிற்கு ஒரு சான்று இருந்தால், இந்த "
+"குழுவில் உள்ள பிற நிகழ்வுகளுக்கு பரிந்துரைகள் எதுவும் செய்யப்படாது. கண்டிப்பாக BAPM "
+"என்பது பிறந்த சிறிது நேரத்திலேயே நிகழும் ஒரு நிகழ்வு அல்ல என்பதை நினைவில் கொள்க, ஆனால் "
+"அது பெரும்பாலும் அந்த வழியில் பயன்படுத்தப்படுகிறது (GR உண்மையில் மிகவும் பொருத்தமானதாக "
+"இருக்கும்போது, GEDCOM விவரக்குறிப்பின் படி). நீங்கள் Chr/BAPM இல் ஒன்றை மட்டுமே "
+"பயன்படுத்தினால், மற்றொன்றை இங்கே தேர்வு செய்ய பரிந்துரைக்கப்படுகிறது."
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:78
 msgid "Events related to Death. If there is a source for one of these events, no suggestions will be made for other events in this group."
 msgstr ""
+"இறப்பு தொடர்பான நிகழ்வுகள். இந்த நிகழ்வுகளில் ஒன்றிற்கு ஒரு சான்று இருந்தால், இந்த குழுவில்"
+" உள்ள பிற நிகழ்வுகளுக்கு பரிந்துரைகள் எதுவும் செய்யப்படாது."
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:83
 msgid "Age range for Confirmation events"
-msgstr ""
+msgstr "உறுதிப்படுத்தல் நிகழ்வுகளுக்கான அகவை வரம்பு"
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:86
 msgid "Minimal age in years"
-msgstr ""
+msgstr "ஆண்டுகளில் குறைந்தபட்ச அகவை"
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:93
 msgid "Maximal age in years"
-msgstr ""
+msgstr "ஆண்டுகளில் அதிகபட்ச அகவை"
 
 #. I18N: Module Configuration
 #: ResearchSuggestionsModuleTrait.php:94
 msgid "Used to calculate date range for suggestions for Confirmation (CONF) events, based on birth or similar event (in case there is no explicit Confirmation event)."
 msgstr ""
+"பிறப்பு அல்லது இதே போன்ற நிகழ்வின் அடிப்படையில் உறுதிப்படுத்தல் (CONF) நிகழ்வுகளுக்கான "
+"பரிந்துரைகளுக்கான தேதி வரம்பைக் கணக்கிடப் பயன்படுகிறது (வெளிப்படையான உறுதிப்படுத்தல் "
+"நிகழ்வு இல்லையென்றால்)."
 
 #. I18N: custom type for virtual EVEN
 #: ResearchSuggestionsService.php:168
 msgid "Research Suggestion"
-msgstr ""
+msgstr "ஆராய்ச்சி பரிந்துரை"
 
 #: ResearchSuggestionsService.php:197
 #, php-format
 msgid "Possible source for %1$s:"
-msgstr ""
+msgstr "%1$s க்கான சாத்தியமான ஆதாரம்:"
 
 #: ResearchSuggestionsService.php:339 ResearchSuggestionsService.php:479
 #: ResearchSuggestionsService.php:535 ResearchSuggestionsService.php:591
 #: ResearchSuggestionsService.php:692
 #, php-format
 msgid "Missing source for %1$s - Possible source:"
-msgstr ""
+msgstr "%1$s க்கான மூலத்தைக் காணவில்லை - சாத்தியமான மூல:"
 
 #: ResearchSuggestionsService.php:481
 msgid "Possible source:"
-msgstr ""
+msgstr "சாத்தியமான ஆதாரம்:"
 
 #: WhatsNew/WhatsNew0.php:11
 msgid "Vesta Research Suggestions: A new custom module. See the Readme for details."
 msgstr ""
+"வெச்டா ஆராய்ச்சி பரிந்துரைகள்: ஒரு புதிய தனிப்பயன் தொகுதி. விவரங்களுக்கு README ஐப் "
+"பார்க்கவும்."
 
 #: resources/views/admin/trees-preferences-ext.phtml:7
 msgid "Facts for source records"
-msgstr ""
+msgstr "மூல பதிவுகளுக்கான உண்மைகள்"
 
 #: resources/views/admin/trees-preferences-ext.phtml:12
 msgid "Facts recorded in sources"
-msgstr ""
+msgstr "ஆதாரங்களில் பதிவு செய்யப்பட்ட உண்மைகள்"
 
 #. I18N: Help text for the “Facts recorded in sources” configuration setting
 #: resources/views/admin/trees-preferences-ext.phtml:17
 msgid "Sources can be annotated, via the 'data' fact, in order to describe which individual and family facts they contain. "
 msgstr ""
+"'தரவு' உண்மை வழியாக, அவை எந்த தனிப்பட்ட மற்றும் குடும்ப உண்மைகளைக் கொண்டுள்ளன என்பதை "
+"விவரிக்க ஆதாரங்களை சிறுகுறிப்பு செய்யலாம். "
 
 #: resources/views/lists/sources-table.phtml:105
 msgid "Event data?"
-msgstr ""
+msgstr "நிகழ்வு தரவு?"
