@@ -78,6 +78,7 @@ $count_notes = DB::table('other')
         //[RC] added
         null,
         null,
+        null,
 
         /*
         null,
@@ -104,6 +105,7 @@ $count_notes = DB::table('other')
             ?>
             <th class="d-none d-md-table-cell"><?= I18N::translate('Event data?') ?></th>
             <th class="d-none d-md-table-cell"><?= MoreI18N::xlate('Repository') ?></th>
+            <th class="d-none d-md-table-cell"><?= MoreI18N::xlate('Call number') ?></th>
             <?php
             /*
             <th class="d-none d-md-table-cell"><?= MoreI18N::xlate('Abbreviation') ?></th>
@@ -139,10 +141,29 @@ $count_notes = DB::table('other')
                     <?php endif ?>
                 </td>
 
-                <!-- Repository -->
-                <td class="d-none d-md-table-cell">
-                    <?= $source->facts(['REPO'])->isNotEmpty() ? Registry::elementFactory()->make('SOUR:REPO')->value($source->facts(['REPO'])->first()->value(), $tree) : '' ?>
+                <!-- Repository and Call number -->
+                <td class="d-none d-md-table-cell" colspan="2" data-sort="<?= e($source->facts(['REPO'])->map(fn($f) => strip_tags(Registry::elementFactory()->make('SOUR:REPO')->value($f->value(), $tree)))->implode(' ')) ?>">
+                    <?php foreach ($source->facts(['REPO']) as $num => $fact) : ?>
+                        <div>
+                            <?= Registry::elementFactory()->make('SOUR:REPO')->value($fact->value(), $tree) ?>
+                            
+                            <?php $caln = $fact->attribute('CALN'); ?>
+                            <?php if ($caln) : ?>
+                                <span class="text-muted small ms-3">
+                                    <?php if (filter_var($caln, FILTER_VALIDATE_URL)) : ?>
+                                        <a href="<?= e($caln) ?>">
+                                            (<?= e($caln) ?>)
+                                        </a>
+                                    <?php else : ?>
+                                        (<?= e($caln) ?>)
+                                    <?php endif ?>
+                                </span>
+                            <?php endif ?>
+                        </div>                    
+                    <?php endforeach ?>
                 </td>
+
+                <td hidden="hidden" data-sort="<?= e($source->facts(['REPO'])->map(fn($f) => $f->attribute('CALN') ?: 'ZZZZ')->implode(' ')) ?>"></td>
 
                 <?php
                 /*
@@ -160,7 +181,10 @@ $count_notes = DB::table('other')
 
                 <!-- Publisher -->
                 <td class="d-none d-md-table-cell">
-                    <?= Registry::elementFactory()->make('SOUR:PUBL')->value($source->facts(['PUBL'])->isNotEmpty() ? $source->facts(['PUBL'])->first()->value() : '', $tree) ?>
+                    <!--<?= Registry::elementFactory()->make('SOUR:PUBL')->value($source->facts(['PUBL'])->isNotEmpty() ? $source->facts(['PUBL'])->first()->value() : '', $tree) ?>-->
+                    <?php if ($source->facts(['PUBL'])->isNotEmpty()) : ?>
+                      <span class="wt-icon-save"><i class="fas fa-check fa-fw" aria-hidden="true"></i></span>
+                    <?php endif ?>
                 </td>
 
                 <!-- Count of linked individuals -->

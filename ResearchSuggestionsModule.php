@@ -126,8 +126,6 @@ class ResearchSuggestionsModule extends AbstractModule implements
 
         //Gedcom-L
         $ef->registerTags([
-            'FAM:*:_ASSO:SOUR'                => new XrefSourceExt(MoreI18N::xlate('Source citation')),
-            'INDI:*:_ASSO:SOUR'               => new XrefSourceExt(MoreI18N::xlate('Source citation')),
             '_LOC:EVEN:SOUR'                  => new XrefSourceExt(MoreI18N::xlate('Source citation')),
             '_LOC:NAME:SOUR'                  => new XrefSourceExt(MoreI18N::xlate('Source')),
             '_LOC:SOUR'                       => new XrefSourceExt(MoreI18N::xlate('Source')),
